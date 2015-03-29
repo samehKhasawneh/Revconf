@@ -1,5 +1,4 @@
 <?php
-
 $NOS = $_POST['NumberOfSessions'];
 echo $NOS;
 
@@ -10,8 +9,6 @@ echo $NOS;
 
 for ($i=1;$i<=$NOS;$i++)
 {
-
-
     echo $_POST["chair".$i];
 
     echo "<br>";
@@ -21,14 +18,7 @@ for ($i=1;$i<=$NOS;$i++)
     echo $chair['session'.$i];
     echo "<br>";
 
-
     echo"------";
-
-
-
 }
 
-
-
-
-?>
+?>;

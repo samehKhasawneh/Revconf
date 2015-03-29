@@ -11,7 +11,7 @@ $conf= $_GET['conf'];
 
 function hi()
 {
-    for ($x = 0; $x <= 10; $x++) {
+    for ($x = 9; $x <= 10; $x++) {
         echo "The number is: $x <br>";
     }
 
