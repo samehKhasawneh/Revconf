@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d90c1fb6-1a8b-46c3-a309-a9e13dd74513" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/post.php" afterPath="$PROJECT_DIR$/post.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/schedule.php" afterPath="$PROJECT_DIR$/schedule.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/includes/scheduleCheck.php" afterPath="$PROJECT_DIR$/includes/scheduleCheck.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="d90c1fb6-1a8b-46c3-a309-a9e13dd74513" name="Default" comment="" />
     <ignored path="Revconf.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
