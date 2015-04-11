@@ -40,8 +40,6 @@ include_once("includes/navbar.php");
 
 
 
-<!-- /Body Start -->
-
 <hr>
 
 <div id="bodyContainer" class="container" >
@@ -54,7 +52,7 @@ include_once("includes/navbar.php");
 
         <div class="col-lg-12">
 
-            <form  role="form">
+            <form  role="form" method="post" action="foundconf.php">
 
             <div class="panel panel-default">
                 <div class="panel-body">
@@ -103,7 +101,7 @@ include_once("includes/navbar.php");
     <br>
 
     <div class="row">
-        <form>
+        <form  role="form" method="post" action="foundconf.php">
 
 
             <!--            ---------------Topics Div Start------------------>

@@ -132,9 +132,10 @@
         <div class="col-md-4 text-center">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <h2 class="text-center">Conferences</h2>
-                    <p class="text-center">View a lists of conferences which you can attend</p>
-                    <button id="but" class="btn btn-block btn-primary" href="#" role="button">View details</button>
+                    <img src="img/search.jpg" width="100%" height="25%%" class="img-thumbnail img-rounded">
+                    <h2 class="text-center">Find a Conference</h2>
+                    <p class="text-center">Search for a Conference</p>
+                    <a id="but" class="btn btn-block btn-primary" href="findconf.php" role="button">View details</a>
                 </div>
             </div>
         </div>
@@ -214,15 +215,5 @@
             </div>
 
         </div>
-    </footer>
-</div>
 
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
-</body>
-</html>
+

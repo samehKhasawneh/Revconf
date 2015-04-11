@@ -1,11 +1,5 @@
-<?php
-    requi
-
-
-?>
+<!DOCTYPE html>
 <html>
-
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -19,17 +13,14 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
     <script src="js/jquery.min.js"></script>
+
     <script src="js/schedule.js"></script>
+
     <script src="js/bootstrap.min.js"></script>
     <!-- Custom styles for this template -->
     <link href="css/carousel.css" rel="stylesheet">
+
     <link href="css/body.css" rel="stylesheet"> <!-- includes background color -->
-
-
-
-
-
-
 
 </head>
 
@@ -47,6 +38,7 @@
         <div class="col-md-2" id="startingTime">
         <label for="sTime">Starting Time</label>
         <input type="time" class="form-control" id="sTime" name="sTime1" >
+
 
         </div>
 

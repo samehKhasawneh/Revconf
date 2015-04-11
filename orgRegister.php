@@ -221,7 +221,5 @@ include_once("includes/navbar.php");
         </div>
     </footer>
 </div>
-
-
 </html>
 

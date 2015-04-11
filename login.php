@@ -1,5 +1,35 @@
 <?php
+require_once("./includes/functions.php");
+require_once("./includes/config.php");
+require_once("./includes/session.php");
+require_once("./includes/user.php");
 include_once("includes/navbar.php");
+
+if($session->is_logged_in()) {
+    redirect_to("home.php");
+}
+
+if (isset($_POST['email'])) { // Form has been submitted.
+
+    $email = trim($_POST['email']);
+    $password = trim($_POST['password']);
+
+    // Check database to see if email/password exist.
+    $found_user = User::authenticate($email, $password);
+
+    if ($found_user) {
+        $session->login($found_user);
+        redirect_to("home.php");
+
+    } else {
+        // email/password combo was not found in the database
+        echo  "Email/password combination incorrect.";
+    }
+
+} else { // Form has not been submitted.
+    $email = "";
+    $password = "";
+}
 
 ?>
 <!DOCTYPE html>
@@ -62,23 +92,26 @@ include_once("includes/navbar.php");
             </div>
 
         <div class="col-md-5" id="login-form">
-            <form class="form-signin">
+            <form class="form-signin" action="login.php" method="post">
                 <div class="panel panel-primary text-center">
                     <div class="panel-heading">
                         <h1>Login</h1>
                     </div>
                     <div class="panel-body">
-                        <h2 class="form-signin-heading">Please sign in</h2>
+                        <h2 class="form-signin-heading">Please sign in
+                            <?php echo $message; ?>
+                        </h2>
+
                         <label for="inputEmail" class="sr-only">Email address</label>
-                        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+                        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus name="email">
                         <label for="inputPassword" class="sr-only">Password</label>
-                        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required name="password">
                         <div class="checkbox">
                             <label>
                                 <input type="checkbox" value="remember-me"> Remember me
                             </label>
                         </div>
-                        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+                        <button class="btn btn-lg btn-primary btn-block" type="submit" value="submit">Sign in</button>
                     </div>
                 </div>
             </form>

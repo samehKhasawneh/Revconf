@@ -17,6 +17,7 @@
     <script src="js/bootstrap.min.js"></script>
     <!-- Custom styles for this template -->
     <link href="css/carousel.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
     <link href="css/body.css" rel="stylesheet"> <!-- includes background color -->
 
 
@@ -73,8 +74,8 @@
         <div class="text-center" id="jump">
             </br>
             </br>
-            <h1>Hello, Khaled</h1>
-            <img id="profilephoto" src="http://api.randomuser.me/portraits/men/2.jpg" class="img-thumbnail img-circle " width="25%">
+            <h1 class="animated fadeInLeftBig  ">Hello, Khaled</h1>
+            <img  id="profilephoto" src="img/user.jpg" class="img-thumbnail img-circle animated zoomInUp   " width="25%">
             <p></p>
 
         </div>
@@ -95,27 +96,27 @@
             <div class="panel panel-default">
                 <div class="panel-body">
 
-                    <h2 class="text-center">Conferences</h2>
-                    <p class="text-center">View a lists of conferences which you can attend</p>
-                    <button id="but" class="btn btn-primary" href="#" role="button">View details »</button>
+                    <h2 class="text-center">My Conferences</h2>
+                    <p class="text-center">View a list of conferences which I'm attending</p>
+                    <button id="but" class="btn btn-block btn-primary" href="#" role="button">View</button>
                 </div>
             </div>
         </div>
         <div class="col-md-4 text-center">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <h2 class="text-center">Conferences</h2>
+                    <h2 class="text-center">Search for a Conference</h2>
                     <p class="text-center">View a lists of conferences which you can attend</p>
-                    <button id="but" class="btn btn-primary" href="#" role="button">View details »</button>
+                    <a type="button" id="but" class="btn btn-block btn-primary" href="findconf.php">Find </a>
                 </div>
             </div>
         </div>
         <div class="col-md-4 text-center">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <h2 class="text-center">Conferences</h2>
-                    <p class="text-center">View a lists of conferences which you can attend</p>
-                    <button id="but" class="btn btn-primary" href="#" role="button">View details »</button>
+                    <h2 class="text-center">My Profile</h2>
+                    <p class="text-center">Visit and Edit Your Profile</p>
+                    <a type="button" id="but" class="btn btn-block btn-primary" href="profile.php">Go to Profile </a>
                 </div>
             </div>
 
