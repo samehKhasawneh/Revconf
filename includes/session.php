@@ -4,14 +4,22 @@ require_once("database.php");
 
 class session {
 
-    private $logged_in=false;
-    public $userId;
+    private $logged_in = false;
+    private $admin_logged_in = false;
+    public $isAdmin;
+    public $userID;
     public $message;
 
     function __construct() {
         session_start();
         $this->check_message();
         $this->check_login();
+        if($this->logged_in) {
+            // actions to take right away if user is logged in
+            $this->check_admin();
+        } else {
+            // actions to take right away if user is not logged in
+        }
     }
 
     public function is_logged_in() {
@@ -20,16 +28,16 @@ class session {
 
     public function login() {
         // database should find user based on username/password
-        if(isset($_SESSION['userId'])){
+        if(isset($_SESSION['UserID'])){
 
-            $this->userId = $_SESSION['userId'];
+            $this->userID = $_SESSION['UserID'];
             $this->logged_in = true;
         }
     }
 
     public function logout() {
-        unset($_SESSION['user_id']);
-        unset($this->userId);
+        unset($_SESSION['UserID']);
+        unset($this->userID);
         $this->logged_in = false;
     }
 
@@ -43,12 +51,23 @@ class session {
         }
     }
 
+    private function check_admin (){
+        if(isset($_SESSION['isAdmin'])) {
+            $this->isAdmin = $_SESSION['isAdmin'];
+            $this->admin_logged_in = true;
+        } else {
+            unset($this->userID);
+            $this->admin_logged_in = false;
+        }
+
+    }
+
     private function check_login() {
-        if(isset($_SESSION['userId'])) {
-            $this->userId = $_SESSION['userId'];
+        if(isset($_SESSION['userID'])) {
+            $this->userID = $_SESSION['userID'];
             $this->logged_in = true;
         } else {
-            unset($this->userId);
+            unset($this->userID);
             $this->logged_in = false;
         }
     }
