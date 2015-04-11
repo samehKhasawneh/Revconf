@@ -13,11 +13,12 @@ if (isset($_POST['email'])) { // Form has been submitted.
 
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
-
     // Check database to see if email/password exist.
+
     $found_user = User::authenticate($email, $password);
 
     if ($found_user) {
+
         $session->login($found_user);
         redirect_to("home.php");
 
