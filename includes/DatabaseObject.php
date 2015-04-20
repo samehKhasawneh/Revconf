@@ -7,52 +7,33 @@ class DatabaseObject {
 
     protected static $table_name;
     protected static $db_fields = array();
-    public $email;
-    public $password;
-    public $id;
-    public $name;
-    public $website;
-    public $gender;
-    public $link;
-    public $author;
-    public $topic;
-    public $city;
-    public $visible;
-    public $paper_id;
 
+    public $ID;
 
     public static function find_all() {
         return static::find_by_sql("SELECT * FROM ".static::$table_name);
     }
 
     public static function find_by_id($id=0) {
-        $result_array = static::find_by_sql("SELECT * FROM ".static::$table_name." WHERE id={$id} LIMIT 1");
+        $result_array = static::find_by_sql("SELECT * FROM ".static::$table_name." WHERE ID={$id} LIMIT 1");
         return !empty($result_array) ? array_shift($result_array) : false;
-    }
-
-    public static function find_by_name($name=""){
-        $result_array = static::find_by_sql("SELECT * FROM ".static::$table_name." WHERE conference_name={$name}");
-        return !empty($result_array) ? array_shift($result_array) : false;
-
     }
 
     public static function find_by_sql($sql="") {
-        echo"7";
         global $database;
-        echo"8";
         $result_set = $database->query($sql);
-        echo"9";
         $object_array = array();
         while ($row = $database->fetch_array($result_set)) {
             $object_array[] = static::instantiate($row);
         }
-        echo"10";
         return $object_array;
     }
 
+
+
     public static function count_all() {
         global $database;
-        $sql = "SELECT COUNT(*) FROM ".static::$table_name;
+        $sql = 'SELECT COUNT(*) FROM '.static::$table_name;
         $result_set = $database->query($sql);
         $row = $database->fetch_array($result_set);
         return array_shift($row);
@@ -75,10 +56,10 @@ class DatabaseObject {
         return array_key_exists($attribute, $this->attributes());
     }
 
-    protected function attributes() {
+     protected function attributes() {
         // return an array of attribute names and their values
         $attributes = array();
-        foreach(self::$db_fields as $field) {
+        foreach(static::$db_fields as $field) {
             if(property_exists($this, $field)) {
                 $attributes[$field] = $this->$field;
             }
@@ -97,14 +78,13 @@ class DatabaseObject {
         return $clean_attributes;
     }
 
-   // public function save() {
+    public function save() {
         // A new record won't have an id yet.
-       // return isset($this->id) ? $this->update() : $this->create();
-    //}
+        return isset($this->ID) ? $this->update() : $this->create();
+    }
 
     public function create() {
         global $database;
-        // INSERT INTO table (key, key) VALUES ('value', 'value')
         // single-quotes around all values and escape all values to prevent SQL injection
         $attributes = $this->sanitized_attributes();
         $sql = "INSERT INTO ".self::$table_name." (";
@@ -113,7 +93,7 @@ class DatabaseObject {
         $sql .= join("', '", array_values($attributes));
         $sql .= "')";
         if($database->query($sql)) {
-            $this->id = $database->insert_id();
+            $this->ID = $database->insert_id();
             return true;
         } else {
             return false;
@@ -122,8 +102,7 @@ class DatabaseObject {
 
     public function update() {
         global $database;
-        // - UPDATE table SET key='value', key='value' WHERE condition
-        // - single-quotes around all values and escape all values to prevent SQL injection
+        //single-quotes around all values and escape all values to prevent SQL injection
         $attributes = $this->sanitized_attributes();
         $attribute_pairs = array();
         foreach($attributes as $key => $value) {
@@ -131,7 +110,7 @@ class DatabaseObject {
         }
         $sql = "UPDATE ".self::$table_name." SET ";
         $sql .= join(", ", $attribute_pairs);
-        $sql .= " WHERE id=". $database->escape_value($this->id);
+        $sql .= " WHERE ID=". $database->escape_value($this->ID);
         $database->query($sql);
         return ($database->affected_rows() == 1) ? true : false;
     }
@@ -140,7 +119,7 @@ class DatabaseObject {
         global $database;
         // - escape all values to prevent SQL injection and use LIMIT 1 to ensure that the affected rows=1
         $sql = "DELETE FROM ".self::$table_name;
-        $sql .= " WHERE id=". $database->escape_value($this->id);
+        $sql .= " WHERE ID=". $database->escape_value($this->ID);
         $sql .= " LIMIT 1";
         $database->query($sql);
         return ($database->affected_rows() == 1) ? true : false;
@@ -148,4 +127,3 @@ class DatabaseObject {
     }
 
 }
-?>

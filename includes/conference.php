@@ -1,30 +1,23 @@
 <?php
 
+require_once("database.php");
+require_once("DatabaseObject.php");
+
 
 class conference extends DatabaseObject{
 
-    protected static $table_name="confernce";
-    protected static $db_fields=array('id', '1111111', 'creator', 'info');
 
-    public $creator;
-    public $name;
-    public $info;
-    public $date;
-    public $topic;
-    public $city;
-    public $website;
-    public $visible;
+    protected static $table_name="conference";
+    protected static $db_fields = array('ID' ,'confName' ,'orgID' ,'confDate' ,'confSubmitEnd' ,'confReviewEnd' ,'introduction' ,'isapproved' ,'photoURL');
 
-    public static function find_conference_by($topic="") {
-        global $database;
-        $sql = "SELECT * FROM " . self::$table_name;
-        $sql .= " WHERE topic=" .$database->escape_value($topic);
-        $sql .= " ORDER BY  topic ASC";
-        return self::find_by_sql($sql);
-    }
-
-
-
-
+    public $ID;
+    public $confName;
+    public $orgID;
+    public $confDate;
+    public $confSubmitEnd;
+    public $confReviewEnd;
+    public $introduction;
+    public $isapproved;
+    public $photoURL;
 
 } 

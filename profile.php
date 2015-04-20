@@ -1,6 +1,9 @@
 <?php
-
+//if (!$session->is_logged_in()) { redirect_to("login.php"); }
 include_once("includes/navbar.php");
+require_once("includes/DatabaseObject.php");
+require_once("includes/database.php");
+require_once("includes/session.php");
 
 
 ?>
@@ -110,9 +113,11 @@ include_once("includes/navbar.php");
         <h2>About Me</h2>
 
         <div class="well">
-            The 7th International Conference on Information Technology, ICIT 2015 is a forum for scientists, engineers, and practitioners to present their latest research results, ideas, developments, and applications in all areas of Information Technology. ICIT 2015 will include presentations of contributed papers and state-of-the-art lectures by invited keynote speakers. Moreover, the program will include tutorials on hot areas of Information Technology.
-
-            All submitted papers will go through double-blind* reviewing processes by at least three reviewers. Extended versions of the conference best selected papers will be evaluated to be published in WCSIT special issue (www.wcsit.org) and in ARPN Journal of Systems and Software (http://www.scientific-journals.org).
+            <?php $userID = $_SESSION['userID'];?>
+            <?php  $query = "SELECT aboutme FROM userinfo WHERE userID = 1";
+                  $sql = DatabaseObject::find_by_sql($query) ;
+            ?>
+           <?php echo htmlentities($sql->aboutme); ?>
         </div>
     </div>
 

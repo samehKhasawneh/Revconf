@@ -1,6 +1,26 @@
 <?php
 
 include_once("includes/navbar.php");
+require_once("includes/functions.php");
+require_once("includes/database.php");
+require_once("includes/session.php");
+require_once("includes/functions.php");
+
+//if(!$session->is_logged_in()) { redirect_to("login.php"); }
+
+//if(isset($_POST["submit"])){
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//}
+
+
 
 
 ?>
@@ -52,7 +72,8 @@ include_once("includes/navbar.php");
 
         <div class="col-lg-12">
 
-            <form  role="form" method="post" action="foundconf.php">
+
+            <form  role="form" method="post" action="findconf.php">
 
             <div class="panel panel-default">
                 <div class="panel-body">

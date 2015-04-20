@@ -1,3 +1,38 @@
+<?php
+require_once("./includes/functions.php");
+require_once("./includes/database.php");
+require_once("./includes/session.php");
+require_once("./includes/DatabaseObject.php");
+require_once("./includes/userimgs.php");
+
+if (!isset($_SESSION["Email"])) {
+    redirect_to("login.php");
+
+}
+
+?>
+<?php
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -47,18 +82,7 @@
             </button>
             <a class="navbar-brand" href="#">Project name</a>
         </div>
-        <div id="navbar" class="navbar-collapse collapse">
-            <form class="navbar-form navbar-right">
-                <div id="log" class="form-group">
-                    <input type="text" placeholder="Email" class="form-control">
-                </div>
-                <div id="log" class="form-group">
-                    <input type="password" placeholder="Password" class="form-control">
-                </div>
-                <button id="sign" type="submit" class="btn btn-primary">Sign in</button>
-                <button id="register"  class="btn btn-success">Register</button>
-            </form>
-        </div><!--/.navbar-collapse -->
+
     </div>
 </nav>
 
@@ -74,15 +98,26 @@
         <div class="text-center" id="jump">
             </br>
             </br>
-            <h1 class="animated fadeInLeftBig  ">Hello, Khaled</h1>
-            <img  id="profilephoto" src="img/user.jpg" class="img-thumbnail img-circle animated zoomInUp   " width="25%">
+            <h1 class="animated fadeInLeftBig  ">Hello, <?php echo $_SESSION['FirstName']?></h1>
+            <?php
+            $query = "SELECT imageURL FROM userimgs WHERE userID = {$_SESSION['ID']}";
+            $sql = userimgs::find_by_sql($query);
+            $counter = 0 ;
+            $array = array();
+            foreach($sql as $s){
+                foreach($s as $key){
+                    $array[$counter] = $key;
+                    $counter++;
+                }
+            }
+            ?>
+            <img  id="profilephoto" src="<?php echo htmlentities($array[1]); ?>" class="img-thumbnail img-circle animated zoomInUp   " width="25%">
             <p></p>
 
         </div>
 
     </div>
 </div>
-
 <hr>
 
 <!-- /.carousel -->
@@ -98,7 +133,7 @@
 
                     <h2 class="text-center">My Conferences</h2>
                     <p class="text-center">View a list of conferences which I'm attending</p>
-                    <button id="but" class="btn btn-block btn-primary" href="#" role="button">View</button>
+                    <button id="but" class="btn btn-block btn-primary" href="myconf.php" role="button">View</button>
                 </div>
             </div>
         </div>
@@ -177,7 +212,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <ul class="nav nav-pills nav-justified">
-                        <li><a href="/">© 2013 Company Name.</a></li>
+                        <li><a href="/">© Copyright <?php echo date("Y",time()); ?> Company Name.</a></li>
                         <li><a href="#">Terms of Service</a></li>
                         <li><a href="#">Privacy</a></li>
                     </ul>

@@ -14,6 +14,10 @@
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
+    <script src="js/jquery.min.js"></script>
+
+    <script src="js/bootstrap.min.js"></script>
+
     <!-- Custom CSS -->
     <link href="css/sb-admin.css" rel="stylesheet">
 
@@ -143,44 +147,38 @@
                     </ul>
                 </li>
             </ul>
+
             <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
-                    <li>
-                        <a href="index.php"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+                    <li ">
+                    <a href="index.php"><i class="fa fa-fw fa-dashboard"></i> Admin Panel</a>
                     </li>
                     <li>
-                        <a href="charts.html"><i class="fa fa-fw fa-bar-chart-o"></i> Charts</a>
-                    </li>
-                    <li>
-                        <a href="tables.html"><i class="fa fa-fw fa-table"></i> Tables</a>
-                    </li>
-                    <li>
-                        <a href="forms.html"><i class="fa fa-fw fa-edit"></i> Forms</a>
-                    </li>
-                    <li>
-                        <a href="bootstrap-elements.html"><i class="fa fa-fw fa-desktop"></i> Bootstrap Elements</a>
-                    </li>
-                    <li>
-                        <a href="bootstrap-grid.html"><i class="fa fa-fw fa-wrench"></i> Bootstrap Grid</a>
-                    </li>
-                    <li>
-                        <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i> Dropdown <i class="fa fa-fw fa-caret-down"></i></a>
-                        <ul id="demo" class="collapse">
-                            <li>
-                                <a href="#">Dropdown Item</a>
+                        <a href="javascript:;" data-toggle="collapse" data-target="#demo" class="" aria-expanded="true"><i class="fa fa-fw fa-arrows-v"></i> Conference <i class="fa fa-fw fa-caret-down"></i></a>
+                        <ul id="demo" class="collapse in" aria-expanded="true">
+                            <li class="active">
+                                <a href="conf.php">List of Conferences</a>
                             </li>
                             <li>
-                                <a href="#">Dropdown Item</a>
+                                <a href="#"> Conferences Requests </a>
                             </li>
                         </ul>
                     </li>
-                    <li class="active">
-                        <a href="blank-page.php"><i class="fa fa-fw fa-file"></i> Blank Page</a>
-                    </li>
                     <li>
-                        <a href="index-rtl.html"><i class="fa fa-fw fa-dashboard"></i> RTL Dashboard</a>
+                        <a href="users.php"><i class="fa fa-fw fa-table"></i> Users</a>
+
+                        <a href="javascript:;" data-toggle="collapse" data-target="#demo1" class="" aria-expanded="true"><i class="fa fa-fw fa-table-v"></i> Users <i class="fa fa-fw fa-caret-down"></i></a>
+                        <ul id="demo1" class="collapse in" aria-expanded="true">
+                            <li class="active">
+                                <a href="users.php">List of Users</a>
+                            </li>
+                            <li>
+                                <a href="#"> User Requests </a>
+                            </li>
+                        </ul>
                     </li>
+
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -209,6 +207,51 @@
                 </div>
                 <!-- /.row -->
 
+                <div class="row text-center">
+                <h3>List Of Conferences</h3>
+                    <hr>
+                    <div class="col-md-12 text-center ">
+                    <table class="table table-bordered well">
+
+                        <thead>
+                        <tr>
+                            <th class="text-center">ID</th>
+                            <th class="text-center">Conference Name</th>
+                            <th class="text-center">Organization</th>
+                            <th class="text-center">Date</th>
+                            <th class="text-center">Statistics</th>
+
+
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>PSUT MENA 15</td>
+                            <td>RSS</td>
+                            <td>05-05-2015</td>
+                            <td> <a class="btn btn-success btn-block">Open</a> </td>
+                        </tr>
+
+
+                        <tr>
+                            <td>2</td>
+                            <td>GJU MENA 15</td>
+                            <td>ALU</td>
+                            <td>05-03-2015</td>
+                            <td> <a class="btn btn-success btn-block">Open</a> </td>
+                        </tr>
+
+
+
+                        </tbody>
+
+
+                    </table>
+</div>
+                </div>
+
             </div>
             <!-- /.container-fluid -->
 
@@ -218,11 +261,7 @@
     </div>
     <!-- /#wrapper -->
 
-    <!-- jQuery -->
-    <script src="js/jquery.js"></script>
 
-    <!-- Bootstrap Core JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
 
 </body>
 

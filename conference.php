@@ -2,7 +2,7 @@
 
 include_once("includes/navbar.php");
 
-
+echo $_SESSION["userID"];
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -5,21 +5,26 @@ require_once("database.php");
 
 class user extends DatabaseObject{
 
-    protected static $table_name="users";
-    protected static $db_fields = array('id', 'email', 'password', 'first_name', 'last_name');
+    protected static $table_name="user";
+    protected static $db_fields =
+        array('ID', 'title', 'FirstName', 'LastName', 'Age', 'gender', 'Email', 'Password','scientific_degrees', 'date_registered', 'city', 'isAdmin');
 
-    public $id;
-    public $email;
-    public $password;
-    public $first_name;
-    public $last_name;
-    public $link;
+    public $ID;
+    public $title;
+    public $FirstName;
+    public $LastName;
+    public $Age;
     public $gender;
-
+    public $Email;
+    public $Password;
+    public $scientific_degrees;
+    public $date_registered;
+    public $city;
+    public $isAdmin;
 
     public function full_name() {
-        if(isset($this->first_name) && isset($this->last_name)) {
-            return $this->first_name . " " . $this->last_name;
+        if(isset($this->FirstName) && isset($this->LastName)) {
+            return $this->FirstName . " " . $this->LastName;
         } else {
             return "";
         }
@@ -32,11 +37,10 @@ class user extends DatabaseObject{
         $password = $database->escape_value($password);
 
         $sql  = "SELECT * FROM user ";
-        $sql .= "WHERE `email` = '{$email}' ";
-        $sql .= "AND `password` = '{$password}' ";
+        $sql .= "WHERE `Email` = '{$email}' ";
+        $sql .= "AND `Password` = '{$password}' ";
         $sql .= "LIMIT 1";
-        $result_array = static::find_by_sql($sql);
-
+        $result_array = self::find_by_sql($sql);
         return !empty($result_array) ? array_shift($result_array) : false;
     }
 

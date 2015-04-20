@@ -5,7 +5,7 @@ require_once("./includes/session.php");
 require_once("./includes/user.php");
 include_once("includes/navbar.php");
 
-if($session->is_logged_in()) {
+if(isset($_SESSION["ID"])) {
     redirect_to("home.php");
 }
 

@@ -1,7 +1,5 @@
 <?php
-
 include_once("includes/navbar.php");
-
 
 ?>
 <!DOCTYPE html>
@@ -22,6 +20,12 @@ include_once("includes/navbar.php");
 
 
     <link href="css/body.css" rel="stylesheet"> <!-- includes background color -->
+
+    <style>
+        textarea {
+            resize: none;
+        }
+    </style>
 
 
 </head>
@@ -82,25 +86,208 @@ include_once("includes/navbar.php");
     </table>
 
 <div class="row col-md-12 well">
-
+<form>
     <iframe src="http://localhost/pdf/web/helloworld.pdf" width="100%" height="100% controls seamless frameborder="0" ></iframe>
 
-    <fieldset id="fs_review"><legend>Review</legend><div class="field"><label class="plain">Recommendation:</label><label>&nbsp;</label><fieldset class="radio"><label><input type="radio" name="recommendation" id="recommendation1" value="1">Reject: Content inappropriate to the conference or has little merit</label><br><label><input type="radio" name="recommendation" id="recommendation2" value="2">Probable Reject: Basic flaws in content or presentation or very poorly written</label><br><label><input type="radio" name="recommendation" id="recommendation3" value="3">Marginal Tend to Reject: Not as badly flawed; major effort necessary to make acceptable but content well-covered in literature already</label><br><label><input type="radio" name="recommendation" id="recommendation4" value="4">Marginal Tend to Accept: Content has merit, but accuracy, clarity, completeness, and/or writing should and could be improved in time</label><br><label><input type="radio" name="recommendation" id="recommendation5" value="5" checked="">Clear Accept: Content, presentation, and writing meet professional norms; improvements may be advisable but acceptable as is</label><br><label><input type="radio" name="recommendation" id="recommendation6" value="6">Must Accept: Candidate for outstanding submission. Suggested improvements still appropriate</label><br></fieldset></div>
-        <div class="field"><label class="plain">Submission Categorization:</label><label>&nbsp;</label><fieldset class="radio"><label><input type="radio" name="category" id="category1" value="1">Highly theoretical</label><br><label><input type="radio" name="category" id="category2" value="2" checked="">Tends towards theoretical</label><br><label><input type="radio" name="category" id="category3" value="3">Balanced theory and practice</label><br><label><input type="radio" name="category" id="category4" value="4">Tends toward practical</label><br><label><input type="radio" name="category" id="category5" value="5">Highly practical</label><br></fieldset></div>
-        <div class="field"><label class="plain">Overall Value Added to the Field:</label><label>&nbsp;</label><fieldset class="checkbox"><label><input type="checkbox" name="value[]" id="value1" value="1" checked="">New information</label><br><label><input type="checkbox" name="value[]" id="value2" value="2">Valuable confirmation of present knowledge</label><br><label><input type="checkbox" name="value[]" id="value3" value="3">Clarity to present understanding</label><br><label><input type="checkbox" name="value[]" id="value4" value="4" checked="">New perspective, issue, or problem definition</label><br><label><input type="checkbox" name="value[]" id="value5" value="5">Not much</label><br><label><input type="checkbox" name="value[]" id="value6" value="6">Other</label><br></fieldset><div class="fieldnote note">Check as many as appropriate</div></div>
-        <div class="field"><label class="plain">Reviewer Familiarity with Subject Matter:</label><label>&nbsp;</label><fieldset class="radio"><label><input type="radio" name="familiar" id="familiar1" value="Low">Low</label><br><label><input type="radio" name="familiar" id="familiar2" value="Moderate">Moderate</label><br><label><input type="radio" name="familiar" id="familiar3" value="High" checked="">High</label><br></fieldset><div class="fieldnote note">Relates to the confidence you have in your review</div></div>
-        <div class="field"><label class="plain">Is this submission a candidate for the best submission award:</label><label>&nbsp;</label><fieldset class="radio"><label><input type="radio" name="bpcandidate" id="bpcandidate1" value="Yes" checked="">Yes</label><br><label><input type="radio" name="bpcandidate" id="bpcandidate2" value="No">No</label><br><label><input type="radio" name="bpcandidate" id="bpcandidate3" value="Unsure">Unsure</label><br></fieldset></div>
-        <div class="field"><label class="plain">Is the submission length appropriate:</label><label>&nbsp;</label><fieldset class="radio"><label><input type="radio" name="length" id="length1" value="Yes" checked="">Yes</label><br><label><input type="radio" name="length" id="length2" value="No">No</label><br><label><input type="radio" name="length" id="length3" value="Unsure">Unsure</label><br></fieldset></div>
-        <div class="field"><label class="plain">If from reading the submission you know who the author is, how different is this from earlier submissions on the same topic by the same author? That is, is it the same as or a slight modification of other submissions, with little or no new information:</label><label>&nbsp;</label><fieldset class="radio"><label><input type="radio" name="difference" id="difference1" value="1">Totally or largely different from other submissions</label><br><label><input type="radio" name="difference" id="difference2" value="2" checked="">Moderately different from other submissions</label><br><label><input type="radio" name="difference" id="difference3" value="3">Totally or largely identical to other submissions</label><br><label><input type="radio" name="difference" id="difference4" value="4">Don't know</label><br></fieldset><div class="fieldnote note">We use these suggestions in assigning submissions to sessions for the conference, but not in determining whether the submission is accepted)</div></div>
-        <div class="field"><label class="plain">Which of the following session(s) would be the most appropriate for this submission:</label><label>&nbsp;</label><fieldset class="checkbox"><label><input type="checkbox" name="sessions[]" id="sessions1" value="1" checked="">Classic Papers</label><br><label><input type="checkbox" name="sessions[]" id="sessions2" value="2">Programming</label><br><label><input type="checkbox" name="sessions[]" id="sessions3" value="3">RFC</label><br><label><input type="checkbox" name="sessions[]" id="sessions4" value="4">Computer Science</label><br><label><input type="checkbox" name="sessions[]" id="sessions5" value="5">Networking</label><br><label><input type="checkbox" name="sessions[]" id="sessions6" value="6">Humo(u)r</label><br></fieldset><div class="fieldnote note">We use these suggestions in assigning submissions to sessions for the conference, but not in determining whether the submission is accepted)</div></div>
-        <div class="field"><label for="authorcomments" class="plain">Comments for the Authors:</label><label>&nbsp;</label><textarea name="authorcomments" id="authorcomments" cols="60" rows="5" maxlength="">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Vivamus lectus. Suspendisse potenti. Proin velit. Proin vehicula justo sit amet massa. Cras rhoncus pellentesque dolor. Integer placerat, tellus id porta posuere, lacus est feugiat leo, eget sollicitudin augue nibh in augue.</textarea><div class="fieldnote note">Constructive comments to the author(s) would be appreciated.</div></div>
-        <div class="field"><label for="pccomments" class="plain">Comments for the Program Committee (authors will not see these comments):</label><label>&nbsp;</label><textarea name="pccomments" id="pccomments" cols="60" rows="5" maxlength="">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Vivamus lectus. Suspendisse potenti. Proin velit. Proin vehicula justo sit amet massa. Cras rhoncus pellentesque dolor. Integer placerat, tellus id porta posuere, lacus est feugiat leo, eget sollicitudin augue nibh in augue.</textarea><div class="fieldnote note">Reasons must be included for all submissions, because they help us determine what to do when reviewers disagree with each other.</div></div>
+    <fieldset>
+
+        <legend>
+            Recommendations
+        </legend>
+
+            <div class="col-lg-12">
+
+
+                <fieldset class="radio"><label><input type="radio" name="recommendation" id="recommendation1" value="1"><strong>Reject:</strong> Content inappropriate to the conference or has little merit</label>
+                    <br>
+                    <label><input type="radio" name="recommendation" id="recommendation2" value="2"><strong>Probable Reject:</strong> Basic flaws in content or presentation or very poorly written</label>
+                    <br>
+                    <label><input type="radio" name="recommendation" id="recommendation3" value="3"><strong>Marginal Tend to Reject:</strong> Not as badly flawed; major effort necessary to make acceptable but content well-covered in literature already</label>
+                    <br>
+                    <label><input type="radio" name="recommendation" id="recommendation4" value="4"><strong>Marginal Tend to Accept:</strong> Content has merit, but accuracy, clarity, completeness, and/or writing should and could be improved in time</label>
+                    <br>
+                    <label><input type="radio" name="recommendation" id="recommendation5" value="5" checked=""><strong>Clear Accept:</strong> Content, presentation, and writing meet professional norms; improvements may be advisable but acceptable as is</label>
+                    <br>
+                    <label><input type="radio" name="recommendation" id="recommendation6" value="6"><strong>Must Accept:</strong> Candidate for outstanding submission. Suggested improvements still appropriate</label><br></fieldset>
+<br>
+                <br>
+                <p><strong>Reviewer Familiarity with Subject Matter: </strong></p>
+                <label><input type="radio" name="fam" id="fam" value="1">Low </label>
+                <br>
+                <label><input type="radio" name="fam" id="fam" value="2">Moderate </label>
+                <br>
+                <label><input type="radio" name="fam" id="fam" value="3">High </label>
+
+
+            </div>
+
+
     </fieldset>
 
+    <br>
+    <br>
+    <fieldset>
+        <legend>
+            General Evaluation (Please Rate for each iteml 1=unsatisfactory, 2=fair, 3=good, 4=Very Good, 5=Excellent)
+            </legend>
+<br>
+            <div id="q1" >
+                <p><strong>1)</strong> The abstract is clear and concise, including the specific objective of the work, the techniques employed and significant results.</p>
+                <label><input type="radio" value="1" name="q1"> 1</label>
+                <label><input type="radio" value="2" name="q1"> 2</label>
+                <label><input type="radio" value="3" name="q1"> 3</label>
+                <label><input type="radio" value="4" name="q1"> 4</label>
+                <label><input type="radio" value="5" name="q1"> 5</label>
+            </div>
+<hr>
+        <div id="q2">
+            <p><strong>2)</strong> There are few grammatical errors and spelling mistakes in this article. </p>
+            <label><input type="radio" value="1" name="q2"> 1</label>
+            <label><input type="radio" value="2" name="q2"> 2</label>
+            <label><input type="radio" value="3" name="q2"> 3</label>
+            <label><input type="radio" value="4" name="q2"> 4</label>
+            <label><input type="radio" value="5" name="q2"> 5</label>
+        </div>
+
+        <hr>
+
+        <div id="q3">
+            <p><strong>3)</strong> The research methods are adequately applied.  </p>
+            <label><input type="radio" value="1" name="q3"> 1</label>
+            <label><input type="radio" value="2" name="q3"> 2</label>
+            <label><input type="radio" value="3" name="q3"> 3</label>
+            <label><input type="radio" value="4" name="q3"> 4</label>
+            <label><input type="radio" value="5" name="q3"> 5</label>
+        </div>
+
+        <hr>
+
+        <div id="q4">
+            <p><strong>4)</strong> The article is well organized. </p>
+            <label><input type="radio" value="1" name="q4"> 1</label>
+            <label><input type="radio" value="2" name="q4"> 2</label>
+            <label><input type="radio" value="3" name="q4"> 3</label>
+            <label><input type="radio" value="4" name="q4"> 4</label>
+            <label><input type="radio" value="5" name="q4"> 5</label>
+        </div>
+
+
+        <hr>
+
+        <div id="q5" >
+            <p><strong>5)</strong> The tables and figures are clear and appropriate. </p>
+            <label><input type="radio" value="1" name="q5"> 1</label>
+            <label><input type="radio" value="2" name="q5"> 2</label>
+            <label><input type="radio" value="3" name="q5"> 3</label>
+            <label><input type="radio" value="4" name="q5"> 4</label>
+            <label><input type="radio" value="5" name="q5"> 5</label>
+        </div>
+
+        <hr>
+        <div id="q6" >
+            <p><strong>6)</strong> The linguistic level and the mechanics of writing are appropriate for publication. </p>
+            <label><input type="radio" value="1" name="q6"> 1</label>
+            <label><input type="radio" value="2" name="q6"> 2</label>
+            <label><input type="radio" value="3" name="q6"> 3</label>
+            <label><input type="radio" value="4" name="q6"> 4</label>
+            <label><input type="radio" value="5" name="q6"> 5</label>
+        </div>
+    <hr>
+        <div id="q7" >
+            <p><strong>7)</strong> The conclusions and interpretations are valid and they are supported by the data. </p>
+            <label><input type="radio" value="1" name="q7"> 1</label>
+            <label><input type="radio" value="2" name="q7"> 2</label>
+            <label><input type="radio" value="3" name="q7"> 3</label>
+            <label><input type="radio" value="4" name="q7"> 4</label>
+            <label><input type="radio" value="5" name="q7"> 5</label>
+        </div>
+    <hr>
+
+        <div id="q8" >
+            <p><strong>8)</strong> The references and quotations are clear and the bibliography is updated and relevant.</p>
+            <label><input type="radio" value="1" name="q8"> 1</label>
+            <label><input type="radio" value="2" name="q8"> 2</label>
+            <label><input type="radio" value="3" name="q8"> 3</label>
+            <label><input type="radio" value="4" name="q8"> 4</label>
+            <label><input type="radio" value="5" name="q8"> 5</label>
+        </div>
+
+        <hr>
+
+        <div id="q9" >
+            <p><strong>9)</strong> There are few technical errors in this article. </p>
+            <label><input type="radio" value="1" name="q9"> 1</label>
+            <label><input type="radio" value="2" name="q9"> 2</label>
+            <label><input type="radio" value="3" name="q9"> 3</label>
+            <label><input type="radio" value="4" name="q9"> 4</label>
+            <label><input type="radio" value="5" name="q9"> 5</label>
+        </div>
+
+
+        <hr>
+
+        <div id="q10">
+            <p><strong>10)</strong> The paper presents new ideas and results that have not been previously published. </p>
+            <label><input type="radio" value="1" name="q10"> 1</label>
+            <label><input type="radio" value="2" name="q10"> 2</label>
+            <label><input type="radio" value="3" name="q10"> 3</label>
+            <label><input type="radio" value="4" name="q10"> 4</label>
+            <label><input type="radio" value="5" name="q10"> 5</label>
+        </div>
+    </fieldset>
+
+
+
+
+
+
+    <br>
+    <br>
+    <div class="col-md-12">
+
+        <fieldset>
+            <legend>
+                Specific Comments and Suggestions
+            </legend>
+
+
+            <p><strong>Please state briefly the strengths and weaknesses of the article:  </strong></p>
+            <textarea rows="6" cols="50" name="sp1" class="col-lg-12"></textarea>
+            <br>
+
+
+            <p><strong>Please describe the main problems of the article and give detailed suggestions on how to improve the article:  </strong></p>
+            <textarea rows="6" cols="50" name="sp2" class="col-lg-12"></textarea>
+            <br>
+
+            <p><strong>Additional comments or suggestions to be sent to the author:  </strong></p>
+            <textarea rows="6" cols="50" name="sp3" class="col-lg-12"></textarea>
+            <br>
+
+
+
+
+
+
+        </fieldset>
+
+<br>
+        <br>
 
     </div>
 
 
+                <div class="text-center">
+
+                    <input class="btn btn-success input-lg" type="submit" value="Submit">
+                    <input class="btn btn-warning input-lg" type="reset" value="Reset">
+                    </div>
+    </div>   <!--end of main div-->
+
+
+
+
+</form>
 
 </div>
 <!----------------------------------->

@@ -1,6 +1,7 @@
 <?php
 require_once("DatabaseObject.php");
 require_once("config.php");
+
 class database extends DatabaseObject
 {
 
@@ -41,7 +42,7 @@ class database extends DatabaseObject
 
         $this->last_query = $sql;
         $result = mysqli_query($this->connection,$sql);
-        //$this->confirm_query($result);
+//        $this->confirm_query($result);
         return $result;
     }
 
@@ -85,17 +86,17 @@ class database extends DatabaseObject
         return mysqli_affected_rows($this->connection);
     }
 
-//    private function confirm_query($result)
-//    {
-//        if (!$result) {
-//            $output = "Database query failed: " . mysqli_error($result) . " <br /><br />";
-//            die($output);
-//        }
-//    }
+    private function confirm_query($result)
+    {
+        if (!$result) {
+            $output = "Database query failed: " . mysqli_error($result) . " <br /><br />";
+            die($output);
+        }
+    }
 
 }
 
 $database = new database();
-$db = $database;
+$db =& $database;
 ?>
 

@@ -1,7 +1,16 @@
 <?php
 include_once("includes/navbar-user.php");
+require_once("includes/functions.php");
 
-?>
+//if($_GET["submit"]){
+//
+//
+//
+//}
+//else{
+//    redirect_to();
+//}
+//?>
 
 
 <!DOCTYPE html>

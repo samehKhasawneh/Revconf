@@ -1,4 +1,5 @@
 <?php
+
 function strip_zeros_from_date( $marked_string="" ) {
     // first remove the marked zeros
     $no_zeros = str_replace('*0', '', $marked_string);
@@ -13,6 +14,7 @@ function redirect_to( $location = NULL ) {
         exit;
     }
 }
+
 function output_message($message="") {
     if (!empty($message)) {
         return "<p class=\"message\">{$message}</p>";
@@ -21,33 +23,25 @@ function output_message($message="") {
     }
 }
 
-function __autoload($class_name) {
-    $class_name = strtolower($class_name);
-    $path = LIB_PATH.DS."{$class_name}.php";
-    if(file_exists($path)) {
-        require_once($path);
-    } else {
-        die("The file {$class_name}.php could not be found.");
-    }
-}
-
-function log_action($action, $message="") {
-    $logfile = SITE_ROOT.DS.'logs'.DS.'log.txt';
-    $new = file_exists($logfile) ? false : true;
-    if($handle = fopen($logfile, 'a')) { // append
-        $timestamp = strftime("%Y-%m-%d %H:%M:%S", time());
-        $content = "{$timestamp} | {$action}: {$message}\n";
-        fwrite($handle, $content);
-        fclose($handle);
-        if($new) { chmod($logfile, 0755); }
-    } else {
-        echo "Could not open log file for writing.";
-    }
-}
+//function log_action($action, $message="") {
+//    $logfile = SITE_ROOT.DS.'logs'.DS.'log.txt';
+//    $new = file_exists($logfile) ? false : true;
+//    if($handle = fopen($logfile, 'a')) { // append
+//        $timestamp = strftime("%Y-%m-%d %H:%M:%S", time());
+//        $content = "{$timestamp} | {$action}: {$message}\n";
+//        fwrite($handle, $content);
+//        fclose($handle);
+//        if($new) { chmod($logfile, 0755); }
+//    } else {
+//        echo "Could not open log file for writing.";
+//    }
+//}
 
 function datetime_to_text($datetime="") {
     $unixdatetime = strtotime($datetime);
     return strftime("%B %d, %Y at %I:%M %p", $unixdatetime);
 }
+
+
 
 ?>
