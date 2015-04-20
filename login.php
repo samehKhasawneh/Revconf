@@ -9,29 +9,32 @@ if($session->is_logged_in()) {
     redirect_to("home.php");
 }
 
-if (isset($_POST['email'])) { // Form has been submitted.
 
-    $email = trim($_POST['email']);
-    $password = trim($_POST['password']);
+if (isset($_POST["email"])) { // Form has been submitted.
+
+    $email = trim($_POST["email"]);
+    $password = trim($_POST["password"]);
     // Check database to see if email/password exist.
 
     $found_user = User::authenticate($email, $password);
 
     if ($found_user) {
 
-        $session->login($found_user);
+        foreach($found_user as $key=>$value){
+            $session->setAttrb($key,$value);
+        }
         redirect_to("home.php");
 
     } else {
-        // email/password combo was not found in the database
-        echo  "Email/password combination incorrect.";
-    }
 
-} else { // Form has not been submitted.
+        // email/password combo was not found in the database
+        $session->setAttrb("message","Email/password combination incorrect.");
+    }
+} else {
+    // Form has not been submitted.
     $email = "";
     $password = "";
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -99,9 +102,7 @@ if (isset($_POST['email'])) { // Form has been submitted.
                         <h1>Login</h1>
                     </div>
                     <div class="panel-body">
-                        <h2 class="form-signin-heading">Please sign in
-                            <?php echo $message; ?>
-                        </h2>
+                        <h2 class="form-signin-heading">Please sign in</h2>
 
                         <label for="inputEmail" class="sr-only">Email address</label>
                         <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus name="email">
@@ -111,6 +112,7 @@ if (isset($_POST['email'])) { // Form has been submitted.
                             <label>
                                 <input type="checkbox" value="remember-me"> Remember me
                             </label>
+                            <label> <?php echo $session->getAttrb("message"); ?></label>
                         </div>
                         <button class="btn btn-lg btn-primary btn-block" type="submit" value="submit">Sign in</button>
                     </div>
@@ -123,7 +125,7 @@ if (isset($_POST['email'])) { // Form has been submitted.
 </div>
 
 
-
+<?php if(isset($database)) { $database->close_connection(); } ?>
 
 </body>
 </html>
