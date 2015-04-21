@@ -8,7 +8,6 @@ class DatabaseObject {
     protected static $table_name;
     protected static $db_fields = array();
 
-    public $ID;
 
     public static function find_all() {
         return static::find_by_sql("SELECT * FROM ".static::$table_name);
