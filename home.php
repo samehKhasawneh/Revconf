@@ -98,7 +98,7 @@ if (!isset($_SESSION["Email"])) {
         <div class="text-center" id="jump">
             </br>
             </br>
-            <h1 class="animated fadeInLeftBig  ">Hello, <?php echo $_SESSION['FirstName']?></h1>
+            <h1 class="animated fadeInLeftBig  ">Hello, <?php echo ucfirst($_SESSION['FirstName'])?></h1>
             <?php
             $query = "SELECT imageURL FROM userimgs WHERE userID = {$_SESSION['ID']}";
             $sql = userimgs::find_by_sql($query);

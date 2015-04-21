@@ -22,13 +22,13 @@ class user extends DatabaseObject{
     public $city;
     public $isAdmin;
 
-    public function full_name() {
-        if(isset($this->FirstName) && isset($this->LastName)) {
-            return $this->FirstName . " " . $this->LastName;
-        } else {
-            return "";
-        }
-    }
+//    public function full_name() {
+//        if(isset($this->FirstName) && isset($this->LastName)) {
+//            return $this->FirstName . " " . $this->LastName;
+//        } else {
+//            return "";
+//        }
+//    }
 
     public static function authenticate($email="", $password="") {
         global $database;
