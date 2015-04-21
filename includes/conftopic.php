@@ -6,9 +6,9 @@ require_once("DatabaseObject.php");
 class conftopic extends DatabaseObject{
 
     protected static $table_name="conftopic";
-    protected static $db_fields=array('TopicID', 'confID');
+    protected static $db_fields=array('topicID', 'confID');
 
-    public $TopicID;
+    public $topicID;
     public $confID;
 
 

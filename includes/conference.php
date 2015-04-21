@@ -8,7 +8,7 @@ class conference extends DatabaseObject{
 
 
     protected static $table_name="conference";
-    protected static $db_fields = array('ID' ,'confName' ,'orgID' ,'confDate' ,'confSubmitEnd' ,'confReviewEnd' ,'introduction' ,'isapproved' ,'photoURL');
+    protected static $db_fields = array('ID' ,'confName' ,'orgID' ,'confDate' ,'confSubmitEnd' ,'confReviewEnd' ,'introduction' ,'isApproved' ,'photoURL');
 
     public $ID;
     public $confName;
@@ -17,7 +17,7 @@ class conference extends DatabaseObject{
     public $confSubmitEnd;
     public $confReviewEnd;
     public $introduction;
-    public $isapproved;
+    public $isApproved;
     public $photoURL;
 
 } 
