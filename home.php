@@ -14,20 +14,16 @@ if (!isset($_SESSION["Email"])) {
 <?php
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+$query = "SELECT imageURL FROM userimgs WHERE userID = {$_SESSION['ID']}";
+$sql = userimgs::find_by_sql($query);
+$counter = 0 ;
+$array = array();
+foreach($sql as $s){
+    foreach($s as $key){
+        $array[$counter] = $key;
+        $counter++;
+    }
+}
 
 
 ?>
@@ -99,18 +95,6 @@ if (!isset($_SESSION["Email"])) {
             </br>
             </br>
             <h1 class="animated fadeInLeftBig  ">Hello, <?php echo ucfirst($_SESSION['FirstName'])?></h1>
-            <?php
-            $query = "SELECT imageURL FROM userimgs WHERE userID = {$_SESSION['ID']}";
-            $sql = userimgs::find_by_sql($query);
-            $counter = 0 ;
-            $array = array();
-            foreach($sql as $s){
-                foreach($s as $key){
-                    $array[$counter] = $key;
-                    $counter++;
-                }
-            }
-            ?>
             <img  id="profilephoto" src="<?php echo htmlentities($array[1]); ?>" class="img-thumbnail img-circle animated zoomInUp   " width="25%">
             <p></p>
 
@@ -212,7 +196,7 @@ if (!isset($_SESSION["Email"])) {
             <div class="row">
                 <div class="col-lg-12">
                     <ul class="nav nav-pills nav-justified">
-                        <li><a href="/">© Copyright <?php echo date("Y",time()); ?> Company Name.</a></li>
+                        <li><a href="/"> Copyright <?php echo htmlentities("© ");  echo date("Y",time()); ?>  Company Name.</a></li>
                         <li><a href="#">Terms of Service</a></li>
                         <li><a href="#">Privacy</a></li>
                     </ul>
