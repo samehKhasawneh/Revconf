@@ -2,6 +2,10 @@
 include_once("includes/navbar-user.php");
 require_once("includes/functions.php");
 
+if(!isset($_POST["search"])){
+    redirect_to("findconf.php");
+}
+
 //if($_GET["submit"]){
 //
 //
