@@ -10,7 +10,7 @@ if(isset($_SESSION["ID"])) {
 }
 
 
-if (isset($_POST["email"])) { // Form has been submitted.
+if (isset($_POST["submit"])) { // Form has been submitted.
 
     $email = trim($_POST["email"]);
     $password = trim($_POST["password"]);
@@ -114,7 +114,7 @@ if (isset($_POST["email"])) { // Form has been submitted.
                             </label>
                             <label> <?php echo $session->getAttrb("message"); ?></label>
                         </div>
-                        <button class="btn btn-lg btn-primary btn-block" type="submit" value="submit">Sign in</button>
+                        <button class="btn btn-lg btn-primary btn-block" type="submit" value="submit" name="submit">Sign in</button>
                     </div>
                 </div>
             </form>
