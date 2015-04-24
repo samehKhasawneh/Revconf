@@ -121,7 +121,7 @@ include_once("includes/navbar.php");
                 <div class="row">
                     <div class="col-lg-12">
                         <ul class="nav nav-pills nav-justified">
-                            <li><a href="/">© 2013 Company Name.</a></li>
+                            <li><a href="/">Copyright <?php echo htmlentities("© ");  echo date("Y",time()); ?>  Company Name.</a></li>
                             <li><a href="#">Terms of Service</a></li>
                             <li><a href="#">Privacy</a></li>
                         </ul>
