@@ -68,7 +68,7 @@ include_once("includes/navbar.php");
             <div class="row">
 
                 <div class="text-center" name="Buttons">
-                    <input type="submit" class="btn btn-primary " value="Submit" name="submit">
+                    <input type="submit" class="btn btn-primary " value="Search" name="submit">
                     <input type="reset" class="btn btn-danger " onclick="reset(); " value="Reset">
 
                 </div>
