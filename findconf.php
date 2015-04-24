@@ -1,26 +1,5 @@
 <?php
-
 include_once("includes/navbar.php");
-require_once("includes/functions.php");
-require_once("includes/database.php");
-require_once("includes/session.php");
-require_once("includes/functions.php");
-
-//if(!$session->is_logged_in()) { redirect_to("login.php"); }
-
-//if(isset($_POST["submit"])){
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//}
-
-
 
 
 ?>
@@ -66,241 +45,42 @@ require_once("includes/functions.php");
 
 <h1 id="help1">Search For a Specific Conference</h1> <button id="help" class="btn-lg btn-warning">HELP ME</button>
 
-    <div class="row" name="FindConf" >
+<div class="row" name="FindConf" >
 
+    <form  role="form" method="post" action="foundconf.php">
 
-
-        <div class="col-lg-12">
-
-
-            <form  role="form" method="post" action="findconf.php">
-
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <div class="input-group" onclick="checkac();">
-                        <span class="input-group-addon" id="basic-addon1">Conference Name</span>
-                        <input type="text" id ="namefield" class="form-control input-lg"  placeholder="Enter the name of the conference" aria-describedby="basic-addon1">
-                    </div>
-                    <h2 class="text-center text-capitalize">OR</h2>
-                    <div class="input-group" onclick="checkname();">
-                        <span class="input-group-addon" id="basic-addon1">Acronym</span>
-                        <input type="text" id="acname" class="form-control input-lg"  placeholder="Enter the Acronym of the conference" aria-describedby="basic-addon1">
-                    </div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="input-group" onclick="checkac();">
+                    <span class="input-group-addon" id="basic-addon1">By Conference Name</span>
+                    <input type="text" id ="namefield" class="form-control input-lg"  placeholder="Enter the name of the conference" aria-describedby="basic-addon1" name="search1">
                 </div>
-
-            </div>
-
-                <!--                    Buttons Row Start-->
-                <div class="row">
-
-                    <div class="text-center" name="Buttons">
-                        <input type="submit" class="btn btn-primary " value="Submit">
-                        <input type="reset" class="btn btn-danger " onclick="reset(); " value="Reset">
-
-                    </div>
-
-
-                </div>
-                <!--            Buttons Row End-->
-
-            </form>
-
-    </div>
-
-
-
-
-
-
-    </div>
-
-
-
-
-<h1>Find a Conference</h1>
-    <br>
-    <br>
-
-    <div class="row">
-        <form  role="form" method="post" action="foundconf.php">
-
-
-            <!--            ---------------Topics Div Start------------------>
-
-            <div class="col-md-10" name="TopicsDiv">
-
-
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h2 class="panel-title">
-                        Topics
-                    </h2>
-                </div>
-                <div class="panel-body">
-<!--            =================== Computer Science Topics start =====================-->
-                    <div class="col-md-4" name="Computer Science Topics">
-
-
-                        <div class="panel panel-default" name="CS panel">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">
-                                    Computer Science
-                                </h3>
-                            </div>
-                            <div class="panel-body">
-                                <label><input type="checkbox" value="">Object Oriented Programmin</label>
-                                <br>
-                                <label><input type="checkbox" value="">Compilers</label>
-                                <br>
-                                <label><input type="checkbox" value="">UX/UI</label>
-                                <br>
-                                <label><input type="checkbox" value="">Big Data</label>
-                                <br>
-                                <label><input type="checkbox" value="">Cloud Comoputing</label>
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <!--            =================== Computer Science Topics end =====================-->
-
-
-<!--                        ==== software enigineering topics start ====-->
-                    <div class="col-md-4" name="SoftwareEngineeringTopics">
-
-
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">
-                                    Software Engineering
-                                </h3>
-                            </div>
-                            <div class="panel-body">
-                                <label><input type="checkbox" value="">Quality Assurance</label>
-                                <br>
-                                <label><input type="checkbox" value="">Risk Management</label>
-                                <br>
-                                <label><input type="checkbox" value="">Project Management</label>
-                                <br>
-                                <label><input type="checkbox" value="">Software Re-Engineering</label>
-                                <br>
-                                <label><input type="checkbox" value="">Software Design and Arch.</label>
-
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="col-md-4" name="SoftwareEngineeringTopics">
-
-
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">
-                                    Software Engineering
-                                </h3>
-                            </div>
-                            <div class="panel-body">
-                                <label><input type="checkbox" value="">Quality Assurance</label>
-                                <br>
-                                <label><input type="checkbox" value="">Risk Management</label>
-                                <br>
-                                <label><input type="checkbox" value="">Project Management</label>
-                                <br>
-                                <label><input type="checkbox" value="">Software Re-Engineering</label>
-                                <br>
-                                <label><input type="checkbox" value="">Software Design and Arch.</label>
-
-                            </div>
-                        </div>
-                    </div>
-
-
-
-                </div>
-                <!--                        ==== Information Security topics end ====-->
-
-
-
-
-
-
-
-
-
-
-            </div>
-            </div>
-<!--            ---------------Topics Div end------------------>
-
-
-            <!--            ---------------City Div Start------------------>
-        <div class="col-md-2" name="CityDiv">
-
-
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">
-                        City
-                    </h3>
-                </div>
-                <div class="panel-body">
-                    <label><input type="checkbox" value="">Amman</label>
-                    <br>
-                    <label><input type="checkbox" value="">Irbid</label>
-                    <br>
-                    <label><input type="checkbox" value="">Al-Karak</label>
-                    <br>
-                    <label><input type="checkbox" value="">Aqaba</label>
-                    <br>
-                    <label><input type="checkbox" value="">Ramtha</label>
-                    <br>
-                    <label><input type="checkbox" value="">Tafeleh</label>
-                    <br>
-                    <label><input type="checkbox" value="">Zarqa'</label>
-ww                    <br>
-                    <label><input type="checkbox" value="">Madaba</label>
+                <h2 class="text-center text-capitalize">OR</h2>
+                <div class="input-group" onclick="checkname();">
+                    <span class="input-group-addon" id="basic-addon1">By Topic</span>
+                    <input type="text" id="acname" class="form-control input-lg"  placeholder="Enter the topic of the conference" aria-describedby="basic-addon1" name="search2">
                 </div>
             </div>
-
-
-
 
         </div>
-            <!--            ---------------City Div end------------------>
 
-        </div>
-<!--                    Buttons Row Start-->
-        <div class="row">
+            <!--                    Buttons Row Start-->
+            <div class="row">
 
-            <div class="text-center" name="Buttons">
-                <input type="submit" class="btn btn-primary " value="Submit">
-                <input type="reset" class="btn btn-danger " value="Reset">
+                <div class="text-center" name="Buttons">
+                    <input type="submit" class="btn btn-primary " value="Submit" name="submit">
+                    <input type="reset" class="btn btn-danger " onclick="reset(); " value="Reset">
+
+                </div>
+
 
             </div>
-
-
-        </div>
-<!--            Buttons Row End-->
-
+            <!--            Buttons Row End-->
 
         </form>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
+         </div>
+    </div>
 
 <!-- /Body End -->
 
@@ -346,7 +126,7 @@ ww                    <br>
                 <div class="row">
                     <div class="col-lg-12">
                         <ul class="nav nav-pills nav-justified">
-                            <li><a href="/">© 2013 Company Name.</a></li>
+                            <li><a href="/">Copyright <?php echo htmlentities("© ");  echo date("Y",time()); ?> Company Name.</a></li>
                             <li><a href="#">Terms of Service</a></li>
                             <li><a href="#">Privacy</a></li>
                         </ul>
@@ -357,6 +137,10 @@ ww                    <br>
         </div>
     </footer>
 </div>
+
+
+
+
 
 <!-- Bootstrap core JavaScript
 ================================================== -->
