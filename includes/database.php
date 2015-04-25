@@ -42,7 +42,7 @@ class database extends DatabaseObject
 
         $this->last_query = $sql;
         $result = mysqli_query($this->connection,$sql);
-//        $this->confirm_query($result);
+        $this->confirm_query($result);
         return $result;
     }
 
