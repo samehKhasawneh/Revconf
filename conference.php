@@ -10,7 +10,7 @@ require_once("includes/user.php");
 require_once("includes/session.php");
 require_once("includes/topic.php");
 require_once("includes/userimgs.php");
-
+require_once("includes/attendance.php");
 
 
 if(empty($_GET["ID"])) {
@@ -154,31 +154,59 @@ foreach($users as $user){
                 </div>
 
 
+                <?php
+                if(!isset($_SESSION["ID"])) {
+                    ?>
+                    <div class="panel panel-default text-center" id="join">
+                        <div class="panel-body">
+                            <h2 class="text-center">Join This Conference</h2>
 
-                <div class="panel panel-default text-center" id="join" >
-                    <div class="panel-body">
-                        <h2 class="text-center">Join This Conference</h2>
-                        <p class="text-center">View a lists of conferences which you can attend</p>
-                        <button  class="btn btn-primary btn-lg btn-block" role="button">Join</button>
+                            <p class="text-center">View a lists of conferences which you can attend</p>
+                            <button class="btn btn-primary btn-lg btn-block" role="button">Join</button>
+                        </div>
                     </div>
-                </div>
+                    <?php
+                }elseif(isset($_SESSION["ID"])) {
+                    $conf = "SELECT * FROM attendance WHERE userID = {$_SESSION["ID"]}";
+                    $found_user = attendance::find_by_sql($conf);
+                    if (!$found_user) {
+                        ?>
+                        <div class="panel panel-default text-center" id="join">
+                            <div class="panel-body">
+                                <h2 class="text-center">Join This Conference</h2>
 
-                <div class="panel panel-default text-center" id="submitpaper">
-                    <div class="panel-body">
-                        <h2 class="text-center">Submit Paper</h2>
-                        <p class="text-center">View a lists of conferences which you can attend</p>
-                        <button id="submitPaper" class="btn btn-primary btn-lg btn-block" role="button">Submit</button>
-                    </div>
-                </div>
+                                <p class="text-center">View a lists of conferences which you can attend</p>
+                                <button class="btn btn-primary btn-lg btn-block" role="button">Join</button>
+                            </div>
+                        </div>
+                    <?php
+                    } else {
+                        ?>
+
+                        <div class="panel panel-default text-center" id="submitpaper">
+                            <div class="panel-body">
+                                <h2 class="text-center">Submit Paper</h2>
+
+                                <p class="text-center">View a lists of conferences which you can attend</p>
+                                <button id="submitPaper" class="btn btn-primary btn-lg btn-block" role="button">Submit
+                                </button>
+                            </div>
+                        </div>
 
 
-                <div class="panel panel-default text-center" id="reviewPaper">
-                    <div class="panel-body">
-                        <h2 class="text-center">Review Paper</h2>
-                        <p class="text-center">Review Papers</p>
-                        <button id="submitPaper" class="btn btn-primary btn-lg btn-block" role="button">Review</button>
-                    </div>
-                </div>
+                        <div class="panel panel-default text-center" id="reviewPaper">
+                            <div class="panel-body">
+                                <h2 class="text-center">Review Paper</h2>
+
+                                <p class="text-center">Review Papers</p>
+                                <button id="submitPaper" class="btn btn-primary btn-lg btn-block" role="button">Review
+                                </button>
+                            </div>
+                        </div>
+                    <?php
+                    }
+                }else {}
+                ?>
                 <script>
                     //             <!-- This will check if the user has joined the conference if he did , the join div will get removed -->
                     x = true;
