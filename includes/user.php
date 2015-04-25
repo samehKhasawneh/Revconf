@@ -7,7 +7,7 @@ class user extends DatabaseObject{
 
     protected static $table_name="user";
     protected static $db_fields =
-        array('ID', 'title', 'FirstName', 'LastName', 'Age', 'gender', 'Email', 'Password','scientific_degrees', 'date_registered', 'city', 'isAdmin');
+        array('ID', 'title', 'FirstName', 'LastName', 'Age', 'gender', 'Email', 'Password','scientific_degree', 'date_registered', 'city', 'isAdmin');
 
     public $ID;
     public $title;
@@ -17,18 +17,11 @@ class user extends DatabaseObject{
     public $gender;
     public $Email;
     public $Password;
-    public $scientific_degrees;
+    public $scientific_degree;
     public $date_registered;
     public $city;
     public $isAdmin;
 
-//    public function full_name() {
-//        if(isset($this->FirstName) && isset($this->LastName)) {
-//            return $this->FirstName . " " . $this->LastName;
-//        } else {
-//            return "";
-//        }
-//    }
 
     public static function authenticate($email="", $password="") {
         global $database;

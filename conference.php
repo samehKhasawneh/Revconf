@@ -1,8 +1,63 @@
 <?php
-
 include_once("includes/navbar.php");
+require_once("includes/functions.php");
+require_once("includes/database.php");
+require_once("includes/DatabaseObject.php");
+require_once("includes/conference.php");
+require_once("includes/conftopic.php");
+require_once("includes/committe.php");
+require_once("includes/user.php");
+require_once("includes/session.php");
+require_once("includes/topic.php");
+require_once("includes/userimgs.php");
 
-echo $_SESSION["userID"];
+
+
+if(empty($_GET["ID"])) {
+    $session->message("No conference has been choosen");
+    redirect_to("findconf.php");
+}
+$conference = conference::find_by_id($_GET["ID"]);
+
+if(!$conference) {
+    $session->message("The conference is not exists.");
+    redirect_to("findconf.php");
+}
+
+$query = "SELECT topic.topicName FROM topic INNER JOIN conftopic WHERE topic.ID = conftopic.topicID AND conftopic.confID = {$_GET["ID"]};";
+
+$topics = topic::find_by_sql($query);
+
+$counter = 0;
+$array = array();
+foreach($topics as $topic){
+    foreach($topic as $key) {
+        if (isset($key)) {
+            $array[$counter] = $key;
+            $counter++;
+        }
+    }
+}
+
+$quey2 = "SELECT user.ID, user.FirstName FROM user INNER JOIN committe WHERE user.ID = committe.userID AND committe.confID = {$_GET["ID"]}";
+
+$users = user::find_by_sql($quey2);
+
+$counter1 = 0;
+$array1= array();
+foreach($users as $user){
+    foreach($user as $key) {
+        if (isset($key)) {
+            $array1[$counter1] = $key;
+            $counter1++;
+        }
+    }
+}
+
+
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -39,8 +94,8 @@ echo $_SESSION["userID"];
         <div class="text-center">
             </br>
             </br>
-            <h1>Conference Name</h1>
-            <p>20/5/2015</p>
+            <h1><?php echo htmlentities($conference->confName)?></h1>
+            <p><?php echo htmlentities($conference->confDate)?></p>
 
         </div>
 
@@ -61,7 +116,7 @@ echo $_SESSION["userID"];
                 </br>
                 </br>
 
-             <img src="https://services.rss.jo/Images/logo4_2.png" class="img-thumbnail" alt="Cinque Terre">
+             <img src="<?php echo htmlentities($conference->photoURL)?>" class="img-thumbnail" alt="Cinque Terre">
 
 
                 <div class="table-responsive" >
@@ -70,36 +125,29 @@ echo $_SESSION["userID"];
                         <tbody >
                         <tr>
                             <td><strong>Conference Name</strong></td>
-                            <td>PSUT ICT MINA 2015</td>
+                            <td><?php echo htmlentities($conference->confName)?></td>
                         </tr>
                         <tr>
                             <td><strong>Organization</strong></td>
-                            <td>PSUT</td>
+                            <td><?php echo htmlentities($conference->orgID)?></td>
                         </tr>
-
+                        <tr>
+                            <td><strong>Location</strong></td>
+                            <td><?php echo htmlentities($conference->Location)?></td>
+                        </tr>
                         <tr>
                             <td><strong>Conference Date</strong></td>
-                            <td>12/5/2015</td>
-                        </tr>
-
-                        <tr>
-                            <td><strong>Submitting Start Date</strong></td>
-                            <td>12/5/2015</td>
+                            <td><?php echo htmlentities($conference->confDate)?></td>
                         </tr>
 
                         <tr>
                             <td><strong>Submitting End Date</strong></td>
-                            <td>12/5/2015</td>
-                        </tr>
-
-                        <tr>
-                            <td><strong>Reviewing Start Date</strong></td>
-                            <td>12/5/2015</td>
+                            <td><?php echo htmlentities($conference->confSubmitEnd)?></td>
                         </tr>
 
                         <tr>
                             <td><strong>Reviewing End Date</strong></td>
-                            <td>12/5/2015</td>
+                            <td><?php echo htmlentities($conference->confReviewEnd)?></td>
                         </tr>
                         </tbody>
                     </table>
@@ -154,9 +202,7 @@ echo $_SESSION["userID"];
         <h2>Introduction</h2>
 
             <div class="well">
-                The 7th International Conference on Information Technology, ICIT 2015 is a forum for scientists, engineers, and practitioners to present their latest research results, ideas, developments, and applications in all areas of Information Technology. ICIT 2015 will include presentations of contributed papers and state-of-the-art lectures by invited keynote speakers. Moreover, the program will include tutorials on hot areas of Information Technology.
-
-                All submitted papers will go through double-blind* reviewing processes by at least three reviewers. Extended versions of the conference best selected papers will be evaluated to be published in WCSIT special issue (www.wcsit.org) and in ARPN Journal of Systems and Software (http://www.scientific-journals.org).
+                <?php echo htmlentities($conference->introduction)?>
             </div>
                 </div>
 
@@ -169,12 +215,14 @@ echo $_SESSION["userID"];
 
                 <div class="well">
 
-                    <p class="label label-primary">Software Engineering</p>
-                    <p class="label label-primary">Artificial Intelligence</p>
-                    <p class="label label-primary">UX/UI</p>
-                    <p class="label label-primary">Software Engineering</p>
-                    <p class="label label-primary">Artificial Intelligence</p>
-                    <p class="label label-primary">UX/UI</p>
+                    <?php
+                    for($i = 0;$i<=$counter-1;$i++) {
+                        ?>
+                        <p class="label label-primary"><?php echo htmlentities($array[$i])?></p>
+
+                    <?php
+                    }
+                    ?>
 
                 </div>
             </div>
@@ -190,69 +238,32 @@ echo $_SESSION["userID"];
 
 <div class="row">
 
+    <?php
+    for($i = 0; $i <= $counter1-1 ;$i+=2){
+    ?>
     <div ng-repeat="u in users" class="col-xs-4 col-sm-2 ng-scope">
-        <img src="http://api.randomuser.me/portraits/men/65.jpg" class="img-thumbnail img-responsive img-circle">
-        <h3 class="text-center ">art</h3>
+        <?php
+        $query3 = "SELECT imageURL FROM userimgs WHERE userID = {$array1[$i]};";
+        $photos = userimgs::find_by_sql($query3);
+        $counter2 = 0;
+        $array2 = array();
+        foreach($photos as $photo){
+            foreach($photo as $key) {
+                if (isset($key)) {
+                    $array2[$counter2] = $key;
+                    $counter2++;
+                }
+            }
+        }
+        ?>
+        <img src="<?php if($i == 0){echo $array2[$i];}else{echo $array2[$i-2];}?>" class="img-thumbnail img-responsive img-circle">
+        <h3 class="text-center "><?php echo htmlentities($array1[$i+1]) ?></h3>
         <hr>
     </div>
+    <?php
+    }
+    ?>
 
-    <div ng-repeat="u in users" class="col-xs-4 col-sm-2 ng-scope">
-        <img src="http://api.randomuser.me/portraits/men/31.jpg" class="img-thumbnail img-responsive img-circle">
-        <h3 class="text-center ">art</h3>
-        <hr>
-    </div>
-
-    <div ng-repeat="u in users" class="col-xs-4 col-sm-2 ng-scope">
-        <img src="http://api.randomuser.me/portraits/men/62.jpg" class="img-thumbnail img-responsive img-circle">
-        <h3 class="text-center ">art</h3>
-        <hr>
-    </div>
-
-    <div ng-repeat="u in users" class="col-xs-4 col-sm-2 ng-scope">
-        <img src="http://api.randomuser.me/portraits/men/45.jpg" class="img-thumbnail img-responsive img-circle">
-        <h3 class="text-center ">art</h3>
-        <hr>
-    </div>
-    <div ng-repeat="u in users" class="col-xs-4 col-sm-2 ng-scope">
-        <img src="http://api.randomuser.me/portraits/men/12.jpg" class="img-thumbnail img-responsive img-circle">
-        <h3 class="text-center ">art</h3>
-        <hr>
-    </div>
-    <div ng-repeat="u in users" class="col-xs-4 col-sm-2 ng-scope">
-        <img src="http://api.randomuser.me/portraits/men/77.jpg" class="img-thumbnail img-responsive img-circle">
-        <h3 class="text-center ">art</h3>
-        <hr>
-    </div>
-    <div ng-repeat="u in users" class="col-xs-4 col-sm-2 ng-scope">
-        <img src="http://api.randomuser.me/portraits/men/54.jpg" class="img-thumbnail img-responsive img-circle">
-        <h3 class="text-center ">art</h3>
-        <hr>
-    </div>
-    <div ng-repeat="u in users" class="col-xs-4 col-sm-2 ng-scope">
-        <img src="http://api.randomuser.me/portraits/men/12.jpg" class="img-thumbnail img-responsive img-circle">
-        <h3 class="text-center ">art</h3>
-        <hr>
-    </div>
-    <div ng-repeat="u in users" class="col-xs-4 col-sm-2 ng-scope">
-        <img src="http://api.randomuser.me/portraits/men/2.jpg" class="img-thumbnail img-responsive img-circle">
-        <h3 class="text-center ">art</h3>
-        <hr>
-    </div>
-    <div ng-repeat="u in users" class="col-xs-4 col-sm-2 ng-scope">
-        <img src="http://api.randomuser.me/portraits/men/32.jpg" class="img-thumbnail img-responsive img-circle">
-        <h3 class="text-center ">art</h3>
-        <hr>
-    </div>
-    <div ng-repeat="u in users" class="col-xs-4 col-sm-2 ng-scope">
-        <img src="http://api.randomuser.me/portraits/men/22.jpg" class="img-thumbnail img-responsive img-circle">
-        <h3 class="text-center ">art</h3>
-        <hr>
-    </div>
-    <div ng-repeat="u in users" class="col-xs-4 col-sm-2 ng-scope">
-        <img src="http://api.randomuser.me/portraits/men/66.jpg" class="img-thumbnail img-responsive img-circle">
-        <h3 class="text-center ">art</h3>
-        <hr>
-    </div>
 
 </div>
 
