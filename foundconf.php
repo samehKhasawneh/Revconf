@@ -8,7 +8,7 @@ require_once("includes/conference.php");
 
 
 if(isset($_POST["submit"])){
-//&& conference.isApproved = 1
+
     if(isset($_POST["search1"])){
         $search = $_POST["search1"];
         $search = preg_replace("#[^0-9a-z]#i","##",$search);
