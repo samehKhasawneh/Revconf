@@ -12,6 +12,7 @@ require_once("includes/topic.php");
 require_once("includes/userimgs.php");
 require_once("includes/attendance.php");
 require_once("includes/paper.php");
+require_once("includes/paperassign.php");
 
 if(empty($_GET["ID"])) {
     $session->message("No conference has been choosen");
@@ -194,16 +195,31 @@ foreach($users as $user){
                         </div>
 
 <!--// href=papers.php?ID={$_GET["ID"]}-->
-                        <div class="panel panel-default text-center" id="reviewPaper">
-                            <div class="panel-body">
-                                <h2 class="text-center">Review Paper</h2>
+                        <?php
+                        $query1 = "SELECT paperID FROM paperassign WHERE userID = {$_SESSION["ID"]}";
+                        $result = paperassign::find_by_sql($query1);
+//                        foreach($photos as $photo){
+//                            foreach($photo as $key) {
+//                                if (isset($key)) {
+//                                    $array2[$counter2] = $key;
+//                                    $counter2++;
+//                                }
+//                            }
+//                        }
+                        if($result) {
+                            ?>
+                            <div class="panel panel-default text-center" id="reviewPaper">
+                                <div class="panel-body">
+                                    <h2 class="text-center">Review Paper</h2>
 
-                                <p class="text-center">Review Papers</p>
-                                <button id="submitPaper" class="btn btn-primary btn-lg btn-block" role="button">Review
-                                </button>
+                                    <p class="text-center">Review Papers</p>
+                                    <button id="submitPaper" class="btn btn-primary btn-lg btn-block" role="button">
+                                        Review
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    <?php
+                        <?php
+                        }
                     }
                 }else {}
                 ?>
