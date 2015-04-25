@@ -28,6 +28,12 @@ class DatabaseObject {
         return $object_array;
     }
 
+    public static function execut_by_sql($sql=""){
+        global $database;
+        $result = $database->query($sql);
+        return $result;
+    }
+
 
 
     public static function count_all() {
@@ -82,11 +88,10 @@ class DatabaseObject {
         return isset($this->ID) ? $this->update() : $this->create();
     }
 
-    public function create() {
+    private function create() {
         global $database;
-        // single-quotes around all values and escape all values to prevent SQL injection
         $attributes = $this->sanitized_attributes();
-        $sql = "INSERT INTO ".self::$table_name." (";
+        $sql = "INSERT INTO ".static::$table_name." (";
         $sql .= join(", ", array_keys($attributes));
         $sql .= ") VALUES ('";
         $sql .= join("', '", array_values($attributes));
@@ -99,15 +104,14 @@ class DatabaseObject {
         }
     }
 
-    public function update() {
+    private function update() {
         global $database;
-        //single-quotes around all values and escape all values to prevent SQL injection
         $attributes = $this->sanitized_attributes();
         $attribute_pairs = array();
         foreach($attributes as $key => $value) {
             $attribute_pairs[] = "{$key}='{$value}'";
         }
-        $sql = "UPDATE ".self::$table_name." SET ";
+        $sql = "UPDATE ".static::$table_name." SET ";
         $sql .= join(", ", $attribute_pairs);
         $sql .= " WHERE ID=". $database->escape_value($this->ID);
         $database->query($sql);
@@ -116,8 +120,7 @@ class DatabaseObject {
 
     public function delete() {
         global $database;
-        // - escape all values to prevent SQL injection and use LIMIT 1 to ensure that the affected rows=1
-        $sql = "DELETE FROM ".self::$table_name;
+        $sql = "DELETE FROM ".static::$table_name;
         $sql .= " WHERE ID=". $database->escape_value($this->ID);
         $sql .= " LIMIT 1";
         $database->query($sql);
