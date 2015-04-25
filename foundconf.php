@@ -8,13 +8,13 @@ require_once("includes/conference.php");
 
 
 if(isset($_POST["submit"])){
-
+//&& conference.isApproved = 1
     if(isset($_POST["search1"])){
         $search = $_POST["search1"];
         $search = preg_replace("#[^0-9a-z]#i","##",$search);
 
-        $query  = "SELECT conference.confName, conference.confDate, conference.photoURL FROM conference ";
-        $query .=  "WHERE conference.confName LIKE '%$search%' ORDER BY  conference.confName;";
+        $query  = "SELECT conference.ID ,conference.confName, conference.confDate, conference.photoURL FROM conference ";
+        $query .=  "WHERE conference.confName LIKE '%$search%' AND conference.isApproved = 1 ORDER BY  conference.confName;";
         $sql = conference::find_by_sql($query);
         $counter = 0;
         $counter2 = 0;
@@ -32,10 +32,9 @@ if(isset($_POST["submit"])){
         $search = $_POST["search2"];
         $search = preg_replace("#[^0-9a-z]#i","##",$search);
 
-
-        $query = "SELECT conference.confName, conference.confDate, conference.photoURL, topic.topicName FROM conference
-           INNER JOIN conftopic ON conference.ID = conftopic.confID
-           INNER JOIN topic ON topic.ID = conftopic.topicID WHERE topic.topicName LIKE '%$search%'
+        $query = "SELECT conference.ID ,conference.confName, conference.confDate, conference.photoURL FROM conference
+           INNER JOIN conftopics ON conference.ID = conftopics.confID
+           INNER JOIN topic ON topic.ID = conftopics.topicID WHERE topic.topicName LIKE '%$search%' AND conference.isApproved = 1
            ORDER BY  conference.confName;";
         $sql = conference::find_by_sql($query);
         $counter = 0;
@@ -50,7 +49,6 @@ if(isset($_POST["submit"])){
             }
             $counter2++;
         }
-
     }
 
 }else{
@@ -95,7 +93,7 @@ if(isset($_POST["submit"])){
     <h6>Those are the results of your search</h6>
 
     <h3><?php
-       if($counter2 != 1){
+       if($counter2 > 1){
            echo $counter2 ." Conferences found";
        }else{
            echo $counter2 ." Conference found";
@@ -103,7 +101,7 @@ if(isset($_POST["submit"])){
         ?> </h3>
 
     <?php
-    for($i = 0 ; $i<=$counter-1 ; $i+=3) {
+    for($i = 0 ; $i<=$counter-1 ; $i+=4) {
 
         ?>
     <div class="row"> <!--EACH ROW IS FOR EACH CONFERENCE FOUND-->
@@ -115,15 +113,15 @@ if(isset($_POST["submit"])){
             <div class="panel-body">
 
                 <div class="col-md-3">
-                    <a type="hidden" href="conference.php?id=<?php echo $array[$i]; ?>">
-                    <img src="<?php echo $array[$i + 2] ?>" class="img-thumbnail">
+                    <a type="hidden" href="conference.php?ID=<?php echo $array[$i]; ?>">
+                    <img src="<?php echo $array[$i+3] ?>" class="img-thumbnail">
                 </div>
 
                 <div class="col-md-4">
 
                     <span class="row">
-                        <p>Conference Name: <span><?php echo htmlentities($array[$i]) ?></span></p>
-                        <p>Date: <span><?php echo htmlentities($array[$i+1]) ?></span></p>
+                        <p>Conference Name: <span><?php echo htmlentities($array[$i+1]) ?></span></p>
+                        <p>Date: <span><?php echo htmlentities($array[$i+2]) ?></span></p>
                     </span>
 
                 </div>
