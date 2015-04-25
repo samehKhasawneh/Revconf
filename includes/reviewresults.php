@@ -7,27 +7,16 @@ require_once('C:\wamp\www\Revconf\includes\phpMailer-master/class.smtp.php');
 class reviewresults extends DatabaseObject{
 
     protected static $table_name="reviewresults";
-    protected static $db_fields=array('paperID', 'userID', 'recommendation', 'strengthWeakness', 'mainProblems', 'comments');
+    protected static $db_fields=array('paperID', 'userID', 'recommendation', 'userFamiliarity', 'strengthWeakness', 'mainProblems', 'comments');
 
     public $paperID;
     public $userID;
     public $recommendation;
+    public $userFamiliarity;
     public $strengthWeakness;
     public $mainProblems;
     public $comments;
 
-
-    public static function make($paperID, $userID="", $comments="") {
-        if(!empty($paperID) && !empty($userID) && !empty($comments)) {
-            $comment = new reviewresults();
-            $comment->paperID = (int)$paperID;
-            $comment->userID = $userID;
-            $comment->comments = $comments;
-            return $comment;
-        } else {
-            return false;
-        }
-    }
 
     public static function find_comments_on($paperID=0) {
         global $database;
