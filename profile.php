@@ -58,7 +58,7 @@ foreach($sql3 as $s3){
 
 
 $sql = "SELECT topic.topicName FROM topic
-                    INNER JOIN usertopic ON topic.topicID = usertopic.topicID
+                    INNER JOIN usertopic ON topic.ID = usertopic.topicID
                     INNER JOIN user ON user.ID = usertopic.userID WHERE user.ID ={$_SESSION["ID"]}
                     ORDER BY topic.topicName";
 
@@ -75,7 +75,7 @@ foreach($query as $result){
     }
 }
 
-$sql2 = "SELECT conference.confName,conference.Location,conference.confDate FROM conference
+$sql2 = "SELECT conference.ID,conference.confName,conference.Location,conference.confDate FROM conference
                     INNER JOIN attendance ON conference.ID = attendance.confID
                     INNER JOIN user ON user.ID = attendance.userID WHERE user.ID ={$_SESSION["ID"]}
                     ORDER BY conference.confName";
@@ -273,13 +273,13 @@ foreach($query as $result2){
 
 
     <?php
-    for($i = 0 ; $i<=$c1-1 ; $i+=3) {
+    for($i = 0 ; $i<=$c1-1 ; $i+=4) {
     ?>
     <tr>
-        <td><?php echo htmlentities($array4[$i]);?></td>
         <td><?php echo htmlentities($array4[$i+1]);?></td>
         <td><?php echo htmlentities($array4[$i+2]);?></td>
-        <td><a class="btn btn-success">Open</a> </td>
+        <td><?php echo htmlentities($array4[$i+3]);?></td>
+        <td><a class="btn btn-success" type="hidden" href="conference.php?id=<?php echo $array4[$i]; ?>">Open</a> </td>
     </tr>
      <?php
     }
