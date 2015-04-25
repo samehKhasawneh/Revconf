@@ -279,7 +279,7 @@ foreach($query as $result2){
         <td><?php echo htmlentities($array4[$i+1]);?></td>
         <td><?php echo htmlentities($array4[$i+2]);?></td>
         <td><?php echo htmlentities($array4[$i+3]);?></td>
-        <td><a class="btn btn-success" type="hidden" href="conference.php?id=<?php echo $array4[$i]; ?>">Open</a> </td>
+        <td><a class="btn btn-success" type="hidden" href="conference.php?ID=<?php echo $array4[$i]; ?>">Open</a> </td>
     </tr>
      <?php
     }
