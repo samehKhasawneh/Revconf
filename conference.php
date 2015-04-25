@@ -24,7 +24,7 @@ if(!$conference) {
     redirect_to("findconf.php");
 }
 
-$query = "SELECT topic.topicName FROM topic INNER JOIN conftopic WHERE topic.ID = conftopic.topicID AND conftopic.confID = {$_GET["ID"]};";
+$query = "SELECT topic.topicName FROM topic INNER JOIN conftopics WHERE topic.ID = conftopics.topicID AND conftopics.confID = {$_GET["ID"]};";
 
 $topics = topic::find_by_sql($query);
 
