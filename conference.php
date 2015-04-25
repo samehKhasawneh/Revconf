@@ -11,7 +11,7 @@ require_once("includes/session.php");
 require_once("includes/topic.php");
 require_once("includes/userimgs.php");
 require_once("includes/attendance.php");
-
+require_once("includes/paper.php");
 
 if(empty($_GET["ID"])) {
     $session->message("No conference has been choosen");
@@ -193,7 +193,7 @@ foreach($users as $user){
                             </div>
                         </div>
 
-
+<!--// href=papers.php?ID={$_GET["ID"]}-->
                         <div class="panel panel-default text-center" id="reviewPaper">
                             <div class="panel-body">
                                 <h2 class="text-center">Review Paper</h2>
@@ -308,6 +308,33 @@ foreach($users as $user){
 
                 <div class="well">
 
+                    <?php
+                    $query4 = "SELECT ID,paperName FROM paper WHERE isAccepted = 1 AND confID = {$conference->ID}";
+                    $papers = paper::find_by_sql($query4);
+
+                    $c1 = 0;
+                    $array4 = array();
+                    foreach($papers as $result2){
+                        foreach($result2 as $key4) {
+                            if (isset($key4)) {
+                                $array4[$c1] = $key4;
+                                $c1++;
+                            }
+                        }
+                    }
+
+                    for($i = 0 ; $i<=$c1-1 ; $i+=2) {
+                        ?>
+                        <p class="label label-primary">
+                            <?php
+                            echo $array4[$i];
+                            echo "<br>";
+                            echo $array4[$i+1];
+                            ?>
+                        </p>
+                    <?php
+                    }
+                    ?>
 
 
                 </div>
