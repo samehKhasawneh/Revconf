@@ -15,7 +15,7 @@ if(!isset($_GET["ID"])){
     redirect_to("index.php");
 }
 
-$query = "SELECT ID,userID,paperName FROM paper WHERE confID = {$_GET["ID"]}";
+$query = "SELECT ID,userID,paperName FROM paper WHERE confID = {$_GET["ID"]} AND isAccepted = 0";
 $papers = paper::find_by_sql($query);
 
 $counter = 0;
