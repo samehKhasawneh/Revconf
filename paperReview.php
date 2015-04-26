@@ -1,5 +1,103 @@
 <?php
 include_once("includes/navbar.php");
+require_once("includes/session.php");
+require_once("includes/paper.php");
+require_once("includes/functions.php");
+require_once("includes/conference.php");
+require_once("includes/paperassign.php");
+require_once("includes/evaluationresult.php");
+require_once("includes/reviewresults.php");
+
+
+if(!isset($_SESSION["ID"]) || !isset($_GET["ID"])){
+    redirect_to("conference.php");
+}
+$query = "SELECT userID FROM paperassign WHERE paperID = {$_GET["ID"]} AND userID = {$_SESSION["ID"]}";
+$user = paperassign::find_by_sql($query);
+if(!$user) {
+    redirect_to("conference.php?ID={$_GET["ID"]}");
+}
+
+    $query = "SELECT userID FROM evaluationresult WHERE paperID = {$_GET["ID"]}";
+    $user = evaluationresult::find_by_sql($query);
+
+    $counter = 0;
+    $array = array();
+    foreach($user as $s) {
+        foreach ($s as $key) {
+            if (isset($key)) {
+                $array[$counter] = $key;
+                $counter++;
+            }
+        }
+
+    }
+if($array[0] == $_SESSION["ID"]){
+    redirect_to("papers.php");
+}
+
+
+
+
+$paper = paper::find_by_id($_GET["ID"]);
+
+
+
+
+if(isset($_POST["submit"])){// Form has been submitted.
+
+    $q1 = $_POST["q1"];
+    $q2 = $_POST["q2"];
+    $q3 = $_POST["q3"];
+    $q4 = $_POST["q4"];
+    $q5 = $_POST["q5"];
+    $q6 = $_POST["q6"];
+    $q7 = $_POST{"q7"};
+    $q8 = $_POST["q8"];
+    $q9 = $_POST["q9"];
+    $q10 = $_POST["q10"];
+
+    $query1 = "INSERT INTO evaluationresult (paperID,userID,eval1,eval2,eval3,eval4,eval5,eval6,eval7,eval8,eval9,eval10) ";
+    $query1 .= "VALUES ({$_GET["ID"]},{$_SESSION["ID"]},{$q1},{$q2},{$q3},{$q4},{$q5},{$q6},{$q7},{$q8},{$q9},{$q10})";
+
+    $result = evaluationresult::execut_by_sql($query1);
+
+    $rec = $_POST["recommendation"];
+    $fam = $_POST["fam"];
+    $sw = $_POST["sp1"];
+    $mp = $_POST["sp2"];
+    $com = $_POST["sp3"];
+
+    $query2 = "INSERT INTO reviewresults (paperID,userID,recommendation,userFamiliarity,strengthWeakness,mainProblems,comments) ";
+    $query2 .= "VALUES ({$_GET["ID"]},{$_SESSION["ID"]},'{$rec}','{$fam}','{$sw}','{$mp}','{$com}')";
+
+    $result2 = reviewresults::execut_by_sql($query2);
+
+    if($result && $result2){
+        redirect_to("papers.php");
+    }
+
+}else{
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ?>
 <!DOCTYPE html>
@@ -42,7 +140,7 @@ include_once("includes/navbar.php");
             </br>
             </br>
             <h1>Review Paper:</h1>
-            <p>an Implementation to a Unix Based Compiler</p>
+            <p><?php echo $paper->paperName ?></p>
 
         </div>
 
@@ -69,9 +167,12 @@ include_once("includes/navbar.php");
         <tbody>
 
         <tr>
-            <td>12</td>
-            <td style="color:red; font-weight: bold;">an Implementation to a Unix Based Compiler</td>
-            <td>PSUT MINA 15 </td>
+            <td><?php echo $paper->ID ?></td>
+            <td style="color:red; font-weight: bold;"><?php echo $paper->paperName ?></td>
+            <?php
+            $conference = conference::find_by_id($paper->confID)
+            ?>
+            <td><?php echo $conference->confName ?></td>
 
 
         </tr>
@@ -87,8 +188,9 @@ include_once("includes/navbar.php");
 
 <div class="row col-md-12 well">
 <form>
-    <iframe src="http://localhost/pdf/web/helloworld.pdf" width="100%" height="100% controls seamless frameborder="0" ></iframe>
-
+    <iframe src="<?php echo $paper->paperURL ?>" width="100%" height="100% controls seamless frameborder="0" ></iframe>
+</form>
+    <form  role="form" method="post" action="paperReview.php?ID=<?php echo $_GET["ID"]?>">
     <fieldset>
 
         <legend>
@@ -106,20 +208,20 @@ include_once("includes/navbar.php");
                     <br>
                     <label><input type="radio" name="recommendation" id="recommendation4" value="4"><strong>Marginal Tend to Accept:</strong> Content has merit, but accuracy, clarity, completeness, and/or writing should and could be improved in time</label>
                     <br>
-                    <label><input type="radio" name="recommendation" id="recommendation5" value="5" checked=""><strong>Clear Accept:</strong> Content, presentation, and writing meet professional norms; improvements may be advisable but acceptable as is</label>
+                    <label><input type="radio" name="recommendation" id="recommendation5" value="5"><strong>Clear Accept:</strong> Content, presentation, and writing meet professional norms; improvements may be advisable but acceptable as is</label>
                     <br>
                     <label><input type="radio" name="recommendation" id="recommendation6" value="6"><strong>Must Accept:</strong> Candidate for outstanding submission. Suggested improvements still appropriate</label><br></fieldset>
-<br>
-                <br>
-                <p><strong>Reviewer Familiarity with Subject Matter: </strong></p>
-                <label><input type="radio" name="fam" id="fam" value="1">Low </label>
-                <br>
-                <label><input type="radio" name="fam" id="fam" value="2">Moderate </label>
-                <br>
-                <label><input type="radio" name="fam" id="fam" value="3">High </label>
+
+                    <br>
+                    <p><strong>Reviewer Familiarity with Subject Matter: </strong></p>
+                    <label><input type="radio" name="fam" id="fam" value="1">Low </label>
+                    <br>
+                    <label><input type="radio" name="fam" id="fam" value="2">Moderate </label>
+                    <br>
+                    <label><input type="radio" name="fam" id="fam" value="3">High </label>
 
 
-            </div>
+                 </div>
 
 
     </fieldset>
@@ -279,7 +381,7 @@ include_once("includes/navbar.php");
 
                 <div class="text-center">
 
-                    <input class="btn btn-success input-lg" type="submit" value="Submit">
+                    <input class="btn btn-success input-lg" type="submit" value="Submit" name="submit">
                     <input class="btn btn-warning input-lg" type="reset" value="Reset">
                     </div>
     </div>   <!--end of main div-->
