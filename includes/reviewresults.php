@@ -22,7 +22,7 @@ class reviewresults extends DatabaseObject{
         global $database;
         $sql = "SELECT recommendation, strengthWeakness, mainProblems, comments  FROM " . self::$table_name;
         $sql .= " WHERE paperID =" .$database->escape_value($paperID);
-        $sql .= " ORDER BY id ASC";
+        $sql .= " ORDER BY userID ASC";
         return self::find_by_sql($sql);
     }
 

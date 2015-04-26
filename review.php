@@ -107,8 +107,10 @@ $conf = conference::find_by_id($_GET["ID"]);
             <td style="color:red; font-weight: bold;"><?php echo htmlentities($array4[$i + 1]) ?></td>
             <td><?php echo htmlentities($conf->confName)?></td>
             <td>
-                <button class="btn btn-block btn-success"><a href="paperReview.php?ID=<?php echo $array4[$i] ?>">Review
+                <a href="paperReview.php?ID=<?php echo $array4[$i] ?>">
+                <button class="btn btn-block btn-success">Review
                 </button>
+                    </a>
             </td>
 
         </tr>
