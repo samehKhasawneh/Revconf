@@ -2,7 +2,7 @@
 require_once("../includes/session.php");
 require_once("../includes/database.php");
 require_once("../includes/functions.php");
-require_once("../includes/paper.php");
+require_once("../includes/conference.php");
 
 
 
@@ -13,12 +13,11 @@ if(!isset($_GET["ID"])){
     redirect_to("index.php");
 }
 
-$paper = paper::find_by_id($_GET["ID"]);
+$conf = conference::find_by_id($_GET["ID"]);
 
-$paper->isAccepted = 1;
 
-if($paper->save()){
-    redirect_to("confList.php");
+if($conf->delete()){
+    redirect_to("confdelete.php");
 }else{
     redirect_to("index.php");
 }

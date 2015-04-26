@@ -1,3 +1,46 @@
+<?php
+require_once("../includes/session.php");
+require_once("../includes/conference.php");
+require_once("../includes/database.php");
+require_once("../includes/functions.php");
+require_once("../includes/paper.php");
+require_once("../includes/user.php");
+require_once("../includes/evaluationresult.php");
+
+
+if(!isset($_SESSION["orgEmail"])){
+    redirect_to("login.php");
+}
+if(!isset($_GET["ID"])){
+    redirect_to("index.php");
+}
+
+$query = "SELECT ID,userID,paperName FROM paper WHERE confID = {$_GET["ID"]}";
+$papers = paper::find_by_sql($query);
+
+$counter = 0;
+$array = array();
+foreach($papers as $paper){
+    foreach($paper as $key) {
+        if (isset($key)) {
+            $array[$counter] = $key;
+            $counter++;
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -223,10 +266,10 @@
                     <table class="table table-bordered well">
 
                         <thead>
+
                         <tr>
                             <th class="text-center">ID</th>
                             <th class="text-center">Paper Name</th>
-                            <th class="text-center">Topic </th>
                             <th class="text-center">User</th>
                             <th class="text-center"># Of Reviews</th>
                             <th class="text-center">Rank</th>
@@ -234,18 +277,24 @@
 
 
                         </tr>
+
                         </thead>
 
                         <tbody>
+                        <?php
+                        for($i=0;$i<=$counter-1;$i=+3){
+                        ?>
                         <tr>
-                            <td>1</td>
-                            <td>C++ Compiler</td>
-                            <td>Compilers</td>
-                            <td>Mohammad Izwayyed</td>
+                            <td><?php echo htmlentities($array[$i])?></td>
+                            <td><?php echo htmlentities($array[$i+2])?></td>
+                            <td><?php echo htmlentities($array[$i+1])?></td>
                             <td>6</td>
                             <td style="color: red; font-weight: bold;">40/100</td>
-                            <td> <a class="btn btn-success btn-block" href="#">Accept</a> </td>
+                            <td> <a class="btn btn-success btn-block" href="accept.php?ID=<?php echo htmlentities($array[$i])?>">Accept</a> </td>
                         </tr>
+                        <?php
+                        }
+                        ?>
 
 
 
