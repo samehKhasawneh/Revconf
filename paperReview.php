@@ -74,7 +74,12 @@ if(isset($_POST["submit"])){// Form has been submitted.
 
     $result2 = reviewresults::execut_by_sql($query2);
 
+    $email = new reviewresults();
+
+    $email->try_to_send_notification();
+
     if($result && $result2){
+
         redirect_to("review.php?ID={$paper->confID}");
     }
 

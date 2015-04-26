@@ -1,6 +1,42 @@
 <?php
-
 include_once("includes/navbar-user.php");
+require_once("includes/database.php");
+require_once("includes/functions.php");
+require_once("includes/user.php");
+require_once("includes/DatabaseObject.php");
+require_once("includes/userimgs.php");
+require_once("includes/session.php");
+
+if(!isset($_SESSION["ID"]) || !isset($_GET["ID"])){
+    redirect_to("conference.php");
+}
+
+if(isset($_POST["submit"])){// Form has been submitted.
+
+    $paperName = $_POST["pName"];
+    $author = $_POST["author"];
+    $authorEmail = $_POST["authorEmail"];
+    $abstract = $_POST["abstract"];
+    $paperTopic = $_POST["ptopic"];
+
+
+    $mysql_datetime = strftime("%Y-%m-%d", time());
+
+    $new_paper = new paper();
+
+    $new_paper->confID = $_GET["ID"];
+    $new_paper->abstract = $abstract;
+    $new_paper->paperName =$paperName;
+    $new_paper->paperTopic = $paperTopic;
+    $new_paper->dateSubmitted = $mysql_datetime;
+    $new_paper->paperURL = "";
+
+    if($new_paper->save()){
+        redirect_to("conference.php?ID={$_GET["ID"]}");
+    }
+
+}
+
 
 
 
@@ -77,7 +113,7 @@ include_once("includes/navbar-user.php");
         <div class="panel-body" id="info">
             <div class="row well">
             <label>Paper Name :</label>
-            <input type="text" class="form-control btn-block input-lg">
+            <input type="text" class="form-control btn-block input-lg" name="pName">
             </div>
             <hr>
             <div class="row" id="author">
@@ -98,7 +134,7 @@ include_once("includes/navbar-user.php");
         <br>
 <div class="row well">
         <h3>Write An Abstract</h3>
-            <textarea rows="10" cols="50" name="sp1" class="col-lg-12"></textarea>
+            <textarea rows="10" cols="50" name="abstract" class="col-lg-12" ></textarea>
 </div>
             <hr>
 
@@ -107,12 +143,30 @@ include_once("includes/navbar-user.php");
                 <h5>Choose from the conferences topics</h5>
 </div>
             <div class="row well">
+                <?php
+                $query = "SELECT topic.topicName FROM topic INNER JOIN conftopics WHERE topic.ID = conftopics.topicID AND conftopics.confID = {$_GET["ID"]};";
 
-                <select class="form-control input-lg" id="sel1">
-                    <option>IT</option>
-                    <option>Engineering</option>
-                    <option>Business</option>
-                    <option>Physics</option>
+                $topics = topic::find_by_sql($query);
+
+                $counter = 0;
+                $array = array();
+                foreach($topics as $topic){
+                foreach($topic as $key) {
+                if (isset($key)) {
+                $array[$counter] = $key;
+                $counter++;
+                }
+                }
+                }?>
+
+                <select class="form-control input-lg" id="sel1" name="ptopic">
+                    <?php
+                    for($i = 0;$i<=$counter-1;$i++) {
+                    ?>
+                    <option><?php echo htmlentities($array[$i])?></option>
+                    <?php
+                    }
+                    ?>
                 </select>
 
                 <br>
@@ -135,7 +189,7 @@ include_once("includes/navbar-user.php");
         </div>
         <div class="row text-center">
 
-            <button type="submit" class="btn btn-success btn-lg">Submit</button>
+            <button type="submit" class="btn btn-success btn-lg" name="submit">Submit</button>
             <button type="reset" class="btn btn-danger btn-lg">Reset</button>
 
         </div>

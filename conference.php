@@ -198,14 +198,7 @@ foreach($users as $user){
                         <?php
                         $query1 = "SELECT paperID FROM paperassign WHERE userID = {$_SESSION["ID"]}";
                         $result = paperassign::find_by_sql($query1);
-//                        foreach($photos as $photo){
-//                            foreach($photo as $key) {
-//                                if (isset($key)) {
-//                                    $array2[$counter2] = $key;
-//                                    $counter2++;
-//                                }
-//                            }
-//                        }
+
                         if($result) {
                             ?>
                             <div class="panel panel-default text-center" id="reviewPaper">
