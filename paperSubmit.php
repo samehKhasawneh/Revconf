@@ -6,10 +6,15 @@ require_once("includes/user.php");
 require_once("includes/DatabaseObject.php");
 require_once("includes/userimgs.php");
 require_once("includes/session.php");
+require_once("includes/paper.php");
+require_once("includes/topic.php");
+require_once("includes/conference.php");
+
 
 if(!isset($_SESSION["ID"]) || !isset($_GET["ID"])){
     redirect_to("conference.php");
 }
+$conference = conference::find_by_id($_GET["ID"]);
 
 if(isset($_POST["submit"])){// Form has been submitted.
 
@@ -81,7 +86,7 @@ if(isset($_POST["submit"])){// Form has been submitted.
             </br>
             </br>
             <h1>Submit a Paper to:</h1>
-            <p>PSUT ICT 2015</p>
+            <p><?php echo htmlentities($conference->confName)?></p>
 
         </div>
 
