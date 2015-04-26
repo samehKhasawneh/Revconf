@@ -9,15 +9,20 @@ require_once("includes/conference.php");
 
 
 
-//
-//if(!isset($_SESSION["ID"]) || !isset($_GET["ID"])){
-//    redirect_to("conference.php");
-//}
 
+if(!isset($_SESSION["ID"]) || !isset($_GET["ID"])){
+    redirect_to("conference.php");
+}
+$query = "SELECT userID FROM paperassign WHERE confID = {$_GET["ID"]} AND userID = {$_SESSION["ID"]}";
+$user = paperassign::find_by_sql($query);
+if(!$user) {
+
+    redirect_to("conference.php?ID={$_GET["ID"]}");
+}
 
 $query = "SELECT paper.ID,paper.paperName FROM paper INNER JOIN paperassign ON paper.ID = paperassign.paperID INNER JOIN user ON
-          user.ID = paperassign.userID AND paperassign.confID = 1;";
-//{$_GET["ID"]}
+          user.ID = paperassign.userID AND paperassign.confID = {$_GET["ID"]};";
+
 $papers = paper::find_by_sql($query);
 
 $c1 = 0;
@@ -31,8 +36,7 @@ foreach($papers as $result2){
     }
 }
 
-
-//href = "paperReview.php?ID={$_GET["ID"]}"
+$conf = conference::find_by_id($_GET["ID"]);
 
 
 ?>
@@ -70,7 +74,7 @@ foreach($papers as $result2){
             </br>
             </br>
             <h1>Review Papers</h1>
-            <p>Conference Name</p>
+            <p><?php echo htmlentities($conf->confName)?></p>
 
         </div>
 
@@ -101,7 +105,7 @@ foreach($papers as $result2){
         <tr>
             <td><?php echo htmlentities($array4[$i]) ?></td>
             <td style="color:red; font-weight: bold;"><?php echo htmlentities($array4[$i + 1]) ?></td>
-            <td>PSUT MINA 15</td>
+            <td><?php echo htmlentities($conf->confName)?></td>
             <td>
                 <button class="btn btn-block btn-success"><a href="paperReview.php?ID=<?php echo $array4[$i] ?>">Review
                 </button>
@@ -111,26 +115,6 @@ foreach($papers as $result2){
     <?php
     }
     ?>
-
-
-
-    <tr>
-        <td>18</td>
-        <td style="color:red; font-weight: bold;">an Implementation to a Windows Based Cloud System</td>
-        <td>PSUT MINA 15 </td>
-        <td> <a class="btn btn-block btn-success" href="paperReview.php">Review</a>  </td>
-
-    </tr>
-
-
-    <tr>
-        <td>25</td>
-        <td style="color:red; font-weight: bold;">Risk Management Model</td>
-        <td>PSUT MINA 15 </td>
-        <td> <button class="btn btn-block btn-success">Review</button>  </td>
-
-    </tr>
-
 
     </tbody>
 

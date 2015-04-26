@@ -33,15 +33,14 @@ if(!$user) {
         }
 
     }
+$paper = paper::find_by_id($_GET["ID"]);
+
 if($array[0] == $_SESSION["ID"]){
     $session->setAttrb("message","you have reviewed it you can't review it twice");
-    redirect_to("review.php");
+    redirect_to("review.php?ID={$paper->confID}");
 }
 
 
-
-
-$paper = paper::find_by_id($_GET["ID"]);
 
 
 
@@ -76,7 +75,7 @@ if(isset($_POST["submit"])){// Form has been submitted.
     $result2 = reviewresults::execut_by_sql($query2);
 
     if($result && $result2){
-        redirect_to("review.php");
+        redirect_to("review.php?ID={$paper->confID}");
     }
 
 }else{
