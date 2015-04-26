@@ -1,3 +1,24 @@
+<?php
+require_once("../includes/session.php");
+require_once("../includes/organization.php");
+require_once("../includes/functions.php");
+require_once("../includes/conference.php");
+
+
+
+if(!isset($_SESSION["orgName"])) {
+redirect_to("login.php");
+}
+
+
+
+
+
+
+
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -190,7 +211,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header">
-                            Organization's Panel <small>PSUT </small>
+                            Organization's Panel <small><?php echo htmlentities($_SESSION["orgName"])?></small>
                         </h1>
                         <ol class="breadcrumb">
                             <li class="active">
@@ -213,7 +234,19 @@
                                         <i class="fa fa-comments fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge">25</div>
+                                        <?php
+                                        $sql = "SELECT * FROM conference WHERE orgID = {$_SESSION["ID"]}";
+
+                                        $result = conference::find_by_sql($sql);
+
+                                        $counter = 0;
+                                        foreach($result as $s){
+                                            foreach($s as $key) {
+                                            }
+                                            $counter++;
+                                        }
+                                        ?>
+                                        <div class="huge"><?php echo htmlentities($counter)?></div>
                                         <div>My Conferences</div>
                                     </div>
                                 </div>
@@ -262,7 +295,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <a href="#">
+                            <a href="confdelete.php">
                                 <div class="panel-footer">
                                     <span class="pull-left">View Details</span>
                                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
