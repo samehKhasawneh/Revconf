@@ -1,3 +1,35 @@
+<?php
+require_once("../includes/session.php");
+require_once("../includes/conference.php");
+require_once("../includes/database.php");
+require_once("../includes/functions.php");
+
+if(!isset($_SESSION["orgEmail"])){
+    redirect_to("login.php");
+}
+
+$query = "SELECT ID,confName,confDate,isApproved FROM conference WHERE orgID = {$_SESSION["ID"]}";
+$conf = conference::find_by_sql($query);
+$counter = 0;
+$array = array();
+foreach($conf as $con){
+    foreach($con as $key) {
+        if (isset($key)) {
+            $array[$counter] = $key;
+            $counter++;
+        }
+    }
+}
+
+
+
+
+
+
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -217,7 +249,6 @@
                         <tr>
                             <th class="text-center">ID</th>
                             <th class="text-center">Conference Name</th>
-                            <th class="text-center">Organization</th>
                             <th class="text-center">Date</th>
                             <th class="text-center">Approved</th>
                             <th ></th>
@@ -227,26 +258,23 @@
                         </thead>
 
                         <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>PSUT MENA 15</td>
-                            <td>RSS</td>
-                            <td>05-05-2015</td>
-                            <td style="color:green;">YES</td>
-                            <td> <a class="btn btn-success btn-block" href="confStat.php">Open</a> </td>
-                        </tr>
-
-
-                        <tr>
-                            <td>2</td>
-                            <td>GJU MENA 15</td>
-                            <td>ALU</td>
-                            <td>05-03-2015</td>
-                            <td style="color:RED;">NO</td>
-                            <td> <a class="btn btn-success btn-block" href="confStat.php">Open</a> </td>
-                        </tr>
-
-
+                        <?php
+                        if($array) {
+                            for ($i = 0; $i <= $counter - 1; $i += 4) {
+                                ?>
+                                <tr>
+                                    <td><?php echo htmlentities($array[$i])?></td>
+                                    <td><?php echo htmlentities($array[$i+1])?></td>
+                                    <td><?php echo htmlentities($array[$i+2])?></td>
+                                    <td <?php if($array[$i+3] == 1){?>style="color:green;<?php }else{?>style="color:red;<?php }?>">
+                                        <?php if($array[$i+3] == 1){echo "NO";}else{echo "YES";}  ?>
+                                    </td>
+                                    <td><a class="btn btn-success btn-block" href="confStat.php?ID=<?php echo htmlentities($array[$i])?>">Open</a></td>
+                                </tr>
+                            <?php
+                            }
+                        }
+                        ?>
 
                         </tbody>
 
