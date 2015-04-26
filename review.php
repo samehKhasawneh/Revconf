@@ -1,6 +1,38 @@
 <?php
-
 include_once("includes/navbar.php");
+require_once("includes/user.php");
+require_once("includes/session.php");
+require_once("includes/paper.php");
+require_once("includes/paperassign.php");
+require_once("includes/functions.php");
+require_once("includes/conference.php");
+
+
+
+//
+//if(!isset($_SESSION["ID"]) || !isset($_GET["ID"])){
+//    redirect_to("conference.php");
+//}
+
+
+$query = "SELECT paper.ID,paper.paperName FROM paper INNER JOIN paperassign ON paper.ID = paperassign.paperID INNER JOIN user ON
+          user.ID = paperassign.userID AND paperassign.confID = 1;";
+//{$_GET["ID"]}
+$papers = paper::find_by_sql($query);
+
+$c1 = 0;
+$array4 = array();
+foreach($papers as $result2){
+    foreach($result2 as $key4) {
+        if (isset($key4)) {
+            $array4[$c1] = $key4;
+            $c1++;
+        }
+    }
+}
+
+
+//href = "paperReview.php?ID={$_GET["ID"]}"
 
 
 ?>
@@ -49,7 +81,7 @@ include_once("includes/navbar.php");
 
 <div id="bodyContainer" class="container">
 
-
+<!--    <p>--><?php //echo htmlentities($_SESSION["message"]) ?><!--</p>-->
     <table class="table table-responsive table-bordered well">
 
     <thead>
@@ -63,14 +95,22 @@ include_once("includes/navbar.php");
     </thead>
 
     <tbody>
+    <?php
+    for($i = 0 ; $i<=$c1-1 ; $i+=2) {
+        ?>
+        <tr>
+            <td><?php echo htmlentities($array4[$i]) ?></td>
+            <td style="color:red; font-weight: bold;"><?php echo htmlentities($array4[$i + 1]) ?></td>
+            <td>PSUT MINA 15</td>
+            <td>
+                <button class="btn btn-block btn-success"><a href="paperReview.php?ID=<?php echo $array4[$i] ?>">Review
+                </button>
+            </td>
 
-    <tr>
-        <td>12</td>
-        <td style="color:red; font-weight: bold;">an Implementation to a Unix Based Compiler</td>
-        <td>PSUT MINA 15 </td>
-        <td> <button class="btn btn-block btn-success">Review</button>  </td>
-
-    </tr>
+        </tr>
+    <?php
+    }
+    ?>
 
 
 

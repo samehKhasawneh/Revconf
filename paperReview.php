@@ -15,7 +15,8 @@ if(!isset($_SESSION["ID"]) || !isset($_GET["ID"])){
 $query = "SELECT userID FROM paperassign WHERE paperID = {$_GET["ID"]} AND userID = {$_SESSION["ID"]}";
 $user = paperassign::find_by_sql($query);
 if(!$user) {
-    redirect_to("conference.php?ID={$_GET["ID"]}");
+
+    redirect_to("conference.php");
 }
 
     $query = "SELECT userID FROM evaluationresult WHERE paperID = {$_GET["ID"]}";
@@ -33,7 +34,8 @@ if(!$user) {
 
     }
 if($array[0] == $_SESSION["ID"]){
-    redirect_to("papers.php");
+    $session->setAttrb("message","you have reviewed it you can't review it twice");
+    redirect_to("review.php");
 }
 
 
@@ -74,7 +76,7 @@ if(isset($_POST["submit"])){// Form has been submitted.
     $result2 = reviewresults::execut_by_sql($query2);
 
     if($result && $result2){
-        redirect_to("papers.php");
+        redirect_to("review.php");
     }
 
 }else{
