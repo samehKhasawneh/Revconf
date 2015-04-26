@@ -175,9 +175,10 @@ foreach($users as $user){
                         <div class="panel panel-default text-center" id="join">
                             <div class="panel-body">
                                 <h2 class="text-center">Join This Conference</h2>
-
                                 <p class="text-center">View a lists of conferences which you can attend</p>
+                                    <a href="join.php?ID=<?php echo htmlentities($conference->ID)?>">
                                 <button class="btn btn-primary btn-lg btn-block" role="button">Join</button>
+                                </a>
                             </div>
                         </div>
                     <?php
@@ -186,11 +187,14 @@ foreach($users as $user){
 
                         <div class="panel panel-default text-center" id="submitpaper">
                             <div class="panel-body">
+
                                 <h2 class="text-center">Submit Paper</h2>
 
                                 <p class="text-center">View a lists of conferences which you can attend</p>
+                                <a href="paperSubmit.php?ID=<?php echo htmlentities($conference->ID)?>">
                                 <button id="submitPaper" class="btn btn-primary btn-lg btn-block" role="button">Submit
                                 </button>
+                                    </a>
                             </div>
                         </div>
 
@@ -206,9 +210,11 @@ foreach($users as $user){
                                     <h2 class="text-center">Review Paper</h2>
 
                                     <p class="text-center">Review Papers</p>
+                                    <a href="review.php?ID=<?php echo htmlentities($conference->ID)?>">
                                     <button id="submitPaper" class="btn btn-primary btn-lg btn-block" role="button">
                                         Review
                                     </button>
+                                        </a>
                                 </div>
                             </div>
                         <?php
