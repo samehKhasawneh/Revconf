@@ -266,7 +266,7 @@ foreach($conf as $con){
                                     <td <?php if($array[$i+3] == 1){?>style="color:green;<?php }else{?>style="color:red;<?php }?>">
                                     <?php if($array[$i+3] == 1){echo "NO";}else{echo "YES";}  ?>
                                     </td>
-                                    <td><a class="btn btn-success btn-block" href="confdelete.php?ID=<?php echo htmlentities($array[$i])?>">Delete</a></td>
+                                    <td><a class="btn btn-success btn-block" href="delete.php?ID=<?php echo htmlentities($array[$i])?>">Delete</a></td>
                                 </tr>
                             <?php
                             }
