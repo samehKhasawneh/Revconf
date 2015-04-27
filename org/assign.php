@@ -1,3 +1,40 @@
+<?php
+require_once("../includes/functions.php");
+require_once("../includes/user.php");
+require_once("../includes/committe.php");
+require_once("../includes/session.php");
+require_once("../includes/topic.php");
+require_once("../includes/paper.php");
+
+if(!isset($_SESSION["orgEmail"])){
+    redirect_to("login.php");
+}
+if(!isset($_GET["ID"])){
+    redirect_to("index.php");
+}
+
+$query = "SELECT ID,userID FROM paper WHERE confID = {$_GET["ID"]} AND isAccepted = 1";
+$papers = paper::find_by_sql($query);
+
+if(!$papers){
+    redirect_to("confStat.php?ID={$_GET["ID"]}");
+}
+
+$counter = 0;
+$array = array();
+foreach($papers as $paper){
+    foreach($paper as $key) {
+        if (isset($key)) {
+            $array[$counter] = $key;
+            $counter++;
+        }
+    }
+}
+
+
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -131,20 +168,13 @@
             </ul>
         </li>
         <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> John Smith <b class="caret"></b></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i><?php echo htmlentities($_SESSION["orgName"])?><b class="caret"></b></a>
             <ul class="dropdown-menu">
                 <li>
                     <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-fw fa-envelope"></i> Inbox</a>
-                </li>
-                <li>
-                    <a href="#"><i class="fa fa-fw fa-gear"></i> Settings</a>
-                </li>
-                <li class="divider"></li>
-                <li>
-                    <a href="#"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                    <a href="logout.php"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
                 </li>
             </ul>
         </li>
@@ -236,18 +266,27 @@
                     </thead>
 
                     <tbody>
+                    <?php
+                    for($i=0;$i<=$counter-1;$i=+2){
+
+                        $id = $array[$i];
+                        $paperobj = paper::find_by_id($id);
+                        ?>
                         <tr>
-                            <td>1</td>
-                            <td>C++ Compiler</td>
-                            <td>Compilers</td>
-                            <td>Mohammad Izwayyed</td>
+                            <td><?php echo htmlentities($paperobj->ID)?></td>
+                            <td><?php echo htmlentities($paperobj->paperName)?></td>
+                            <td><?php echo htmlentities($paperobj->paperTopic)?></td>
+                            <?php
+                            $id = $array[$i+1];
+                            $found_user = user::find_by_id($id)
+                            ?>
+                            <td><?php echo htmlentities($found_user->FirstName); echo" "; echo htmlentities($found_user->LastName);?></td>
                             <td style="color: red; font-weight: bold;">4</td>
-                            <td> <a class="btn btn-success btn-block" href="assign2.php">Open</a> </td>
+                            <td> <a class="btn btn-success btn-block" href="assign2.php?ID=<?php echo htmlentities($paperobj->ID)?>&confID=<?php echo htmlentities($_GET["ID"]) ?>">Open</a> </td>
                         </tr>
-
-
-
-
+                    <?php
+                    }
+                    ?>
 
                     </tbody>
 

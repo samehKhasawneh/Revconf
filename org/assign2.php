@@ -1,3 +1,33 @@
+<?php
+require_once("../includes/functions.php");
+require_once("../includes/user.php");
+require_once("../includes/committe.php");
+require_once("../includes/session.php");
+require_once("../includes/topic.php");
+require_once("../includes/paper.php");
+require_once("../includes/attendance.php");
+
+
+if(!isset($_SESSION["orgEmail"])){
+    redirect_to("login.php");
+}
+if(!isset($_GET["ID"]) || !isset($_GET["confID"])){
+    redirect_to("index.php");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -131,20 +161,13 @@
             </ul>
         </li>
         <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> John Smith <b class="caret"></b></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i><?php echo htmlentities($_SESSION["orgName"])?><b class="caret"></b></a>
             <ul class="dropdown-menu">
                 <li>
                     <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-fw fa-envelope"></i> Inbox</a>
-                </li>
-                <li>
-                    <a href="#"><i class="fa fa-fw fa-gear"></i> Settings</a>
-                </li>
-                <li class="divider"></li>
-                <li>
-                    <a href="#"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                    <a href="logout.php"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
                 </li>
             </ul>
         </li>
@@ -227,7 +250,7 @@
                         <th class="text-center">Paper Name</th>
                         <th class="text-center">Topic </th>
                         <th class="text-center">User</th>
-                        <th class="text-center"># Of Reviews</th>
+                        <th class="text-center"># Odf Reviews</th>
 
 
                     </tr>
@@ -235,10 +258,16 @@
 
                     <tbody>
                     <tr>
-                        <td>1</td>
-                        <td>C++ Compiler</td>
-                        <td>Compilers</td>
-                        <td>Mohammad Izwayyed</td>
+                        <?php
+                        $paperobj = paper::find_by_id($_GET["ID"]);
+                        ?>
+                        <td><?php echo htmlentities($paperobj->ID)?></td>
+                        <td><?php echo htmlentities($paperobj->paperName)?></td>
+                        <td><?php echo htmlentities($paperobj->paperTopic)?></td>
+                        <?php
+                        $found_user = user::find_by_id($paperobj->userID)
+                        ?>
+                        <td><?php echo htmlentities($found_user->FirstName); echo" "; echo htmlentities($found_user->LastName);?></td>
                         <td style="color: red; font-weight: bold;">4</td>
 
                     </tr>
@@ -280,36 +309,51 @@
                     </thead>
 
                     <tbody>
-                    <tr>
-                        <td>241</td>
-                        <td>Khaled Tamimi</td>
-                        <td>Compilers</td>
-                        <td>5</td>
-                        <td> <a class="btn btn-success btn-block" href="assign2.php">Assign</a> </td></td>
+                    <?php
+                    $query = "SELECT userID FROM attendance WHERE confID = {$_GET["confID"]}";
+                    $users = attendance::find_by_sql($query);
+                    $counter = 0;
+                    $array = array();
+                    foreach($users as $user) {
+                        foreach($user as $key){
+                            if(isset($key)){
+                                $array[$counter]=$key;
+                                $counter++;
+                            }
+                        }
+                    }
+                    for($i=0;$i=$counter-1;$i++) {
+                        ?>
+                        <tr>
+                            <?php
+                            $id = $array[$i];
+                            $user_info = user::find_by_id($id);
 
-                    </tr>
+                            $query3 = "SELECT topic.topicName FROM topic INNER JOIN usertopic ON topic.ID = usertopic.topicID WHERE usertopic.userID = {$user_info->ID}";
+                            $topics = topic::find_by_sql($query3);
+                            $counter1 = 0;
+                            $array2 = array();
+                            foreach($topics as $topic){
+                                foreach($topic as $key){
+                                    if(isset($key)){
+                                        $array2[$counter1] = $key;
+                                        $counter1++;
+                                    }
+                                }
+                            }
+                            ?>
 
-                    <tr>
-                        <td>324</td>
-                        <td>Rawan Tarawneh</td>
-                        <td>Software Engineering</td>
-                        <td>0</td>
-                        <td> <a class="btn btn-success btn-block" href="assign2.php">Assign</a> </td></td>
+                            <td><?php echo htmlentities($user_info->ID)?></td>
+                            <td><?php echo htmlentities($user_info->FirstName); echo " "; echo htmlentities($user_info->LastName);?></td>
+                            <td><?php for($i=0;$i<=$counter1-1;$i++) { echo htmlentities($array2[$i]); echo "<br>"; } ?></td>
+                            <td>5</td>
+                            <td><a class="btn btn-success btn-block" href="assign2.php">Assign</a></td>
+                            </td>
 
-                    </tr>
-
-                    <tr>
-                        <td>845</td>
-                        <td>Sufyan Ahmad</td>
-                        <td>Agricultural</td>
-                        <td>0</td>
-                        <td> <a class="btn btn-success btn-block" href="assign2.php">Assign</a> </td></td>
-
-                    </tr>
-
-
-
-
+                        </tr>
+                    <?php
+                    }
+                    ?>
 
                     </tbody>
 

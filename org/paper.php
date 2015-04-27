@@ -280,10 +280,17 @@ foreach($papers as $paper){
                         <tr>
                             <td><?php echo htmlentities($array[$i])?></td>
                             <td><?php echo htmlentities($array[$i+2])?></td>
-                            <td><?php echo htmlentities($array[$i+1])?></td>
+                            <?php
+                            $id = $array[$i+1];
+                            $found_user = user::find_by_id($id)
+                            ?>
+                            <td><?php echo htmlentities($found_user->FirstName); echo" "; echo htmlentities($found_user->LastName);?></td>
+                            <?php
+
+                            ?>
                             <td>6</td>
                             <td style="color: red; font-weight: bold;">40/100</td>
-                            <td> <a class="btn btn-success btn-block" href="accept.php?ID=<?php echo htmlentities($array[$i])?>">Accept</a> </td>
+                            <td> <a class="btn btn-success btn-block" href="accept.php?ID=<?php echo htmlentities($array[$i])?>$confID=<?php echo htmlentities($_GET["ID"]) ?>">Accept</a> </td>
                         </tr>
                         <?php
                         }

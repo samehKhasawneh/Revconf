@@ -13,12 +13,12 @@ if(!isset($_GET["ID"]) || !isset($_GET["confID"])){
     redirect_to("index.php");
 }
 
-$paper = paper::find_by_id($_GET["ID"]);
-
+$paper1 = paper::find_by_id($_GET["ID"]);
+ $paper = new paper();
 $paper->isAccepted = 1;
 
 if($paper->save()){
     redirect_to("paper.php?ID={$_GET["confID"]}");
 }else{
-    redirect_to("confList.php");
+    redirect_to("confStat.php?ID={$_GET["confID"]}");
 }

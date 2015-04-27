@@ -175,20 +175,13 @@ foreach($users as $user){
             </ul>
         </li>
         <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> John Smith <b class="caret"></b></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i><?php echo htmlentities($_SESSION["orgName"])?><b class="caret"></b></a>
             <ul class="dropdown-menu">
                 <li>
                     <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-fw fa-envelope"></i> Inbox</a>
-                </li>
-                <li>
-                    <a href="#"><i class="fa fa-fw fa-gear"></i> Settings</a>
-                </li>
-                <li class="divider"></li>
-                <li>
-                    <a href="#"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                    <a href="logout.php"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
                 </li>
             </ul>
         </li>
@@ -282,7 +275,8 @@ foreach($users as $user){
                     <tbody>
                     <?php
                     for($i=0;$i<=$counter-1;$i++) {
-                        $found_user = user::find_by_id($array[$i]);
+                        $id = $array[$i];
+                        $found_user = user::find_by_id($id);
 
                         $query2 = "SELECT userID FROM committe WHERE userID = {$found_user->ID}";
                         $com = committe::find_by_sql($query2);
@@ -332,7 +326,7 @@ foreach($users as $user){
                                 <td><?php echo htmlentities($found_user->FirstName); echo " ";echo htmlentities($found_user->LastName);?></td>
                                 <td><?php for($i=0;$i<=$counter1-1;$i++) { echo htmlentities($array2[$i]); echo "<br>"; } ?></td>
                                 <td><?php echo htmlentities($found_user->city)?></td>
-                                <td><a class="btn btn-danger btn-block" href="addremovecom.php?ID=<?php echo htmlentities($found_user->ID)?>&confID=<?php echo htmlentities($_GET["ID"])?>&OP=1">Remove</a></td>
+                                <td><a class="btn btn-danger btn-block" href="addremovecom.php?ID<?php echo htmlentities($found_user->ID)?>&confID=<?php echo htmlentities($_GET["ID"])?>&OP=0">Remove</a></td>
                             </tr>
                         <?php
                         }
