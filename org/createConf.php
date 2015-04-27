@@ -1,3 +1,49 @@
+<?php
+require_once("../includes/conference.php");
+require_once("../includes/session.php");
+require_once("../includes/functions.php");
+
+if(!isset($_SESSION["orgEmail"])){
+    redirect_to("login.php");
+}
+
+if(isset($_POST["submit"])){
+
+    $name = trim($_POST["confName"]);
+    $intro = trim($_POST["confintro"]);
+    $loc = trim($_POST["location"]);
+
+    $newConf = new conference();
+
+    $mysql_datetime = strftime("%Y-%m-%d", time());
+
+    $newConf->confDate = $mysql_datetime;
+    $newConf->confName = $name;
+    $newConf->introduction = $intro;
+    $newConf->orgID = $_SESSION["ID"];
+    $newConf->Location = $loc;
+
+
+
+
+    if($newConf->save()){
+        redirect_to("index.php");
+    }
+
+
+
+
+}
+
+
+
+
+
+
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -233,16 +279,23 @@
                 <div class="panel-body" id="info">
                     <div class="row well">
                         <label>Conference Name :</label>
-                        <input type="text" name="confName" class="form-control btn-block input-lg">
+                        <input type="text" name="confName" class="form-control btn-block input-lg" required>
                     </div>
                     <hr>
 
                     <br>
                     <div class="row well">
                         <h3>Write An Introduction about the Conference</h3>
-                        <textarea rows="10" cols="50" name="Confintro" class="col-lg-12"></textarea>
+                        <textarea rows="10" cols="50" name="Confintro" class="col-lg-12" required></textarea>
                     </div>
                     <hr>
+
+                    <div class="row form-group">
+                        <div class="3" id="city">
+                            <label for="city">Conference Location <span id="req">*</span></label>
+                            <input type="text" class="form-control"  id="city" required name="location">
+                        </div>
+                    </div>
 
                     <div class="row">
                         <h3>Choose The Conference Topics</h3>
@@ -271,7 +324,7 @@
                 </div>
                 <div class="row text-center">
 
-                    <button type="submit" class="btn btn-success btn-lg">Submit</button>
+                    <button type="submit" class="btn btn-success btn-lg" name="submit">Submit</button>
                     <button type="reset" class="btn btn-danger btn-lg">Reset</button>
 
                 </div>
