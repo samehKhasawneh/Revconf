@@ -1,3 +1,24 @@
+<?php
+require_once("../includes/user.php");
+require_once("../includes/session.php");
+require_once("../includes/functions.php");
+
+if(!isset($_SESSION["isAdmin"]) && $_SESSION["isAdmin"]==1){
+    redirect_to("./../login.php");
+}
+$users = user::find_all();
+$counter = 0;
+$array = array();
+foreach($users as $user){
+    foreach($user as $key){
+        if(isset($key)){
+            $array[$counter] = $key;
+            $counter++;
+        }
+    }
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -225,24 +246,21 @@
                     </thead>
 
                     <tbody>
-                    <tr>
-                        <td>193</td>
-                        <td>Khaled Tamimi</td>
-                        <td>05-05-2015</td>
-                        <td>Khaled.tamimi@gmail.com</td>
-                        <td> <a class="btn btn-success btn-block">Open</a> </td>
-                    </tr>
-
-
-                    <tr>
-                        <td>238</td>
-                        <td>Rawand Tarawneh</td>
-                        <td>02-3-2015</td>
-                        <td>r.tarawneh@yahoo.com</td>
-                        <td> <a class="btn btn-success btn-block">Open</a> </td>
-                    </tr>
-
-
+                    <?php
+                    for($i=0;$i<=$counter-1;$i+=12) {
+                        ?>
+                        <tr>
+                            <td><?php echo htmlentities($array[$i]) ?></td>
+                            <td><?php echo htmlentities($array[$i + 2]);
+                                echo " ";
+                                echo htmlentities($array[$i + 3]); ?></td>
+                            <td><?php echo htmlentities($array[$i + 9]) ?></td>
+                            <td><?php echo htmlentities($array[$i + 6]) ?></td>
+                            <td><a class="btn btn-success btn-block">Open</a></td>
+                        </tr>
+                    <?php
+                    }
+                    ?>
 
                     </tbody>
 

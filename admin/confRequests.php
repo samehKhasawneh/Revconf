@@ -9,7 +9,7 @@ if(!isset($_SESSION["isAdmin"]) && $_SESSION["isAdmin"]==1){
     redirect_to("./../login.php");
 }
 
-$query = "SELECT ID FROM conference WHERE isApproved = 1";
+$query = "SELECT ID,confName,orgID,confDate FROM conference WHERE isApproved = 0";
 $conf = conference::find_by_sql($query);
 $counter = 0;
 $array = array();
@@ -21,6 +21,8 @@ foreach($conf as $con){
         }
     }
 }
+
+
 
 ?>
 <!DOCTYPE html>
@@ -244,7 +246,7 @@ foreach($conf as $con){
                             <th class="text-center">Conference Name</th>
                             <th class="text-center">Organization</th>
                             <th class="text-center">Date</th>
-                            <th class="text-center">Statistics</th>
+                            <th class="text-center">Approve</th>
 
 
                         </tr>
@@ -264,14 +266,12 @@ foreach($conf as $con){
                                         ?></td>
                                     <td><?php echo htmlentities($array[$i+3])?></td>
 
-                                    <td><a class="btn btn-success btn-block" href="confStat.php?ID=<?php echo htmlentities($array[$i])?>">Open</a></td>
+                                    <td><a class="btn btn-success btn-block" href="approve.php?ID=<?php echo htmlentities($array[$i])?>">Open</a></td>
                                 </tr>
                             <?php
                             }
                         }
                         ?>
-
-
                         </tbody>
 
 

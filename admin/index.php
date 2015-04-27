@@ -1,3 +1,20 @@
+<?php
+require_once("../includes/session.php");
+require_once("../includes/organization.php");
+require_once("../includes/functions.php");
+require_once("../includes/conference.php");
+
+
+
+if(!isset($_SESSION["isAdmin"]) && $_SESSION["isAdmin"]==1) {
+    redirect_to("./../login.php");
+}
+
+
+
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -211,12 +228,21 @@
                                         <i class="fa fa-comments fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge">25</div>
-                                        <div>Conf. Need Approval</div>
+                                        <?php
+                                        $query = "SELECT ID FROM conference WHERE isApproved = 1";
+                                        $conf = conference::find_by_sql($query);
+                                        $counter = 0;
+                                        foreach($conf as $con){
+                                            $counter++;
+                                        }
+
+                                        ?>
+                                        <div class="huge"><?php echo htmlentities($counter)?></div>
+                                        <div>Approved Conferences</div>
                                     </div>
                                 </div>
                             </div>
-                            <a href="#">
+                            <a href="conf.php">
                                 <div class="panel-footer">
                                     <span class="pull-left">View Details</span>
                                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -233,12 +259,21 @@
                                         <i class="fa fa-tasks fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge">320</div>
+                                        <?php
+                                        $users = user::find_all();
+                                        $counter1 = 0;
+                                        foreach($users as $user){
+                                            $counter1++;
+
+                                        }
+
+                                        ?>
+                                        <div class="huge"><?php echo htmlentities($counter1)?></div>
                                         <div>Users</div>
                                     </div>
                                 </div>
                             </div>
-                            <a href="#">
+                            <a href="users.php">
                                 <div class="panel-footer">
                                     <span class="pull-left">View Details</span>
                                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -255,12 +290,20 @@
                                         <i class="fa fa-shopping-cart fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge">124</div>
-                                        <div>Conferences Requests</div>
+                                        <?php
+                                        $query = "SELECT ID FROM conference WHERE isApproved = 0";
+                                        $conf = conference::find_by_sql($query);
+                                        $counter = 0;
+                                        foreach($conf as $con){
+                                            $counter++;
+                                        }
+
+                                        ?>
+                                        <div class="huge"><?php echo htmlentities($counter)?></div>
                                     </div>
                                 </div>
                             </div>
-                            <a href="#">
+                            <a href="confRequests.php">
                                 <div class="panel-footer">
                                     <span class="pull-left">View Details</span>
                                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>

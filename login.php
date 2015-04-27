@@ -23,7 +23,11 @@ if (isset($_POST["submit"])) { // Form has been submitted.
         foreach($found_user as $key=>$value){
             $session->setAttrb($key,$value);
         }
-        redirect_to("home.php");
+        if($_SESSION["isAdmin"] == 1){
+            redirect_to("admin/index.php");
+        }else {
+            redirect_to("home.php");
+        }
 
     } else {
 

@@ -9,7 +9,7 @@ require_once("../includes/reviewresults.php");
 require_once("../includes/organization.php");
 
 
-if(!isset($_SESSION["isAdmin"])){
+if(!isset($_SESSION["isAdmin"]) && $_SESSION["isAdmin"]==1){
     redirect_to("./../login.php");
 }
 if(!isset($_GET["ID"])){
