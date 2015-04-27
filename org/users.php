@@ -1,3 +1,39 @@
+<?php
+require_once("../includes/user.php");
+require_once("../includes/session.php");
+require_once("../includes/functions.php");
+
+if(!isset($_SESSION["orgEmail"])){
+    redirect_to("login.php");
+}
+if(!isset($_GET["ID"])){
+    redirect_to("index.php");
+}
+
+$query = "SELECT user.ID FROM user INNER JOIN attendance WHERE user.ID = attendance.userID AND attendance.confID = {$_GET["ID"]}";
+$users = user::find_by_sql($query);
+
+$counter = 0;
+$array = array();
+foreach($users as $user){
+    foreach($user as $key){
+        if(isset($key)){
+         $array[$counter] = $key;
+         $counter++;
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -225,25 +261,21 @@
                     </thead>
 
                     <tbody>
-                    <tr>
-                        <td>193</td>
-                        <td>Khaled Tamimi</td>
-                        <td>05-05-2015</td>
-                        <td>Khaled.tamimi@gmail.com</td>
-                        <td> <a class="btn btn-success btn-block">Open</a> </td>
-                    </tr>
+                    <?php
+                    for($i=0;$i<=$counter-1;$i++) {
+                     $found_user = user::find_by_id($array[$i]);
 
-
-                    <tr>
-                        <td>238</td>
-                        <td>Rawand Tarawneh</td>
-                        <td>02-3-2015</td>
-                        <td>r.tarawneh@yahoo.com</td>
-                        <td> <a class="btn btn-success btn-block">Open</a> </td>
-                    </tr>
-
-
-
+                        ?>
+                        <tr>
+                            <td><?php echo htmlentities($found_user->ID)?></td>
+                            <td><?php echo htmlentities($found_user->FirstName); echo " ";echo htmlentities($found_user->LastName);?></td>
+                            <td><?php echo htmlentities($found_user->date_registered);?></td>
+                            <td><?php echo htmlentities($found_user->Email)?></td>
+                            <td><a class="btn btn-success btn-block">Open</a></td>
+                        </tr>
+                    <?php
+                    }
+                    ?>
                     </tbody>
 
 
