@@ -10,7 +10,7 @@ if(!isset($_GET["ID"])){
     redirect_to("index.php");
 }
 
-$query = "SELECT user.ID FROM user INNER JOIN attendance WHERE user.ID = attendance.userID AND attendance.confID = {$_GET["ID"]}";
+$query = "SELECT user.ID FROM user INNER JOIN attendance ON user.ID = attendance.userID WHERE attendance.confID = {$_GET["ID"]}";
 $users = user::find_by_sql($query);
 
 $counter = 0;
