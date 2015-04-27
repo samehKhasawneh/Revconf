@@ -1,3 +1,48 @@
+<?php
+require_once("../includes/functions.php");
+require_once("../includes/user.php");
+require_once("../includes/committe.php");
+require_once("../includes/session.php");
+require_once("../includes/topic.php");
+
+if(!isset($_SESSION["orgEmail"])){
+    redirect_to("login.php");
+}
+if(!isset($_GET["ID"])){
+    redirect_to("index.php");
+}
+
+
+
+$query = "SELECT user.ID FROM user INNER JOIN attendance ON user.ID = attendance.userID WHERE attendance.confID = {$_GET["ID"]}";
+$users = user::find_by_sql($query);
+
+if(!$users){
+    redirect_to("confStat.php?ID={$_GET["ID"]}");
+}
+
+$counter = 0;
+$array = array();
+foreach($users as $user){
+    foreach($user as $key){
+        if(isset($key)){
+            $array[$counter] = $key;
+            $counter++;
+        }
+    }
+}
+
+
+
+
+
+
+
+
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -236,30 +281,64 @@
                     </thead>
 
                     <tbody>
-                    <tr>
-                        <td>325</td>
-                        <td>Khaled Tamimi</td>
-                        <td>Compilers</td>
-                        <td>Amman</td>
-                        <td> <a class="btn btn-success btn-block" href="#">Add</a> </td>
-                    </tr>
+                    <?php
+                    for($i=0;$i<=$counter-1;$i++) {
+                        $found_user = user::find_by_id($array[$i]);
 
-                    <tr>
-                        <td>032</td>
-                        <td>Rawan Tarawneh</td>
-                        <td>Computer Science</td>
-                        <td>Amman</td>
-                        <td> <a class="btn btn-success btn-block" href="#">Add</a> </td>
-                    </tr>
+                        $query2 = "SELECT userID FROM committe WHERE userID = {$found_user->ID}";
+                        $com = committe::find_by_sql($query2);
 
-                    <tr>
-                        <td>535</td>
-                        <td>Ahmad Sufyan</td>
-                        <td>Software Engineering</td>
-                        <td>Amman</td>
-                        <td> <a class="btn btn-danger btn-block" href="#">Remove</a> </td>
-                    </tr>
-
+                        if (!$com) {
+                            ?>
+                            <tr>
+                                <?php
+                                $query3 = "SELECT topic.topicName FROM topic INNER JOIN usertopic ON topic.ID = usertopic.topicID WHERE usertopic.userID = {$found_user->ID}";
+                                $topics = topic::find_by_sql($query3);
+                                $counter1 = 0;
+                                $array2 = array();
+                                foreach($topics as $topic){
+                                    foreach($topic as $key){
+                                        if(isset($key)){
+                                            $array2[$counter1] = $key;
+                                            $counter1++;
+                                        }
+                                    }
+                                }
+                                ?>
+                                <td><?php echo htmlentities($found_user->ID)?></td>
+                                <td><?php echo htmlentities($found_user->FirstName); echo " ";echo htmlentities($found_user->LastName);?></td>
+                                <td><?php for($i=0;$i<=$counter1-1;$i++) { echo htmlentities($array2[$i]); echo "<br>"; } ?></td>
+                                <td><?php echo htmlentities($found_user->city)?></td>
+                                <td><a class="btn btn-success btn-block" href="addremovecom.php?ID<?php echo htmlentities($found_user->ID)?>&confID=<?php echo htmlentities($_GET["ID"])?>&o=1">Add</a></td>
+                            </tr>
+                        <?php
+                        } else {
+                            ?>
+                            <tr>
+                                <?php
+                                $query3 = "SELECT topic.topicName FROM topic INNER JOIN usertopic ON topic.ID = usertopic.topicID WHERE usertopic.userID = {$found_user->ID}";
+                                $topics = topic::find_by_sql($query3);
+                                $counter1 = 0;
+                                $array2 = array();
+                                foreach($topics as $topic){
+                                    foreach($topic as $key){
+                                        if(isset($key)){
+                                            $array2[$counter1] = $key;
+                                            $counter1++;
+                                        }
+                                    }
+                                }
+                                ?>
+                                <td><?php echo htmlentities($found_user->ID)?></td>
+                                <td><?php echo htmlentities($found_user->FirstName); echo " ";echo htmlentities($found_user->LastName);?></td>
+                                <td><?php for($i=0;$i<=$counter1-1;$i++) { echo htmlentities($array2[$i]); echo "<br>"; } ?></td>
+                                <td><?php echo htmlentities($found_user->city)?></td>
+                                <td><a class="btn btn-danger btn-block" href="addremovecom.php?ID<?php echo htmlentities($found_user->ID)?>&confID=<?php echo htmlentities($_GET["ID"])?>&o=1">Remove</a></td>
+                            </tr>
+                        <?php
+                        }
+                    }
+                    ?>
 
 
 
