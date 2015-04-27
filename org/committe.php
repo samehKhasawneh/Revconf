@@ -38,7 +38,6 @@ foreach($users as $user){
 
 
 
-
 ?>
 
 
@@ -309,7 +308,7 @@ foreach($users as $user){
                                 <td><?php echo htmlentities($found_user->FirstName); echo " ";echo htmlentities($found_user->LastName);?></td>
                                 <td><?php for($i=0;$i<=$counter1-1;$i++) { echo htmlentities($array2[$i]); echo "<br>"; } ?></td>
                                 <td><?php echo htmlentities($found_user->city)?></td>
-                                <td><a class="btn btn-success btn-block" href="addremovecom.php?ID<?php echo htmlentities($found_user->ID)?>&confID=<?php echo htmlentities($_GET["ID"])?>&o=1">Add</a></td>
+                                <td><a class="btn btn-success btn-block" href="addremovecom.php?ID=<?php echo htmlentities($found_user->ID)?>&confID=<?php echo htmlentities($_GET["ID"])?>&OP=1">Add</a></td>
                             </tr>
                         <?php
                         } else {
@@ -333,7 +332,7 @@ foreach($users as $user){
                                 <td><?php echo htmlentities($found_user->FirstName); echo " ";echo htmlentities($found_user->LastName);?></td>
                                 <td><?php for($i=0;$i<=$counter1-1;$i++) { echo htmlentities($array2[$i]); echo "<br>"; } ?></td>
                                 <td><?php echo htmlentities($found_user->city)?></td>
-                                <td><a class="btn btn-danger btn-block" href="addremovecom.php?ID<?php echo htmlentities($found_user->ID)?>&confID=<?php echo htmlentities($_GET["ID"])?>&o=1">Remove</a></td>
+                                <td><a class="btn btn-danger btn-block" href="addremovecom.php?ID=<?php echo htmlentities($found_user->ID)?>&confID=<?php echo htmlentities($_GET["ID"])?>&OP=1">Remove</a></td>
                             </tr>
                         <?php
                         }
