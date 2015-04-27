@@ -9,7 +9,7 @@ require_once("../includes/paper.php");
 if(!isset($_SESSION["orgEmail"])){
     redirect_to("login.php");
 }
-if(!isset($_GET["ID"])){
+if(!isset($_GET["ID"]) || !isset($_GET["confID"])){
     redirect_to("index.php");
 }
 
@@ -18,7 +18,7 @@ $paper = paper::find_by_id($_GET["ID"]);
 $paper->isAccepted = 1;
 
 if($paper->save()){
-    redirect_to("confList.php");
+    redirect_to("paper.php?ID={$_GET["confID"]}");
 }else{
-    redirect_to("index.php");
+    redirect_to("confList.php");
 }
