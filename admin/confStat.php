@@ -1,3 +1,58 @@
+<?php
+require_once("../includes/session.php");
+require_once("../includes/conference.php");
+require_once("../includes/database.php");
+require_once("../includes/functions.php");
+require_once("../includes/paper.php");
+require_once("../includes/attendance.php");
+require_once("../includes/reviewresults.php");
+require_once("../includes/organization.php");
+
+
+if(!isset($_SESSION["isAdmin"])){
+    redirect_to("./../login.php");
+}
+if(!isset($_GET["ID"])){
+    redirect_to("index.php");
+}
+
+
+$query = "SELECT * FROM paper WHERE confID = {$_GET["ID"]}";
+$pnum = paper::find_by_sql($query);
+$counter = 0;
+foreach($pnum as $p){
+    $counter++;
+}
+
+$query = "SELECT * FROM paper WHERE confID = {$_GET["ID"]} AND isAccepted = 1";
+$pnum = paper::find_by_sql($query);
+$counter1 = 0;
+foreach($pnum as $p){
+    $counter1++;
+}
+
+$query = "SELECT * FROM reviewresults INNER JOIN paper ON reviewresults.paperID = paper.ID WHERE confID = {$_GET["ID"]}";
+$pnum = reviewresults::find_by_sql($query);
+$counter3 = 0;
+foreach($pnum as $p){
+    $counter3++;
+}
+
+$conf = conference::find_by_id($_GET["ID"]);
+
+$query = "SELECT * FROM attendance WHERE confID = {$_GET["ID"]}";
+$pnum = attendance::find_by_sql($query);
+$counter2 = 0;
+foreach($pnum as $p){
+    $counter2++;
+}
+
+$org = organization::find_by_id($conf->orgID);
+
+
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -196,8 +251,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header">
-                        PSUT MENA 2015
-
+                        <?php echo htmlentities($org->orgName)?>
                     </h1>
                     <ol class="breadcrumb">
                         <li>
@@ -225,40 +279,40 @@
 
                         <tr>
                             <td><strong>Conference Name</strong></td>
-                            <td>PSUT MENA</td>
+                            <td><?php echo htmlentities($conf->confName)?></td>
 
 
                         </tr>
 
                         <tr>
                             <td><strong>Conference Location</strong></td>
-                            <td> Amman</td>
+                            <td><?php echo htmlentities($conf->Location)?></td>
                         </tr>
 
                         <tr>
                             <td><strong>Conference Organization</strong></td>
-                            <td>PSUT</td>
+                            <td><?php echo htmlentities($org->orgName)?></td>
                         </tr>
 
                         <tr>
                             <td><strong>No. of attendees</strong></td>
-                            <td>250</td>
+                            <td><?php echo htmlentities($counter2)?></td>
                         </tr>
 
                         <tr>
                             <td><strong>No. of papers submitted</strong></td>
-                            <td>25</td>
+                            <td><?php echo htmlentities($counter)?></td>
                         </tr>
 
 
                         <tr>
                             <td><strong>No. of papers Accepted</strong></td>
-                            <td>10</td>
+                            <td><?php echo htmlentities($counter1)?></td>
                         </tr>
 
                         <tr>
                             <td><strong>No. of reviews conducted</strong></td>
-                            <td>25</td>
+                            <td><?php echo htmlentities($counter3)?></td>
                         </tr>
 
 
