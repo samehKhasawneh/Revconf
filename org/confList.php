@@ -267,7 +267,7 @@ foreach($conf as $con){
                                     <td><?php echo htmlentities($array[$i+1])?></td>
                                     <td><?php echo htmlentities($array[$i+2])?></td>
                                     <td <?php if($array[$i+3] == 1){?>style="color:green;<?php }else{?>style="color:red;<?php }?>">
-                                        <?php if($array[$i+3] == 1){echo "NO";}else{echo "YES";}  ?>
+                                        <?php if($array[$i+3] == 1){echo "YES";}else{echo "NO";}  ?>
                                     </td>
                                     <td><a class="btn btn-success btn-block" href="confStat.php?ID=<?php echo htmlentities($array[$i])?>">Open</a></td>
                                 </tr>
