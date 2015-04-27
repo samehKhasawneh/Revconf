@@ -72,7 +72,8 @@ if(!isset($_SESSION["isAdmin"]) && $_SESSION["isAdmin"]==1) {
                                         <img class="media-object" src="http://placehold.it/50x50" alt="">
                                     </span>
                                     <div class="media-body">
-                                        <h5 class="media-heading"><strong>John Smith</strong>
+                                        <h5 class="media-heading">
+                                            <strong>John Smith</strong>
                                         </h5>
                                         <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
                                         <p>Lorem ipsum dolor sit amet, consectetur...</p>
@@ -87,7 +88,8 @@ if(!isset($_SESSION["isAdmin"]) && $_SESSION["isAdmin"]==1) {
                                         <img class="media-object" src="http://placehold.it/50x50" alt="">
                                     </span>
                                     <div class="media-body">
-                                        <h5 class="media-heading"><strong>John Smith</strong>
+                                        <h5 class="media-heading">
+                                            <strong>John Smith</strong>
                                         </h5>
                                         <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
                                         <p>Lorem ipsum dolor sit amet, consectetur...</p>
@@ -102,7 +104,8 @@ if(!isset($_SESSION["isAdmin"]) && $_SESSION["isAdmin"]==1) {
                                         <img class="media-object" src="http://placehold.it/50x50" alt="">
                                     </span>
                                     <div class="media-body">
-                                        <h5 class="media-heading"><strong>John Smith</strong>
+                                        <h5 class="media-heading">
+                                            <strong>John Smith</strong>
                                         </h5>
                                         <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
                                         <p>Lorem ipsum dolor sit amet, consectetur...</p>
@@ -143,24 +146,19 @@ if(!isset($_SESSION["isAdmin"]) && $_SESSION["isAdmin"]==1) {
                     </ul>
                 </li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> John Smith <b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i><?php echo htmlentities($_SESSION["FirstName"]); echo " "; echo htmlentities($_SESSION["LastName"]);?><b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-fw fa-envelope"></i> Inbox</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-fw fa-gear"></i> Settings</a>
+                            <a href="../profile.php"><i class="fa fa-fw fa-user"></i> Profile</a>
                         </li>
                         <li class="divider"></li>
                         <li>
-                            <a href="#"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                            <a href="logout.php"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
                         </li>
                     </ul>
                 </li>
             </ul>
+
             <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
@@ -168,7 +166,7 @@ if(!isset($_SESSION["isAdmin"]) && $_SESSION["isAdmin"]==1) {
                     <a href="index.php"><i class="fa fa-fw fa-dashboard"></i> Admin Panel</a>
                     </li>
                     <li>
-                        <a href="javascript:;" data-toggle="collapse" data-target="#demo" class="" aria-expanded="false"><i class="fa fa-fw fa-arrows-v"></i> Conference <i class="fa fa-fw fa-caret-down"></i></a>
+                        <a href="javascript:;" data-toggle="collapse" data-target="#demo" class="" aria-expanded="true"><i class="fa fa-fw fa-arrows-v"></i> Conference <i class="fa fa-fw fa-caret-down"></i></a>
                         <ul id="demo" class="collapse in" aria-expanded="true">
                             <li class="active">
                                 <a href="conf.php">List of Conferences</a>
@@ -181,7 +179,7 @@ if(!isset($_SESSION["isAdmin"]) && $_SESSION["isAdmin"]==1) {
                     <li>
                         <a href="users.php"><i class="fa fa-fw fa-table"></i> Users</a>
 
-                        <a href="javascript:;" data-toggle="collapse" data-target="#demo1" class="" aria-expanded="false"><i class="fa fa-fw fa-table-v"></i> Users <i class="fa fa-fw fa-caret-down"></i></a>
+                        <a href="javascript:;" data-toggle="collapse" data-target="#demo1" class="" aria-expanded="true"><i class="fa fa-fw fa-table-v"></i> Users <i class="fa fa-fw fa-caret-down"></i></a>
                         <ul id="demo1" class="collapse in" aria-expanded="true">
                             <li class="active">
                                 <a href="users.php">List of Users</a>
@@ -291,15 +289,16 @@ if(!isset($_SESSION["isAdmin"]) && $_SESSION["isAdmin"]==1) {
                                     </div>
                                     <div class="col-xs-9 text-right">
                                         <?php
-                                        $query = "SELECT ID FROM conference WHERE isApproved = 0";
-                                        $conf = conference::find_by_sql($query);
-                                        $counter = 0;
-                                        foreach($conf as $con){
-                                            $counter++;
+                                        $query2 = "SELECT ID FROM conference WHERE isApproved = 0";
+                                        $conf2 = conference::find_by_sql($query2);
+                                        $counter2 = 0;
+                                        foreach($conf2 as $con){
+                                            $counter2++;
                                         }
 
                                         ?>
-                                        <div class="huge"><?php echo htmlentities($counter)?></div>
+                                        <div class="huge"><?php echo htmlentities($counter2)?></div>
+                                        <div>Conferences Needs Approve</div>
                                     </div>
                                 </div>
                             </div>
