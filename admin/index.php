@@ -3,7 +3,7 @@ require_once("../includes/session.php");
 require_once("../includes/organization.php");
 require_once("../includes/functions.php");
 require_once("../includes/conference.php");
-
+require_once("../includes/user.php");
 
 
 if(!isset($_SESSION["isAdmin"]) && $_SESSION["isAdmin"]==1) {
