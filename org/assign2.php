@@ -323,24 +323,25 @@ if(!isset($_GET["ID"]) || !isset($_GET["confID"])){
                         }
                     }
                     for($i=0;$i=$counter-1;$i++) {
-                        ?>
-                        <tr>
-                            <?php
-                            $id = $array[$i];
-                            $user_info = user::find_by_id($id);
+                    ?>
+                    <tr>
+                        <?php
+                        $id = $array[$i];
+                        $user_info = user::find_by_id($id);
 
-                            $query3 = "SELECT topic.topicName FROM topic INNER JOIN usertopic ON topic.ID = usertopic.topicID WHERE usertopic.userID = {$user_info->ID}";
-                            $topics = topic::find_by_sql($query3);
-                            $counter1 = 0;
-                            $array2 = array();
-                            foreach($topics as $topic){
-                                foreach($topic as $key){
-                                    if(isset($key)){
-                                        $array2[$counter1] = $key;
-                                        $counter1++;
-                                    }
+                        $query3 = "SELECT topic.topicName FROM topic INNER JOIN usertopic ON topic.ID = usertopic.topicID WHERE usertopic.userID = {$user_info->ID}";
+                        $topics = topic::find_by_sql($query3);
+                        $counter1 = 0;
+                        $array2 = array();
+                        foreach ($topics as $topic) {
+                            foreach ($topic as $key) {
+                                if (isset($key)) {
+                                    $array2[$counter1] = $key;
+                                    $counter1++;
                                 }
                             }
+                        }
+
                             ?>
 
                             <td><?php echo htmlentities($user_info->ID)?></td>
