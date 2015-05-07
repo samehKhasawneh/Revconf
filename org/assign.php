@@ -13,7 +13,7 @@ if(!isset($_GET["ID"])){
     redirect_to("index.php");
 }
 
-$query = "SELECT ID FROM paper WHERE confID = {$_GET["ID"]} AND isAccepted = 1";
+$query = "SELECT ID FROM paper WHERE confID = {$_GET["ID"]} AND isAccepted = 0";
 $papers = paper::find_by_sql($query);
 
 if(!$papers){
