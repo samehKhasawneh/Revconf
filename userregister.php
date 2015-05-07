@@ -6,8 +6,9 @@ require_once("includes/user.php");
 require_once("includes/DatabaseObject.php");
 require_once("includes/userimgs.php");
 require_once("includes/session.php");
+require_once("mail/mail.php");
 
-if(isset($_SESSION["ID"])) {
+if(isset($_SESSION["Email"])) {
     redirect_to("home.php");
 }
 
@@ -15,61 +16,111 @@ $max_file_size = 1048576;
 
 if (isset($_POST["submit"])) { // Form has been submitted.
 
-    $email = trim($_POST["email"]);
-    $password = trim($_POST["password"]);
-    $fname = trim($_POST["fname"]);
-    $lname = trim($_POST["lname"]);
-    $gender = trim($_POST["gender"]);
-    $sdegree = trim($_POST["scientific_degree"]);
-    $city = trim($_POST{"city"});
-    $title = trim($_POST["title"]);
-    $age = trim($_POST["Age"]);
-
-
-
-    $newUser = new user();
-
-    $mysql_datetime = strftime("%Y-%m-%d", time());
-
-    $newUser->date_registered = $mysql_datetime;
-    $newUser->Age = $age;
-    $newUser->FirstName = $fname;
-    $newUser->LastName = $lname;
-    $newUser->Email = $email;
-    $newUser->Password = $password;
-    $newUser->gender = $gender;
-    $newUser->title = $title;
-    $newUser->city = $city;
-    $newUser->scientific_degree = $sdegree;
-
-    $pic = trim($_POST["pic"]);
-    $photo = new userimgs();
-    $photo->userID = $_SESSION["ID"];
-    $photo->attach_file($_FILES['pic']);
-
-
-    if ($newUser->save()) {
-
-        if($photo->save()){
-        }else{
-            $message = join("<br />", $photo->errors);
+    $target_dir = "imgUpload/";
+    $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+    $uploadOk = 1;
+    $imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
+// Check if image file is a actual image or fake image
+    if (isset($_POST["submit"])) {
+        $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+        if ($check !== false) {
+            echo "File is an image - " . $check["mime"] . ".";
+            $uploadOk = 1;
+        } else {
+            echo "File is not an image.";
+            $uploadOk = 0;
         }
-
-        $found_user = User::authenticate($email, $password);
-
-        if ($found_user) {
-
-            foreach ($found_user as $key => $value) {
-                $session->setAttrb($key, $value);
-            }
-            redirect_to("home.php");
+    }
+// Check if file already exists
+    if (file_exists($target_file)) {
+        echo "Sorry, file already exists.";
+        $uploadOk = 0;
+    }
+// Check file size
+    if ($_FILES["fileToUpload"]["size"] > 5000000) {
+        echo "Sorry, your file is too large.";
+        $uploadOk = 0;
+    }
+// Allow certain file formats
+    if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+        && $imageFileType != "gif"
+    ) {
+        echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+        $uploadOk = 0;
+    }
+// Check if $uploadOk is set to 0 by an error
+    if ($uploadOk == 0) {
+        echo "Sorry, your file was not uploaded.";
+// if everything is ok, try to upload file
+    } else {
+        if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+            echo "The file " . basename($_FILES["fileToUpload"]["name"]) . " has been uploaded.";
+            $uploadOk = "ok";
+        } else {
+            echo "Sorry, there was an error uploading your file.";
         }
-
     }
 
+    if ($uploadOk == "ok") {
+        $email = trim($_POST["email"]);
+        $password = trim($_POST["password"]);
+        $fname = trim($_POST["fname"]);
+        $lname = trim($_POST["lname"]);
+        $gender = trim($_POST["gender"]);
+        $sdegree = trim($_POST["scientific_degree"]);
+        $city = trim($_POST{"city"});
+        $title = trim($_POST["title"]);
+
+        $fb = trim($_POST["facebook"]);
+        $li = trim($_POST["linkdin"]);
+        $Am = trim($_POST["aboutme"]);
+        $org = trim($_POST["org"]);
+
+        $query = "SELECT * FROM user WHERE Email = '{$email}'";
+        $found_user = user::find_by_sql($query);
+
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+
+            if (empty($found_user)) {
+
+                $newUser = new user();
+
+                $mysql_datetime = strftime("%Y-%m-%d", time());
+
+                $newUser->date_registered = $mysql_datetime;
+                $newUser->FirstName = $fname;
+                $newUser->LastName = $lname;
+                $newUser->Email = $email;
+                $newUser->Password = $password;
+                $newUser->gender = $gender;
+                $newUser->title = $title;
+                $newUser->city = $city;
+                $newUser->scientific_degree = $sdegree;
+
+
+                if ($newUser->save()) {
+
+                    $found_user = User::authenticate($email, $password);
+
+                    if ($found_user) {
+
+                        foreach ($found_user as $key => $value) {
+                            $session->setAttrb($key, $value);
+                        }
+                        sendMail($email, "Welcome To RevConf", "Thank You FOr Registering");
+                        redirect_to("home.php");
+                    }
+
+                }
+
+            } else {
+                $session->setAttrb("message", "Email is already in use combination incorrect.");
+            }
+        } else {
+            $session->setAttrb("message", "Email is not in a correct format.");
+        }
+    }
 }
-
-
 
 
 
@@ -130,6 +181,7 @@ if (isset($_POST["submit"])) { // Form has been submitted.
 
 
     <div class="row"> <!-- Registration Info -->
+        <label><?php echo $session->getAttrb("message"); ?></label>
         <h6>Please fill out the following form. The required fields are marked by (*)</h6>
     </div>
 
@@ -137,7 +189,7 @@ if (isset($_POST["submit"])) { // Form has been submitted.
 
 
     <div class="container  " id="formContainer"  >
-    <form role="form" class="col-md-4" action="userregister.php" method="post">
+    <form role="form" class="col-md-4" action="userregister.php" method="post" enctype="multipart/form-data">
             <!------------First Name --------->
         <div class="row form-group " >
             <div class="" ID="firstn">
@@ -156,20 +208,14 @@ if (isset($_POST["submit"])) { // Form has been submitted.
         </div>
         <!------------Last Name --------->
 
-        <!------------Age --------->
-        <div class="row form-group">
-            <div class="3" id="Age">
-                <label for="Age">Age <span id="req">*</span></label>
-                <input type="text" class="form-control"  id="Age" required name="Age">
-            </div>
-        </div>
-        <!------------Age --------->
-
         <!------------title --------->
         <div class="row form-group">
             <div class="3" id="title">
                 <label for="title">title<span id="req">*</span></label>
-                <input type="text" class="form-control"  id="title" required name="title">
+                <select class="form-control" name="title" required>
+                    <option value="Mr">Mr</option>
+                    <option value="Mrs">Mrs</option>
+                </select>
             </div>
         </div>
         <!------------title --------->
@@ -225,9 +271,9 @@ if (isset($_POST["submit"])) { // Form has been submitted.
         <!------------scientific_degree --------->
         <div class="row form-group">
             <div class="">
-                <label for="scientific_degree">Select your Gender  <span id="req">*</span></label>
+                <label for="scientific_degree">Select your Scientific Degree  <span id="req">*</span></label>
                 <br>
-                <select class="btn-lg" name="scientific_degree" required>
+                <select class="form-control" name="scientific_degree" required>
                     <option value="PHD">PHD</option>
                     <option value="MASTERS">MASTERS</option>
                     <option value="BC">BC</option>
@@ -236,13 +282,61 @@ if (isset($_POST["submit"])) { // Form has been submitted.
         </div>
         <!------------scientific_degree --------->
 
+        <!------------Last Name --------->
+        <div class="row form-group">
+            <div class="3" id="org">
+                <label for="org">Your Organization : </label>
+                <input type="text" class="form-control"  id="org"  name="org">
+            </div>
+        </div>
+        <!------------Last Name --------->
+
+        <!------------fb --------->
+        <div class="row form-group">
+            <div class="">
+                <label for="facebook">Facebook  <span id="req">*</span></label>
+                <br>
+                <input type="text" class="form-control" name="facebook" >
+
+            </div>
+        </div>
+        <!------------fb --------->
+
+
+        <!------------linkdin --------->
+        <div class="row form-group">
+            <div class="">
+                <label for="linkdin">linkdin  <span id="req">*</span></label>
+                <br>
+                <input type="text" class="form-control" name="linkdin" >
+
+            </div>
+        </div>
+        <!------------linkdin --------->
+
+
+        <!------------aboutme --------->
+        <div class="row form-group">
+            <div class="">
+                <label for="aboutme">About Me  <span id="req">*</span></label>
+                <br>
+                <textarea type="text" class="form-control" name="aboutme" ></textarea>
+
+            </div>
+        </div>
+        <!------------aboutme --------->
+
+
+
+
+
 
         <!------------picture --------->
         <div class="row form-group">
             <div class="" >
-                <label for="pic">Upload a Picture<span id="req">* <?php echo output_message($message); ?></span></label>
-                <input type="hidden" name="pic" value="<?php echo $max_file_size; ?>" />
-                <input class="" id="pic" type="file" name="pic">
+                <label for="pic">Upload a Picture<span id="req">* </span></label>
+                <input type="file" name="fileToUpload"  >
+
             </div>
         </div>
 
@@ -254,7 +348,7 @@ if (isset($_POST["submit"])) { // Form has been submitted.
             <div class="">
                 <label for="gender">Select your Gender  <span id="req">*</span></label>
                 <br>
-                <select class="btn-lg" name="gender" required>
+                <select class="form-control" name="gender" required>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                 </select>

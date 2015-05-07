@@ -37,7 +37,7 @@
                     <input type="password" placeholder="Password" class="form-control">
                 </div>
                 <button id="sign" type="submit" class="btn btn-primary">Sign in</button>
-                <button id="register"  class="btn btn-success">Register</button>
+                <a id="register"   href="register.php" class="btn btn-success">Register</a>
             </form>
         </div><!--/.navbar-collapse -->
     </div>

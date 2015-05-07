@@ -1,5 +1,5 @@
 <?php
-include_once("includes/navbar.php");
+
 require_once("includes/functions.php");
 require_once("includes/database.php");
 require_once("includes/DatabaseObject.php");
@@ -13,6 +13,7 @@ require_once("includes/userimgs.php");
 require_once("includes/attendance.php");
 require_once("includes/paper.php");
 require_once("includes/paperassign.php");
+include_once("includes/navbar-user.php");
 
 if(empty($_GET["ID"])) {
     $session->message("No conference has been choosen");
@@ -72,9 +73,10 @@ foreach($users as $user){
     <title>Jumbotron Template for Bootstrap</title>
 
     <!-- Bootstrap core CSS -->
+    <script src="js/jquery.min.js"></script>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <script src="js/bootstrap.min.js"></script>
-    <script src="js/jquery.min.js"></script>
+
     <script src="js/submitPaper.js"></script>
     <script src="js/ui-bootstrap-0.12.1.min.js"></script>
 
@@ -156,28 +158,19 @@ foreach($users as $user){
 
 
                 <?php
-                if(!isset($_SESSION["ID"])) {
-                    ?>
-                    <div class="panel panel-default text-center" id="join">
-                        <div class="panel-body">
-                            <h2 class="text-center">Join This Conference</h2>
-
-                            <p class="text-center">View a lists of conferences which you can attend</p>
-                            <button class="btn btn-primary btn-lg btn-block" role="button">Join</button>
-                        </div>
-                    </div>
-                    <?php
-                }elseif(isset($_SESSION["ID"])) {
-                    $conf = "SELECT * FROM attendance WHERE userID = {$_SESSION["ID"]}";
+                if(isset($_SESSION["Email"])) {
+                    $conf = "SELECT userID FROM attendance WHERE userID = {$_SESSION["ID"]} AND confID = {$_GET["ID"]}";
                     $found_user = attendance::find_by_sql($conf);
-                    if (!$found_user) {
+
+                    if (empty($found_user)) {
                         ?>
                         <div class="panel panel-default text-center" id="join">
                             <div class="panel-body">
                                 <h2 class="text-center">Join This Conference</h2>
+
                                 <p class="text-center">View a lists of conferences which you can attend</p>
-                                    <a href="join.php?ID=<?php echo htmlentities($conference->ID)?>">
-                                <button class="btn btn-primary btn-lg btn-block" role="button">Join</button>
+                                <a href="join.php?ID=<?php echo htmlentities($conference->ID) ?>">
+                                    <button class="btn btn-primary btn-lg btn-block" role="button">Join</button>
                                 </a>
                             </div>
                         </div>
@@ -191,36 +184,50 @@ foreach($users as $user){
                                 <h2 class="text-center">Submit Paper</h2>
 
                                 <p class="text-center">View a lists of conferences which you can attend</p>
-                                <a href="paperSubmit.php?ID=<?php echo htmlentities($conference->ID)?>">
-                                <button id="submitPaper" class="btn btn-primary btn-lg btn-block" role="button">Submit
-                                </button>
-                                    </a>
+                                <a href="paperSubmit.php?ID=<?php echo htmlentities($conference->ID) ?>">
+                                    <button id="submitPaper" class="btn btn-primary btn-lg btn-block" role="button">
+                                        Submit
+                                    </button>
+                                </a>
                             </div>
                         </div>
 
-<!--// href=papers.php?ID={$_GET["ID"]}-->
-                        <?php
-                        $query1 = "SELECT paperID FROM paperassign WHERE userID = {$_SESSION["ID"]}";
-                        $result = paperassign::find_by_sql($query1);
+                    <?php
+                    }
+                    $query1 = "SELECT paperID FROM paperassign WHERE userID = {$_SESSION["ID"]} AND confID = {$_GET["ID"]}";
+                    $result = paperassign::find_by_sql($query1);
 
-                        if($result) {
-                            ?>
-                            <div class="panel panel-default text-center" id="reviewPaper">
-                                <div class="panel-body">
-                                    <h2 class="text-center">Review Paper</h2>
+                    if ($result) {
+                        ?>
+                        <div class="panel panel-default text-center" id="reviewPaper">
+                            <div class="panel-body">
+                                <h2 class="text-center">Review Paper</h2>
 
-                                    <p class="text-center">Review Papers</p>
-                                    <a href="review.php?ID=<?php echo htmlentities($conference->ID)?>">
+                                <p class="text-center">Review Papers</p>
+                                <a href="review.php?ID=<?php echo htmlentities($conference->ID) ?>">
                                     <button id="submitPaper" class="btn btn-primary btn-lg btn-block" role="button">
                                         Review
                                     </button>
-                                        </a>
-                                </div>
+                                </a>
                             </div>
-                        <?php
-                        }
+                        </div>
+                    <?php
                     }
-                }else {}
+                }else{
+                    ?>
+                    <div class="panel panel-default text-center" id="join">
+                            <div class="panel-body">
+                                <h2 class="text-center">Join This Conference</h2>
+
+                                <p class="text-center">You have to be logged-in to perform this operation</p>
+                                <a href="login.php">
+                                    <?php $session->setAttrb("message","you have to be logged in to join the conference")?>
+                                    <button class="btn btn-primary btn-lg btn-block" role="button">Join</button>
+                                </a>
+                            </div>
+                        </div>
+                <?php
+                }
                 ?>
                 <script>
                     //             <!-- This will check if the user has joined the conference if he did , the join div will get removed -->
@@ -282,6 +289,7 @@ foreach($users as $user){
 <div class="row">
 
     <?php
+    $x = 0;
     for($i = 0; $i <= $counter1-1 ;$i+=2){
     ?>
     <div ng-repeat="u in users" class="col-xs-4 col-sm-2 ng-scope">
@@ -298,8 +306,9 @@ foreach($users as $user){
                 }
             }
         }
+        $x++;
         ?>
-        <img src="<?php if($i == 0){echo $array2[$i];}else{echo $array2[$i-2];}?>" class="img-thumbnail img-responsive img-circle">
+        <img src="<?php echo htmlentities($array2[$x])?>" class="img-thumbnail img-responsive img-circle">
         <h3 class="text-center "><?php echo htmlentities($array1[$i+1]) ?></h3>
         <hr>
     </div>

@@ -1,13 +1,12 @@
 <?php
-include_once("includes/navbar.php");
+
 require_once("includes/session.php");
 require_once("includes/paper.php");
 require_once("includes/functions.php");
 require_once("includes/conference.php");
 require_once("includes/paperassign.php");
-require_once("includes/evaluationresult.php");
 require_once("includes/reviewresults.php");
-
+include_once("includes/navbar-user.php");
 
 if(!isset($_SESSION["ID"]) || !isset($_GET["ID"])){
     redirect_to("conference.php");
@@ -19,8 +18,8 @@ if(!$user) {
     redirect_to("conference.php");
 }
 
-    $query = "SELECT userID FROM evaluationresult WHERE paperID = {$_GET["ID"]}";
-    $user = evaluationresult::find_by_sql($query);
+    $query = "SELECT userID FROM reviewresults WHERE paperID = {$_GET["ID"]}";
+    $user = reviewresults::find_by_sql($query);
 
     $counter = 0;
     $array = array();
@@ -34,12 +33,12 @@ if(!$user) {
 
     }
 $paper = paper::find_by_id($_GET["ID"]);
-
-if($array[0] == $_SESSION["ID"]){
-    $session->setAttrb("message","you have reviewed it you can't review it twice");
-    redirect_to("review.php?ID={$paper->confID}");
+if(isset($array[0])) {
+    if ($array[0] == $_SESSION["ID"]) {
+        $session->setAttrb("message", "you have reviewed it you can't review it twice");
+        redirect_to("review.php?ID={$paper->confID}");
+    }
 }
-
 
 
 
@@ -58,10 +57,8 @@ if(isset($_POST["submit"])){// Form has been submitted.
     $q9 = $_POST["q9"];
     $q10 = $_POST["q10"];
 
-    $query1 = "INSERT INTO evaluationresult (paperID,userID,eval1,eval2,eval3,eval4,eval5,eval6,eval7,eval8,eval9,eval10) ";
-    $query1 .= "VALUES ({$_GET["ID"]},{$_SESSION["ID"]},{$q1},{$q2},{$q3},{$q4},{$q5},{$q6},{$q7},{$q8},{$q9},{$q10})";
-
-    $result = evaluationresult::execut_by_sql($query1);
+    $sum = $q1 + $q2 + $q3 + $q4 + $q5 + $q6 + $q7 + $q8 + $q9 + $q10;
+    $sum = $sum*2;
 
     $rec = $_POST["recommendation"];
     $fam = $_POST["fam"];
@@ -69,16 +66,13 @@ if(isset($_POST["submit"])){// Form has been submitted.
     $mp = $_POST["sp2"];
     $com = $_POST["sp3"];
 
-    $query2 = "INSERT INTO reviewresults (paperID,userID,recommendation,userFamiliarity,strengthWeakness,mainProblems,comments) ";
-    $query2 .= "VALUES ({$_GET["ID"]},{$_SESSION["ID"]},'{$rec}','{$fam}','{$sw}','{$mp}','{$com}')";
+    $query2 = "INSERT INTO reviewresults (paperID,userID,recommendation,userFamiliarity,strengthWeakness,mainProblems,comments,rank) ";
+    $query2 .= "VALUES ({$_GET["ID"]},{$_SESSION["ID"]},'{$rec}','{$fam}','{$sw}','{$mp}','{$com}',{$sum})";
 
     $result2 = reviewresults::execut_by_sql($query2);
 
-    $email = new reviewresults();
 
-    $email->try_to_send_notification();
-
-    if($result && $result2){
+    if($result2){
 
         redirect_to("review.php?ID={$paper->confID}");
     }
@@ -88,21 +82,6 @@ if(isset($_POST["submit"])){// Form has been submitted.
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ?>
@@ -118,9 +97,10 @@ if(isset($_POST["submit"])){// Form has been submitted.
     <title>Review + Paper Name</title>
 
     <!-- Bootstrap core CSS -->
+    <script src="js/jquery.min.js"></script>
+
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <script src="js/bootstrap.min.js"></script>
-    <script src="js/jquery.min.js"></script>
 
 
     <link href="css/body.css" rel="stylesheet"> <!-- includes background color -->

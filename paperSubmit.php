@@ -1,5 +1,5 @@
 <?php
-include_once("includes/navbar-user.php");
+
 require_once("includes/database.php");
 require_once("includes/functions.php");
 require_once("includes/user.php");
@@ -9,38 +9,127 @@ require_once("includes/session.php");
 require_once("includes/paper.php");
 require_once("includes/topic.php");
 require_once("includes/conference.php");
-
+include_once("includes/navbar-user.php");
 
 if(!isset($_SESSION["ID"]) || !isset($_GET["ID"])){
     redirect_to("conference.php");
 }
+
+$query2 = "SELECT conference.ID FROM conference INNER JOIN attendance ON conference.ID = attendance.confID WHERE attendance.userID = {$_SESSION["ID"]}";
+$conferences = conference::find_by_sql($query2);
+$counter1 = 0;
+$array1 = array();
+foreach($conferences as $conf){
+    foreach($conf as $key) {
+        if (isset($key)) {
+            $array1[$counter1] = $key;
+            $counter1++;
+        }
+    }
+}
+if(!(in_array($_GET["ID"],$array1))){
+    redirect_to("home.php");
+}
+
+
+
+
+
 $conference = conference::find_by_id($_GET["ID"]);
 
-if(isset($_POST["submit"])){// Form has been submitted.
-
-    $paperName = $_POST["pName"];
-    $author = $_POST["author"];
-    $authorEmail = $_POST["authorEmail"];
-    $abstract = $_POST["abstract"];
-    $paperTopic = $_POST["ptopic"];
 
 
-    $mysql_datetime = strftime("%Y-%m-%d", time());
+if(isset($_POST["submit"])) {// Form has been submitted.
 
-    $new_paper = new paper();
 
-    $new_paper->confID = $_GET["ID"];
-    $new_paper->abstract = $abstract;
-    $new_paper->paperName =$paperName;
-    $new_paper->paperTopic = $paperTopic;
-    $new_paper->dateSubmitted = $mysql_datetime;
-    $new_paper->paperURL = "";
+    $target_dir = "uploads/";
+    $file = basename($_FILES["fileToUpload"]["name"]);
+    echo $file;
+    $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+    $uploadOk = 1;
+    echo $target_file;;
+    $FileType = pathinfo($target_file, PATHINFO_EXTENSION);
+    echo $FileType;
 
-    if($new_paper->save()){
+
+    echo $target_file;
+    echo $uploadOk;
+// Check if file already exists
+    if (file_exists($target_file)) {
+        echo "Sorry, file already exists.";
+        $uploadOk = 0;
+    }
+// Check file size
+    if ($_FILES["fileToUpload"]["size"] > 1000000) {
+        echo "Sorry, your file is too large.";
+        $uploadOk = 0;
+
+    }
+// Allow certain file formats
+    if ($FileType != "pdf") {
+        echo "Sorry, only PDF files are allowed.";
+        $uploadOk = 0;
+    }
+// Check if $uploadOk is set to 0 by an error
+    if ($uploadOk == 0) {
+        echo "Sorry, your file was not uploaded.";
+// if everything is ok, try to upload file
+    } else {
+        if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+            echo "The file " . basename($_FILES["fileToUpload"]["name"]) . " has been uploaded.";
+
+            $uploadOk = "ok";
+            echo "<p id = 'pages' hidden='hidden' >"; echo $target_file ; echo "</p>";
+//            checkPages();
+
+
+
+
+        } else {
+            echo "Sorry, there was an error uploading your file.";
+        }
+
+
+    }
+
+
+    if ($uploadOk == "ok") {
+
+        $paperName = $_POST["pName"];
+        $author = $_POST["author"];
+        $authorEmail = $_POST["authorEmail"];
+        $abstract = $_POST["abstract"];
+        $paperTopic = $_POST["ptopic"];
+
+
+        $mysql_datetime = strftime("%Y-%m-%d", time());
+
+        $new_paper = new paper();
+
+        $new_paper->userID = $_SESSION["ID"];
+        $new_paper->confID = $_GET["ID"];
+        $new_paper->abstract = $abstract;
+        $new_paper->paperName = $paperName;
+        $new_paper->paperTopic = $paperTopic;
+        $new_paper->dateSubmitted = $mysql_datetime;
+        $new_paper->author = $author;
+        $new_paper->authorEmail = $authorEmail;
+        $new_paper->paperURL = $target_file;
+
+        if ($new_paper->save()) {
         redirect_to("conference.php?ID={$_GET["ID"]}");
+        }
+
     }
 
 }
+
+else
+{
+    echo "error";
+}
+
+
 
 
 
@@ -59,10 +148,17 @@ if(isset($_POST["submit"])){// Form has been submitted.
     <title>Review + Paper Name</title>
 
     <!-- Bootstrap core CSS -->
+    <script src="js/jquery.min.js"></script>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <script src="js/bootstrap.min.js"></script>
-    <script src="js/jquery.min.js"></script>
+
     <script src="js/bootbox.js"></script>
+
+
+    <script src="includes/pdf.worker.js"></script>
+    <script src="includes/pdf.js"></script>
+
+
 
 
     <link href="css/body.css" rel="stylesheet"> <!-- includes background color -->
@@ -74,7 +170,13 @@ if(isset($_POST["submit"])){// Form has been submitted.
 
 </head>
 
+
+
 <body>
+
+<form name="myform"  action="" method="post">
+    <input type="text" hidden="hidden"  name="error" id="error">
+</form>
 
 
 
@@ -110,7 +212,7 @@ if(isset($_POST["submit"])){// Form has been submitted.
 <div id="bodyContainer" class="container">
 
 
-    <form action="includes/upload.php" method="post" enctype="multipart/form-data">
+    <form action="paperSubmit.php?ID=<?php echo $_GET["ID"];?>" method="post" enctype="multipart/form-data">
     <div class="panel panel-default col-lg-12">
         <div class="panel-heading">
             <h1 class="panel-title">General Information</h1>

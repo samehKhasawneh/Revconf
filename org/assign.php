@@ -13,7 +13,7 @@ if(!isset($_GET["ID"])){
     redirect_to("index.php");
 }
 
-$query = "SELECT ID,userID FROM paper WHERE confID = {$_GET["ID"]} AND isAccepted = 1";
+$query = "SELECT ID FROM paper WHERE confID = {$_GET["ID"]} AND isAccepted = 1";
 $papers = paper::find_by_sql($query);
 
 if(!$papers){
@@ -257,7 +257,7 @@ foreach($papers as $paper){
                         <th class="text-center">ID</th>
                         <th class="text-center">Paper Name</th>
                         <th class="text-center">Topic </th>
-                        <th class="text-center">User</th>
+                        <th class="text-center">Author</th>
                         <th class="text-center"># Of Reviews</th>
                         <th ></th>
 
@@ -267,7 +267,7 @@ foreach($papers as $paper){
 
                     <tbody>
                     <?php
-                    for($i=0;$i<=$counter-1;$i=+2){
+                    for($i=0;$i<=$counter-1;$i++){
 
                         $id = $array[$i];
                         $paperobj = paper::find_by_id($id);
@@ -276,13 +276,9 @@ foreach($papers as $paper){
                             <td><?php echo htmlentities($paperobj->ID)?></td>
                             <td><?php echo htmlentities($paperobj->paperName)?></td>
                             <td><?php echo htmlentities($paperobj->paperTopic)?></td>
-                            <?php
-                            $id = $array[$i+1];
-                            $found_user = user::find_by_id($id)
-                            ?>
-                            <td><?php echo htmlentities($found_user->FirstName); echo" "; echo htmlentities($found_user->LastName);?></td>
+                            <td><?php echo htmlentities($paperobj->author)?></td>
                             <td style="color: red; font-weight: bold;">4</td>
-                            <td> <a class="btn btn-success btn-block" href="assign2.php?ID=<?php echo htmlentities($paperobj->ID)?>&confID=<?php echo htmlentities($_GET["ID"]) ?>">Open</a> </td>
+                            <td> <a class="btn btn-success btn-block" href="assign2.php?ID=<?php echo htmlentities($paperobj->ID)?>&confID=<?php echo htmlentities($_GET["ID"]) ?>">Assign</a> </td>
                         </tr>
                     <?php
                     }

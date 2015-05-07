@@ -16,6 +16,7 @@
 
 </html>
 <?php
+
 $target_dir = "uploads/";
 $file = basename($_FILES["fileToUpload"]["name"]);
 echo $file;
@@ -37,6 +38,10 @@ if(isset($_POST["submit"])) {
         echo "File is not an image.";
         $uploadOk = 0;
     }
+}
+
+else{
+
 }
 
 // Check if file already exists

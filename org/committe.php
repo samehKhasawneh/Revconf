@@ -300,7 +300,7 @@ foreach($users as $user){
                                 ?>
                                 <td><?php echo htmlentities($found_user->ID)?></td>
                                 <td><?php echo htmlentities($found_user->FirstName); echo " ";echo htmlentities($found_user->LastName);?></td>
-                                <td><?php for($i=0;$i<=$counter1-1;$i++) { echo htmlentities($array2[$i]); echo "<br>"; } ?></td>
+                                <td><?php for($J=0;$J<=$counter1-1;$J++) { echo htmlentities($array2[$J]); echo "<br>"; } ?></td>
                                 <td><?php echo htmlentities($found_user->city)?></td>
                                 <td><a class="btn btn-success btn-block" href="addremovecom.php?ID=<?php echo htmlentities($found_user->ID)?>&confID=<?php echo htmlentities($_GET["ID"])?>&OP=1">Add</a></td>
                             </tr>
@@ -324,9 +324,9 @@ foreach($users as $user){
                                 ?>
                                 <td><?php echo htmlentities($found_user->ID)?></td>
                                 <td><?php echo htmlentities($found_user->FirstName); echo " ";echo htmlentities($found_user->LastName);?></td>
-                                <td><?php for($i=0;$i<=$counter1-1;$i++) { echo htmlentities($array2[$i]); echo "<br>"; } ?></td>
+                                <td><?php for($J=0;$J<=$counter1-1;$J++) { echo htmlentities($array2[$J]); echo "<br>"; } ?></td>
                                 <td><?php echo htmlentities($found_user->city)?></td>
-                                <td><a class="btn btn-danger btn-block" href="addremovecom.php?ID<?php echo htmlentities($found_user->ID)?>&confID=<?php echo htmlentities($_GET["ID"])?>&OP=0">Remove</a></td>
+                                <td><a class="btn btn-danger btn-block" href="addremovecom.php?ID=<?php echo htmlentities($found_user->ID)?>&confID=<?php echo htmlentities($_GET["ID"])?>&OP=0">Remove</a></td>
                             </tr>
                         <?php
                         }

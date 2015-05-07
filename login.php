@@ -96,7 +96,7 @@ if (isset($_POST["submit"])) { // Form has been submitted.
             </br>
         <h1>Hello, world!</h1>
         <p>ReviConf is your gateway to a modern, sophisticated research environment</p>
-        <p><a class="btn btn-primary btn-lg" href="#" role="button">Sign Up Today</a></p>
+        <p><a class="btn btn-primary btn-lg" href="register.php" role="button">Sign Up Today</a></p>
             </div>
 
         <div class="col-md-5" id="login-form">
@@ -119,11 +119,14 @@ if (isset($_POST["submit"])) { // Form has been submitted.
                             <label> <?php echo $session->getAttrb("message"); ?></label>
                         </div>
                         <button class="btn btn-lg btn-primary btn-block" type="submit" value="submit" name="submit">Sign in</button>
+                        <a class="btn btn-success btn-block" href="org/login.php">Organization Login</a>
                     </div>
                 </div>
             </form>
 
         </div>
+
+
 
     </div>
 </div>

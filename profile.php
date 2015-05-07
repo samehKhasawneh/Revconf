@@ -1,5 +1,5 @@
 <?php
-include_once("includes/navbar.php");
+
 require_once("includes/DatabaseObject.php");
 require_once("includes/database.php");
 require_once("includes/session.php");
@@ -9,17 +9,30 @@ require_once("includes/userimgs.php");
 require_once("includes/attendance.php");
 require_once("includes/topic.php");
 require_once("includes/conference.php");
+require_once("includes/user.php");
+include_once("includes/navbar-user.php");
+include_once("mail/mail.php");
 
-
-
-if (!isset($_SESSION["Email"])) {
+if (!isset($_SESSION["Email"]) && !isset($_GET["ID"])) {
     redirect_to("login.php");
 
 }
 
-?>
-<?php
-$query1 = "SELECT imageURL FROM userimgs WHERE userID = {$_SESSION['ID']}";
+isset($_SESSION["Email"])? $id = $_SESSION["ID"] : $id = $_GET["ID"] ;
+if(isset($_GET["ID"])){
+if(!($_SESSION["ID"] == $_GET["ID"])){
+$id = $_GET["ID"];
+}
+}
+
+$user_info = user::find_by_id($id);
+if(!$user_info){
+    $session->setAttrb("message","user is not found !!!");
+    redirect_to("login.php");
+}
+
+
+$query1 = "SELECT imageURL FROM userimgs WHERE userID = {$id}";
 $sql1 = userimgs::find_by_sql($query1);
 $counter1 = 0 ;
 $array1 = array();
@@ -30,7 +43,7 @@ foreach($sql1 as $s1){
     }
 }
 
-$query2 = "SELECT * FROM userinfo WHERE userID = {$_SESSION["ID"]}";
+$query2 = "SELECT * FROM userinfo WHERE userID = {$id}";
 $sql2 = userinfo::find_by_sql($query2) ;
 $counter2 = 0 ;
 $array2 = array();
@@ -42,7 +55,7 @@ foreach($sql2 as $s2){
 }
 
 
-$query3 = "SELECT * FROM attendance WHERE userID = {$_SESSION["ID"]}";
+$query3 = "SELECT * FROM attendance WHERE userID = {$id}";
 $sql3 = attendance::find_by_sql($query3) ;
 $counter4 = 0 ;
 $counter3 = 0;
@@ -59,7 +72,7 @@ foreach($sql3 as $s3){
 
 $sql = "SELECT topic.topicName FROM topic
                     INNER JOIN usertopic ON topic.ID = usertopic.topicID
-                    INNER JOIN user ON user.ID = usertopic.userID WHERE user.ID ={$_SESSION["ID"]}
+                    INNER JOIN user ON user.ID = usertopic.userID WHERE user.ID ={$id}
                     ORDER BY topic.topicName";
 
 $query = topic::find_by_sql($sql);
@@ -77,7 +90,7 @@ foreach($query as $result){
 
 $sql2 = "SELECT conference.ID,conference.confName,conference.Location,conference.confDate FROM conference
                     INNER JOIN attendance ON conference.ID = attendance.confID
-                    INNER JOIN user ON user.ID = attendance.userID WHERE user.ID ={$_SESSION["ID"]}
+                    INNER JOIN user ON user.ID = attendance.userID WHERE user.ID ={$id}
                     ORDER BY conference.confName";
 
 $query = conference::find_by_sql($sql2);
@@ -92,6 +105,8 @@ foreach($query as $result2){
         }
     }
 }
+
+
 
 
 
@@ -158,9 +173,9 @@ foreach($query as $result2){
 
     <h1 class="text-center" id="userName">
         <?php
-        echo ucfirst($_SESSION["FirstName"]);
+        echo ucfirst($user_info->FirstName);
         echo " ";
-        echo ucfirst($_SESSION["LastName"]);
+        echo ucfirst($user_info->LastName);
         ?>
     </h1>
 
@@ -175,12 +190,12 @@ foreach($query as $result2){
             </tr>
             <tr>
                 <td><strong>Organization</strong></td>
-                <td><?php echo htmlentities($array2[3]); ?></td>
+                <td><?php if(isset($array2[3])){echo htmlentities($array2[3]);} ?></td>
             </tr>
 
             <tr>
                 <td><strong>Join Date</strong></td>
-                <td><?php echo htmlentities($_SESSION["date_registered"]);?></td>
+                <td><?php echo htmlentities($user_info->date_registered);?></td>
             </tr>
 
             <tr>
@@ -200,9 +215,9 @@ foreach($query as $result2){
 
 <div class="well text-center" >
 
-    <a href="<?php echo htmlentities($array2[1]); ?>"><img src="img/fb.png" class="img-thumbnail " width="25%"></a>
-    <a href="<?php echo htmlentities($array2[2]); ?>"> <img src="img/linkedin-icon.png" class="img-thumbnail " width="25%"></a>
-        <a href="<?php echo htmlentities($_SESSION["Email"]); ?>"><img src="img/email.png" class="img-thumbnail " width="35%"></a>
+    <a href="<?php if(isset($array2[1])){echo htmlentities($array2[1]);} ?>"><img src="img/fb.png" class="img-thumbnail " width="25%"></a>
+    <a href="<?php if(isset($array2[2])){echo htmlentities($array2[2]);} ?>"> <img src="img/linkedin-icon.png" class="img-thumbnail " width="25%"></a>
+        <a href="<?php echo htmlentities($user_info->Email); ?>"><img src="img/email.png" class="img-thumbnail " width="35%"></a>
 
 </div>
 
@@ -218,6 +233,7 @@ foreach($query as $result2){
 
         <div class="well">
             <?php
+            if(isset($array2[4]))
              echo htmlentities($array2[4]);
             ?>
         </div>

@@ -3,7 +3,7 @@ require_once("../includes/user.php");
 require_once("../includes/session.php");
 require_once("../includes/functions.php");
 
-if(!isset($_SESSION["isAdmin"]) && $_SESSION["isAdmin"]==1){
+if(!isset($_SESSION["isAdmin"]) || !($_SESSION["isAdmin"]==1)){
     redirect_to("./../login.php");
 }
 $users = user::find_all();
@@ -11,10 +11,10 @@ $counter = 0;
 $array = array();
 foreach($users as $user){
     foreach($user as $key){
-        if(isset($key)){
+//        if(isset($key)){
             $array[$counter] = $key;
             $counter++;
-        }
+//        }
     }
 }
 
@@ -241,16 +241,18 @@ foreach($users as $user){
 
                     <tbody>
                     <?php
-                    for($i=0;$i<=$counter-1;$i+=12) {
+                    for($i=0;$i<=$counter-1;$i+=11) {
+                           $id = $array[$i];
+                        $found_user = user::find_by_id($id);
                         ?>
                         <tr>
-                            <td><?php echo htmlentities($array[$i]) ?></td>
-                            <td><?php echo htmlentities($array[$i + 2]);
+                            <td><?php echo htmlentities($found_user->ID) ?></td>
+                            <td><?php echo htmlentities($found_user->FirstName);
                                 echo " ";
-                                echo htmlentities($array[$i + 3]); ?></td>
-                            <td><?php echo htmlentities($array[$i + 9]) ?></td>
-                            <td><?php echo htmlentities($array[$i + 6]) ?></td>
-                            <td><a class="btn btn-success btn-block">Open</a></td>
+                                echo htmlentities($found_user->LastName); ?></td>
+                            <td><?php echo htmlentities($found_user->date_registered) ?></td>
+                            <td><?php echo htmlentities($found_user->Email) ?></td>
+                            <td><a href="../profile.php?ID=<?php echo htmlentities($found_user->ID) ?>" class="btn btn-success btn-block">Open</a></td>
                         </tr>
                     <?php
                     }

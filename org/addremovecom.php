@@ -22,7 +22,8 @@ if($_GET["OP"] == 1) {
             redirect_to("committe.php?ID={$_GET["confID"]}");
         }
 
-}else{
+}
+if($_GET["OP"] == 0){
 
     $query = "DELETE FROM committe";
     $query .= " WHERE userID = {$_GET["ID"]} AND confID = {$_GET["confID"]}";

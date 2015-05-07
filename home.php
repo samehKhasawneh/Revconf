@@ -4,6 +4,7 @@ require_once("./includes/database.php");
 require_once("./includes/session.php");
 require_once("./includes/DatabaseObject.php");
 require_once("./includes/userimgs.php");
+include_once("includes/navbar-user.php");
 
 if (!isset($_SESSION["Email"])) {
     redirect_to("login.php");
@@ -66,24 +67,7 @@ foreach($sql as $s){
 </head>
 
 <body>
-<!------------------- Navbar Start ---------------------------->
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">Project name</a>
-        </div>
 
-    </div>
-</nav>
-
-
-<!------------------- Navbar End ---------------------------->
 
 
 <!-- Carousel

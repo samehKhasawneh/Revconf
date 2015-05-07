@@ -1,10 +1,3 @@
-<head>
-    <link href="css/bootstrap.css" rel="stylesheet">
-
-    <script src="js/jquery.min.js"></script>
-
-
-</head>
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
@@ -14,29 +7,46 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Project name</a>
+
         </div>
         <div id="navbar" class="navbar-collapse collapse">
 
 
             <ul class="nav navbar-nav">
-                <li><a href="index.php">Home </a></li>
+                <li class="active"><a href="index.php">Home </a></li>
                 <li><a href="#">Conferences</a></li>
                 <li><a href="#">About Us</a></li>
                 <li><a href="#">Contact Us</a></li>
             </ul>
 
 
-            <form class="navbar-form navbar-right">
-                <div id="log" class="form-group">
-                    <input type="text" placeholder="Email" class="form-control">
-                </div>
-                <div id="log" class="form-group">
-                    <input type="password" placeholder="Password" class="form-control">
-                </div>
-                <button id="sign" type="submit" class="btn btn-primary">Sign in</button>
-                <button id="register"  class="btn btn-success">Register</button>
-            </form>
+            <div class="nav navbar-nav col-lg-6">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search for...">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button">Go!</button>
+      </span>
+                </div><!-- /input-group -->
+            </div><!-- /.col-lg-6 -->
+
+
+
+                <ul class="nav navbar-nav navbar-right">
+
+                    <li class="active dropdown">
+
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><?php echo ucfirst($_SESSION['FirstName'])?> <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="profile.php">Profile</a></li>
+
+                            <li class="divider"></li>
+
+                            <li><a href="logout.php">Logout</a></li>
+
+                        </ul>
+                    </li>
+                </ul>
+
         </div><!--/.navbar-collapse -->
     </div>
 </nav>

@@ -6,7 +6,7 @@ require_once("../includes/conference.php");
 require_once("../includes/user.php");
 
 
-if(!isset($_SESSION["isAdmin"]) && $_SESSION["isAdmin"]==1) {
+if(!isset($_SESSION["isAdmin"]) || !($_SESSION["isAdmin"]==1)) {
     redirect_to("./../login.php");
 }
 

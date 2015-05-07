@@ -40,15 +40,15 @@
             <a class="navbar-brand" href="#">Project name</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-            <form class="navbar-form navbar-right">
+            <form method="post" action="login.php" class="navbar-form navbar-right">
                 <div id="log" class="form-group">
-                    <input type="text" placeholder="Email" class="form-control">
+                    <input type="text" placeholder="Email" name="email" class="form-control">
                 </div>
                 <div id="log" class="form-group">
-                    <input type="password" placeholder="Password" class="form-control">
+                    <input type="password" placeholder="Password" name="password" class="form-control">
                 </div>
                 <button id="sign" type="submit" class="btn btn-primary">Sign in</button>
-                <button id="register"  class="btn btn-success">Register</button>
+                <a id="register" href="register.php" class="btn btn-success">Register</a>
             </form>
         </div><!--/.navbar-collapse -->
     </div>

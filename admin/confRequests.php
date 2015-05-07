@@ -5,7 +5,7 @@ require_once("../includes/database.php");
 require_once("../includes/functions.php");
 require_once("../includes/organization.php");
 
-if(!isset($_SESSION["isAdmin"]) && $_SESSION["isAdmin"]==1){
+if(!isset($_SESSION["isAdmin"]) || !($_SESSION["isAdmin"]==1)){
     redirect_to("./../login.php");
 }
 

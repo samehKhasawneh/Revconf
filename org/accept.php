@@ -13,8 +13,8 @@ if(!isset($_GET["ID"]) || !isset($_GET["confID"])){
     redirect_to("index.php");
 }
 
-$paper1 = paper::find_by_id($_GET["ID"]);
- $paper = new paper();
+$paper = paper::find_by_id($_GET["ID"]);
+
 $paper->isAccepted = 1;
 
 if($paper->save()){

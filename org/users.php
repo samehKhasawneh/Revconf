@@ -267,7 +267,7 @@ foreach($users as $user){
                             <td><?php echo htmlentities($found_user->FirstName); echo " ";echo htmlentities($found_user->LastName);?></td>
                             <td><?php echo htmlentities($found_user->date_registered);?></td>
                             <td><?php echo htmlentities($found_user->Email)?></td>
-                            <td><a class="btn btn-success btn-block">Open</a></td>
+                            <td><a href="../profile.php?ID=<?php echo htmlentities($found_user->ID)?>" class="btn btn-success btn-block">Open</a></td>
                         </tr>
                     <?php
                     }

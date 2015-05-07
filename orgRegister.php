@@ -15,38 +15,46 @@ if(isset($_SESSION["orgName"])) {
 
 if (isset($_POST["submit"])) { // Form has been submitted.
 
-$email = trim($_POST["email"]);
-$password = trim($_POST["password"]);
-$orgName = trim($_POST["orgName"]);
-$website = trim($_POST["website"]);
-
-$newOrg = new organization();
-
-$mysql_datetime = strftime("%Y-%m-%d", time());
-
-$newOrg->orgDate = $mysql_datetime;
-$newOrg->orgName = $orgName;
-$newOrg->website = $website;
-$newOrg->orgEmail = $email;
-$newOrg->orgPassword = $password;
+    $email = trim($_POST["email"]);
+    $password = trim($_POST["password"]);
+    $orgName = trim($_POST["orgName"]);
+    $website = trim($_POST["website"]);
 
 
-    if ($newOrg->save()) {
+    $query = "SELECT * FROM organization WHERE orgEmail = '{$email}'";
+    $found_org = organization::find_by_sql($query);
 
-        $found_org = organization::authenticate($email, $password);
+    if (empty($found_org)) {
 
-        if ($found_org) {
+        $newOrg = new organization();
 
-            foreach ($found_org as $key => $value) {
-                $session->setAttrb($key, $value);
+        $mysql_datetime = strftime("%Y-%m-%d", time());
+
+        $newOrg->orgDate = $mysql_datetime;
+        $newOrg->orgName = $orgName;
+        $newOrg->website = $website;
+        $newOrg->orgEmail = $email;
+        $newOrg->orgPassword = $password;
+
+
+        if ($newOrg->save()) {
+
+            $found_org = organization::authenticate($email, $password);
+
+            if ($found_org) {
+
+                foreach ($found_org as $key => $value) {
+                    $session->setAttrb($key, $value);
+                }
+                redirect_to("org/index.php");
             }
-            redirect_to("org/index.php");
+
         }
 
+    }else{
+        $session->setAttrb("message","Email is already in use combination incorrect.");
     }
-
 }
-
 
 
 
@@ -116,6 +124,7 @@ $newOrg->orgPassword = $password;
 
 
     <div class="row"> <!-- Registration Info -->
+        <label><?php echo $session->getAttrb("message"); ?></label>
         <h6>Please fill out the following form. The required fields are marked by (*)</h6>
     </div>
 

@@ -6,7 +6,7 @@ require_once("../includes/session.php");
 require_once("../includes/topic.php");
 require_once("../includes/paper.php");
 require_once("../includes/attendance.php");
-
+require_once("../includes/paperassign.php");
 
 if(!isset($_SESSION["orgEmail"])){
     redirect_to("login.php");
@@ -249,7 +249,7 @@ if(!isset($_GET["ID"]) || !isset($_GET["confID"])){
                         <th class="text-center">ID</th>
                         <th class="text-center">Paper Name</th>
                         <th class="text-center">Topic </th>
-                        <th class="text-center">User</th>
+                        <th class="text-center">Author</th>
                         <th class="text-center"># Odf Reviews</th>
 
 
@@ -264,10 +264,7 @@ if(!isset($_GET["ID"]) || !isset($_GET["confID"])){
                         <td><?php echo htmlentities($paperobj->ID)?></td>
                         <td><?php echo htmlentities($paperobj->paperName)?></td>
                         <td><?php echo htmlentities($paperobj->paperTopic)?></td>
-                        <?php
-                        $found_user = user::find_by_id($paperobj->userID)
-                        ?>
-                        <td><?php echo htmlentities($found_user->FirstName); echo" "; echo htmlentities($found_user->LastName);?></td>
+                        <td><?php echo htmlentities($paperobj->author)?></td>
                         <td style="color: red; font-weight: bold;">4</td>
 
                     </tr>
@@ -322,37 +319,63 @@ if(!isset($_GET["ID"]) || !isset($_GET["confID"])){
                             }
                         }
                     }
-                    for($i=0;$i=$counter-1;$i++) {
-                    ?>
-                    <tr>
-                        <?php
-                        $id = $array[$i];
-                        $user_info = user::find_by_id($id);
 
-                        $query3 = "SELECT topic.topicName FROM topic INNER JOIN usertopic ON topic.ID = usertopic.topicID WHERE usertopic.userID = {$user_info->ID}";
-                        $topics = topic::find_by_sql($query3);
-                        $counter1 = 0;
-                        $array2 = array();
-                        foreach ($topics as $topic) {
-                            foreach ($topic as $key) {
-                                if (isset($key)) {
-                                    $array2[$counter1] = $key;
-                                    $counter1++;
-                                }
+                    $query = "SELECT userID FROM paperassign WHERE paperID = {$_GET["ID"]}";
+                    $users2 = paperassign::execut_by_sql($query);
+                    $counter5 = 0;
+                    $array5 = array();
+                    foreach($users2 as $user2) {
+                        foreach($user2 as $key){
+                            if(isset($key)){
+                                $array5[$counter5]=$key;
+                                $counter5++;
                             }
                         }
+                    }
+
+
+                    for($i=0;$i<=$counter-1;$i++) {
+                        ?>
+                        <tr>
+                        <?php
+
+                        $id = $array[$i];
+                        if (!in_array($id, $array5)) {
+                            $user_info = user::find_by_id($id);
+
+
+                            $query3 = "SELECT topic.topicName FROM topic INNER JOIN usertopic ON topic.ID = usertopic.topicID WHERE usertopic.userID = {$user_info->ID}";
+                            $topics = topic::find_by_sql($query3);
+                            $counter1 = 0;
+                            $array2 = array();
+                            foreach ($topics as $topic) {
+                                foreach ($topic as $key) {
+                                    if (isset($key)) {
+                                        $array2[$counter1] = $key;
+                                        $counter1++;
+                                    }
+                                }
+                            }
 
                             ?>
 
-                            <td><?php echo htmlentities($user_info->ID)?></td>
-                            <td><?php echo htmlentities($user_info->FirstName); echo " "; echo htmlentities($user_info->LastName);?></td>
-                            <td><?php for($i=0;$i<=$counter1-1;$i++) { echo htmlentities($array2[$i]); echo "<br>"; } ?></td>
+                            <td><?php echo htmlentities($user_info->ID) ?></td>
+                            <td><?php echo htmlentities($user_info->FirstName);
+                                echo " ";
+                                echo htmlentities($user_info->LastName); ?></td>
+                            <td><?php for ($J = 0; $J <= $counter1 - 1; $J++) {
+                                    echo htmlentities($array2[$J]);
+                                    echo "<br>";
+                                } ?></td>
                             <td>5</td>
-                            <td><a class="btn btn-success btn-block" href="assign2.php">Assign</a></td>
+                            <td><a class="btn btn-success btn-block"
+                                   href="assignpaper.php?ID=<?php echo htmlentities($paperobj->ID) ?>&confID=<?php echo htmlentities($_GET["confID"]) ?>&userID=<?php echo htmlentities($user_info->ID) ?>">Assign</a>
+                            </td>
                             </td>
 
-                        </tr>
-                    <?php
+                            </tr>
+                        <?php
+                        }
                     }
                     ?>
 

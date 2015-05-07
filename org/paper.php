@@ -15,7 +15,7 @@ if(!isset($_GET["ID"])){
     redirect_to("index.php");
 }
 
-$query = "SELECT ID,userID,paperName FROM paper WHERE confID = {$_GET["ID"]} AND isAccepted = 0";
+$query = "SELECT paper.ID FROM paper INNER JOIN reviewresults ON paper.ID = reviewresults.paperID WHERE confID = {$_GET["ID"]} AND isAccepted = 0";
 $papers = paper::find_by_sql($query);
 
 $counter = 0;
@@ -263,7 +263,8 @@ foreach($papers as $paper){
                         <tr>
                             <th class="text-center">ID</th>
                             <th class="text-center">Paper Name</th>
-                            <th class="text-center">User</th>
+                            <th class="text-center">Author</th>
+                            <th class="text-center">Topic</th>
                             <th class="text-center"># Of Reviews</th>
                             <th class="text-center">Rank</th>
                             <th ></th>
@@ -275,22 +276,18 @@ foreach($papers as $paper){
 
                         <tbody>
                         <?php
-                        for($i=0;$i<=$counter-1;$i=+3){
+                        for($i=0;$i<=$counter-1;$i++){
+                            $id = $array[$i];
+                            $paper_info = paper::find_by_id($id);
                         ?>
                         <tr>
-                            <td><?php echo htmlentities($array[$i])?></td>
-                            <td><?php echo htmlentities($array[$i+2])?></td>
-                            <?php
-                            $id = $array[$i+1];
-                            $found_user = user::find_by_id($id)
-                            ?>
-                            <td><?php echo htmlentities($found_user->FirstName); echo" "; echo htmlentities($found_user->LastName);?></td>
-                            <?php
-
-                            ?>
+                            <td><?php echo htmlentities($paper_info->ID)?></td>
+                            <td><?php echo htmlentities($paper_info->paperName)?></td>
+                            <td><?php echo htmlentities($paper_info->author)?></td>
+                            <td><?php echo htmlentities($paper_info->paperTopic)?></td>
                             <td>6</td>
                             <td style="color: red; font-weight: bold;">40/100</td>
-                            <td> <a class="btn btn-success btn-block" href="accept.php?ID=<?php echo htmlentities($array[$i])?>$confID=<?php echo htmlentities($_GET["ID"]) ?>">Accept</a> </td>
+                            <td> <a class="btn btn-success btn-block" href="accept.php?ID=<?php echo htmlentities($paper_info->ID)?>&confID=<?php echo htmlentities($_GET["ID"]) ?>">Accept</a> </td>
                         </tr>
                         <?php
                         }

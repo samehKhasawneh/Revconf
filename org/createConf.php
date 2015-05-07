@@ -290,6 +290,38 @@ if(isset($_POST["submit"])){
                         </div>
                     </div>
 
+
+                    <div class="row form-group">
+                        <div class="3" id="date">
+                            <label for="date">Conference Date <span id="req">*</span></label>
+                            <input type="date" class="form-control"  id="date" required name="date">
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <div class="3" id="subdate">
+                            <label for="city">Conference Submmittion End <span id="req">*</span></label>
+                            <input type="date" class="form-control"  id="subDate" required name="subDate">
+                        </div>
+                    </div>
+
+
+                    <div class="row form-group">
+                        <div class="3" id="revDate">
+                            <label for="revdate">Conference Reviewing End <span id="req">*</span></label>
+                            <input type="date" class="form-control"  id="revDate" required name="revDate">
+                        </div>
+                    </div>
+
+
+                    <div class="row form-group">
+                        <div class="3" id="city">
+                            <label for="city">Conference Location <span id="req">*</span></label>
+                            <input type="text" class="form-control"  id="city" required name="location">
+                        </div>
+                    </div>
+
+
                     <div class="row">
                         <h3>Choose The Conference Topics</h3>
 

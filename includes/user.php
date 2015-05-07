@@ -7,13 +7,12 @@ class user extends DatabaseObject{
 
     protected static $table_name="user";
     protected static $db_fields =
-        array('ID', 'title', 'FirstName', 'LastName', 'Age', 'gender', 'Email', 'Password','scientific_degree', 'date_registered', 'city', 'isAdmin');
+        array('ID', 'title', 'FirstName', 'LastName', 'gender', 'Email', 'Password','scientific_degree', 'date_registered', 'city', 'isAdmin');
 
     public $ID;
     public $title;
     public $FirstName;
     public $LastName;
-    public $Age;
     public $gender;
     public $Email;
     public $Password;

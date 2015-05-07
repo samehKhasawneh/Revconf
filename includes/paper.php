@@ -5,7 +5,7 @@ require_once("database.php");
 class paper extends DatabaseObject{
 
     protected static $table_name="paper";
-    protected static $db_fields=array('ID', 'userID', 'confID', 'paperName', 'abstract', 'paperTopic', 'dateSubmitted', 'paperURL', 'isAccepted');
+    protected static $db_fields=array('ID', 'userID', 'confID', 'paperName', 'abstract', 'paperTopic', 'author', 'authorEmail', 'dateSubmitted', 'paperURL', 'isAccepted');
 
     public $ID;
     public $userID;
@@ -13,6 +13,8 @@ class paper extends DatabaseObject{
     public $paperName;
     public $abstract;
     public $paperTopic;
+    public $author;
+    public $authorEmail;
     public $dateSubmitted;
     public $paperURL;
     public $isAccepted;
