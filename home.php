@@ -4,7 +4,15 @@ require_once("./includes/database.php");
 require_once("./includes/session.php");
 require_once("./includes/DatabaseObject.php");
 require_once("./includes/userimgs.php");
+require_once("./includes/attendance.php");
+require_once("./includes/paper.php");
+require_once("./includes/reviewresults.php");
 include_once("includes/navbar-user.php");
+
+
+
+
+
 
 if (!isset($_SESSION["Email"])) {
     redirect_to("login.php");
@@ -82,6 +90,49 @@ foreach($sql as $s){
             <img  id="profilephoto" src="<?php echo htmlentities($array[1]); ?>" class="img-thumbnail img-circle animated zoomInUp   " width="25%">
             <p></p>
 
+        </div>
+        <br>
+        <br>
+        <div class="animated bounceInUp well col-md-4 text-center">
+
+            <?php
+            $query = "SELECT * FROM attendance WHERE userID = {$_SESSION["ID"]}";
+            $sql = attendance::find_by_sql($query) ;
+            $counter = 0 ;
+            foreach($sql as $s){
+            $counter++;
+            }
+            ?>
+            <h3><span style="color: red; font-weight: bold"><?php echo $counter?></span>  Attended Conferences</h3>
+
+
+        </div>
+
+        <div class="animated bounceInUp  well col-md-4 text-center">
+
+            <?php
+            $query2 = "SELECT * FROM reviewresults WHERE userID = {$_SESSION["ID"]}";
+            $sql2 = reviewresults::find_by_sql($query2) ;
+            $counter2 = 0 ;
+            foreach($sql2 as $s2){
+                $counter2++;
+            }
+            ?>
+            <h3><span style="color: red; font-weight: bold"><?php echo $counter2?></span>   Reviewed Papers</h3>
+        </div>
+
+        <div class="animated bounceInUp  well col-md-4 text-center">
+
+            <?php
+            $query1 = "SELECT * FROM paper WHERE userID = {$_SESSION["ID"]}";
+            $sql1 = paper::find_by_sql($query1) ;
+            $counter1 = 0 ;
+            foreach($sql1 as $s1){
+                $counter1++;
+            }
+            ?>
+            <h3><span style="color: red; font-weight: bold"><?php echo $counter1?></span>  Submitted Papers</h3>
+        </div>
         </div>
 
     </div>

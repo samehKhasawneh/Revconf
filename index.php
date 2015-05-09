@@ -1,3 +1,9 @@
+<?php
+
+
+include_once("includes/navbar.php");
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,40 +28,9 @@
 
 
 
-
-
 </head>
 
 <body>
-<!------------------- Navbar Start ---------------------------->
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">Project name</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-            <form method="post" action="login.php" class="navbar-form navbar-right">
-                <div id="log" class="form-group">
-                    <input type="text" placeholder="Email" name="email" class="form-control">
-                </div>
-                <div id="log" class="form-group">
-                    <input type="password" placeholder="Password" name="password" class="form-control">
-                </div>
-                <button id="sign" type="submit" class="btn btn-primary">Sign in</button>
-                <a id="register" href="register.php" class="btn btn-success">Register</a>
-            </form>
-        </div><!--/.navbar-collapse -->
-    </div>
-</nav>
-
-
-<!------------------- Navbar End ---------------------------->
 
 
 <!-- Carousel
@@ -74,7 +49,7 @@
                 <div class="carousel-caption">
                     <h1>Welcome to RevCon</h1>
                     <p>Upload it, Review it, Attend it</p>
-                    <p><a class="btn btn-lg btn-primary" href="#" role="button">Sign up today</a></p>
+                    <p><a class="btn btn-lg btn-primary" href="register.php" role="button">Sign up today</a></p>
                 </div>
             </div>
         </div>
@@ -82,8 +57,9 @@
             <img src="http://news.bahai.org/images/news/regional-conferences/photo-header-frankfurt.jpg" alt="Second slide">
             <div class="container">
                 <div class="carousel-caption">
-                    <h1>Another example headline.</h1>
-                    <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                    <h1>PSUT ICIT 2015</h1>
+                    <p>Date: 26/5/2015</p>
+                    <p></p>
                     <p><a class="btn btn-lg btn-primary" href="#" role="button">Learn more</a></p>
                 </div>
             </div>
@@ -116,8 +92,60 @@
 <hr>
 
 <div id="bodyContainer" class="container">
-    <!-- Example row of columns -->
-    <div class="row text-center">
+
+
+
+    <div class="row text-center well">
+        <div class=" col-md-12">
+
+
+            <img class="img img-responsive img-thumbnail " src="img/logo.png" width="10%" height="10%">
+            </br>
+
+            <h2>ReviConf Will Allow You To: </h2>
+            <br>
+            <hr>
+
+            <div class="col-md-4">
+                <img src="img/submit-paper-sign.png" class="img img-responsive img-thumbnail "/>
+            </div>
+
+
+            <div class="col-md-4">
+                <img src="img/review.jpg" class="img img-responsive img-thumbnail" id="rev"/>
+            </div>
+
+
+            <div class="col-md-4">
+                <img src="img/meeting.jpg" class="img img-responsive img-thumbnail" id="conference"/>
+                <script>
+                    var x = $('#rev').height();
+                    var y = $('#rev').width();
+
+                    $("#conference").height(x);
+                    $("#conference").width(y);
+
+
+                </script>
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="row text-center well">
         <div class="col-md-4 text-center">
             <div class="panel panel-default">
                 <div class="panel-body">
@@ -129,6 +157,13 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-md-4" >
+            <h1>Hello</h1>
+        </div>
+
+    </div>
+    <div class="row text-center">
         <div class="col-md-4 text-center">
             <div class="panel panel-default">
                 <div class="panel-body">
@@ -139,6 +174,8 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="row text-center">
         <div class="col-md-4 text-center">
             <div class="panel panel-default">
                 <div class="panel-body">
@@ -151,6 +188,7 @@
 
         </div>
     </div>
+
 
     <hr>
 
@@ -167,53 +205,52 @@
 
                     <div class="col-md-5" id="leftFooter" style=" border-right:1px solid black"">
 
-                        <img src="img/logo.png" class="img-thumbnail" width="50%" height="50%" style="float: left;">
-                        <br>
-                        <br>
-                        <h2 id="footerHead">ReviConf</h2>
 
-                    </div>
+                    <h2 id="footerHead">ReviConf</h2>
+                    <p>Upload It, Review It, Attend It</p>
 
-
-                    <div class="col-lg-7">
-                        <div class="col-md-3">
-                            <ul class="nav nav-pills nav-stacked">
-                                <li><a href="#">About us</a></li>
-                                <li><a href="#">Blog</a></li>
-                            </ul>
-                        </div>
-                        <div class="col-md-3">
-                            <ul class="nav nav-pills nav-stacked">
-                                <li><a href="#">Product for Mac</a></li>
-                                <li><a href="#">Product for Windows</a></li>
-                            </ul>
-                        </div>
-                        <div class="col-md-3">
-                            <ul class="nav nav-pills nav-stacked">
-                                <li><a href="#">Web analytics</a></li>
-                                <li><a href="#">Presentations</a></li>
-                            </ul>
-                        </div>
-                        <div class="col-md-3">
-                            <ul class="nav nav-pills nav-stacked">
-                                <li><a href="#">Product Help</a></li>
-                                <li><a href="#">Developer API</a></li>
-                            </ul>
-                        </div>
-                    </div>
                 </div>
-                <hr>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <ul class="nav nav-pills nav-justified">
-                            <li>© Copyright <?php echo date("Y",time()); ?> Company Name.</li>
-                            <li><a href="#">Terms of Service</a></li>
-                            <li><a href="#">Privacy</a></li>
+
+
+                <div class="col-lg-7">
+                    <div class="col-md-3">
+                        <ul class="nav nav-pills nav-stacked">
+                            <li><a href="#">About us</a></li>
+                            <li><a href="#">Blog</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3">
+                        <ul class="nav nav-pills nav-stacked">
+                            <li><a href="#">Product for Mac</a></li>
+                            <li><a href="#">Product for Windows</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3">
+                        <ul class="nav nav-pills nav-stacked">
+                            <li><a href="#">Web analytics</a></li>
+                            <li><a href="#">Presentations</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3">
+                        <ul class="nav nav-pills nav-stacked">
+                            <li><a href="#">Product Help</a></li>
+                            <li><a href="#">Developer API</a></li>
                         </ul>
                     </div>
                 </div>
             </div>
-
+            <hr>
+            <div class="row">
+                <div class="col-lg-12">
+                    <ul class="nav nav-pills nav-justified">
+                        <li>© Copyright <?php echo date("Y",time()); ?> Company Name.</li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
+
+</div>
 
 

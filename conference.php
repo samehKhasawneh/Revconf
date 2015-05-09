@@ -83,6 +83,65 @@ foreach($users as $user){
 
     <link href="css/body.css" rel="stylesheet"> <!-- includes background color -->
 
+    <style type="text/css">
+        ul.countdown {
+            list-style: none;
+            margin: 75px 0;
+            padding: 0;
+            display: block;
+            text-align: center;
+        }
+        ul.countdown li {
+            display: inline-block;
+        }
+        ul.countdown li span {
+            font-size: 80px;
+            font-weight: 300;
+            line-height: 80px;
+        }
+        ul.countdown li.seperator {
+            font-size: 80px;
+            line-height: 70px;
+            vertical-align: top;
+        }
+        ul.countdown li p {
+            color: #a7abb1;
+            font-size: 14px;
+        }
+
+        span.days {
+            border: 10px solid;
+            padding: 48px;
+            border-radius: 104px;
+            background-color: darkcyan;
+            color:#ffffff;
+        }
+
+
+        span.hours {
+            border: 10px solid;
+            padding: 48px;
+            border-radius: 104px;
+            background-color: darkcyan;
+            color:#ffffff;
+        }
+
+        span.minutes {
+            border: 10px solid;
+            padding: 48px;
+            border-radius: 104px;
+            background-color: darkcyan;
+            color:#ffffff;
+        }
+
+        span.seconds {
+            border: 10px solid;
+            padding: 48px;
+            border-radius: 104px;
+            background-color: darkcyan;
+            color:#ffffff;
+        }
+    </style>
 
 </head>
 
@@ -104,8 +163,106 @@ foreach($users as $user){
 
     </div>
 </div>
+<hr>
+<div class="row" id="breadcrums">
+    <div class="col-md-12 ">
+        <ol class="breadcrumb ">
+            <li><a href="home.php">Home</a></li>
+            <li class="active"><a href="#"><?php echo htmlentities($conference->confName)?></a></li>
+
+        </ol>
+
+    </div>
+</div>
 
 <hr>
+
+<div class="row" id="breadcrums">
+    <div class="col-md-12 ">
+        <ol class="breadcrumb ">
+            <li><a href="home.php">Home</a></li>
+            <li class="active"><a href="#"><?php echo htmlentities($conference->confName)?></a></li>
+
+        </ol>
+
+    </div>
+</div>
+
+<div class="row" id="timer">
+
+
+
+<ul class="countdown">
+    <li> <span class="days">00</span>
+        <p class="days_ref">days</p>
+    </li>
+    <li class="seperator">.</li>
+    <li> <span class="hours">00</span>
+        <p class="hours_ref">hours</p>
+    </li>
+    <li class="seperator">:</li>
+    <li> <span class="minutes">00</span>
+        <p class="minutes_ref">minutes</p>
+    </li>
+    <li class="seperator">:</li>
+    <li> <span class="seconds">00</span>
+        <p class="seconds_ref">seconds</p>
+    </li>
+</ul>
+
+<script class="source" type="text/javascript">
+    $(document).ready(function () {
+
+
+
+
+        var check;
+        var conf = <?php echo json_encode($conference->confDate); ?>;
+        $('.countdown').downCount({
+//        MM//DD//YYYY
+            date: conf + ' 12:00:00',
+            offset: +10
+
+
+
+
+
+
+        });
+        check = conf + ' 12:00:00';
+        var date;
+        var ended=0;
+        date = new Date();
+        date = date.getUTCFullYear() + '-' +
+        ('00' + (date.getUTCMonth()+1)).slice(-2) + '-' +
+        ('00' + date.getUTCDate()).slice(-2) + ' ' +
+        ('00' + date.getUTCHours()).slice(-2) + ':' +
+        ('00' + date.getUTCMinutes()).slice(-2) + ':' +
+        ('00' + date.getUTCSeconds()).slice(-2);
+
+
+        if (check < date)
+//        conference has ended
+        {
+
+            $(".countdown").remove();
+
+            ended = 1;
+
+
+            $("#timer").append('<div class="alert alert-danger text-center" style="font-weight: bold; font-size:larger ">Ended</div>');
+            $("#join").remove();
+            $("#submitPaper").remove();
+
+
+
+
+        }
+    });
+</script>
+</div>
+
+
 
 <div id="bodyContainer" class="container">
 

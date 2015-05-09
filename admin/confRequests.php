@@ -260,7 +260,7 @@ foreach($conf as $con){
                                         ?></td>
                                     <td><?php echo htmlentities($array[$i+3])?></td>
 
-                                    <td><a class="btn btn-success btn-block" href="approve.php?ID=<?php echo htmlentities($array[$i])?>">Open</a></td>
+                                    <td><a class="btn btn-success btn-block" href="approve.php?ID=<?php echo htmlentities($array[$i])?>">Approve</a></td>
                                 </tr>
                             <?php
                             }
