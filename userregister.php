@@ -7,6 +7,10 @@ require_once("includes/DatabaseObject.php");
 require_once("includes/userimgs.php");
 require_once("includes/session.php");
 require_once("mail/mail.php");
+require_once("includes/userinfo.php");
+require_once("includes/topic.php");
+require_once("includes/usertopic.php");
+
 
 if(isset($_SESSION["Email"])) {
     redirect_to("home.php");
@@ -16,52 +20,7 @@ $max_file_size = 1048576;
 
 if (isset($_POST["submit"])) { // Form has been submitted.
 
-    $target_dir = "imgUpload/";
-    $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
-    $uploadOk = 1;
-    $imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
-// Check if image file is a actual image or fake image
-    if (isset($_POST["submit"])) {
-        $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
-        if ($check !== false) {
-            echo "File is an image - " . $check["mime"] . ".";
-            $uploadOk = 1;
-        } else {
-            echo "File is not an image.";
-            $uploadOk = 0;
-        }
-    }
-// Check if file already exists
-    if (file_exists($target_file)) {
-        echo "Sorry, file already exists.";
-        $uploadOk = 0;
-    }
-// Check file size
-    if ($_FILES["fileToUpload"]["size"] > 5000000) {
-        echo "Sorry, your file is too large.";
-        $uploadOk = 0;
-    }
-// Allow certain file formats
-    if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-        && $imageFileType != "gif"
-    ) {
-        echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-        $uploadOk = 0;
-    }
-// Check if $uploadOk is set to 0 by an error
-    if ($uploadOk == 0) {
-        echo "Sorry, your file was not uploaded.";
-// if everything is ok, try to upload file
-    } else {
-        if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-            echo "The file " . basename($_FILES["fileToUpload"]["name"]) . " has been uploaded.";
-            $uploadOk = "ok";
-        } else {
-            echo "Sorry, there was an error uploading your file.";
-        }
-    }
 
-    if ($uploadOk == "ok") {
         $email = trim($_POST["email"]);
         $password = trim($_POST["password"]);
         $fname = trim($_POST["fname"]);
@@ -76,10 +35,13 @@ if (isset($_POST["submit"])) { // Form has been submitted.
         $Am = trim($_POST["aboutme"]);
         $org = trim($_POST["org"]);
 
-        $query = "SELECT * FROM user WHERE Email = '{$email}'";
-        $found_user = user::find_by_sql($query);
+        $t1 = $_POST["utopic1"];
 
         if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+
+            $query = "SELECT * FROM user WHERE Email = '{$email}'";
+        $found_user = user::find_by_sql($query);
+
 
             if (empty($found_user)) {
 
@@ -102,13 +64,67 @@ if (isset($_POST["submit"])) { // Form has been submitted.
 
                     $found_user = User::authenticate($email, $password);
 
-                    if ($found_user) {
+                    $query4 = "INSERT INTO userinfo (userID,facebook,linkedin,org,aboutme) VALUES ({$found_user->ID},'{$fb}','{$li}','{$org}','{$Am}')";
+                    $info = userinfo::execut_by_sql($query4);
+
+                    $query2 = "SELECT ID FROM topic WHERE topicName = '{$_POST["utopic1"]}'";
+                    $topicName = topic::find_by_sql($query2);
+                    $counter1 = 0;
+                    $array1 = array();
+                    foreach($topicName as $topic){
+                        foreach($topic as $key) {
+                            if (isset($key)) {
+                                $array1[$counter1] = $key;
+                                $counter1++;
+                            }
+                        }
+                    }
+
+
+
+
+                    if ($info) {
 
                         foreach ($found_user as $key => $value) {
                             $session->setAttrb($key, $value);
                         }
                         sendMail($email, "Welcome To RevConf", "Thank You FOr Registering");
-                        redirect_to("home.php");
+
+                        $countert = $_POST["counter"];
+                        $x = 0;
+                        $sum = 0;
+                        for ($J = 0; $J <= $countert; $J++) {
+                            if ($x == 4) {
+                                break;
+                            }
+                            if (isset($_POST["topic{$J}"])) {
+                                $query2 = "SELECT ID FROM topic WHERE topicName = '{$_POST["topic{$J}"]}'";
+                                $topicName = topic::find_by_sql($query2);
+                                $counter2 = 0;
+                                $array2 = array();
+                                foreach ($topicName as $topic) {
+                                    foreach ($topic as $key) {
+                                        if (isset($key)) {
+                                            $array2[$counter2] = $key;
+                                            $counter2++;
+                                        }
+                                    }
+                                }
+                                $id = $array2[0];
+                                $query3 = "INSERT INTO usertopic (topicID,userID) VALUES ({$id},{$found_user->ID})";
+                                $usert = usertopic::execut_by_sql($query3);
+                                if ($usert) {
+                                    $sum++;
+                                }
+                                $x++;
+                            }
+                        }
+
+                        if ($sum==$x) {
+                            redirect_to("index.php");
+                        }
+                    }else{
+                        $session->setAttrb("message","error");
                     }
 
                 }
@@ -119,7 +135,6 @@ if (isset($_POST["submit"])) { // Form has been submitted.
         } else {
             $session->setAttrb("message", "Email is not in a correct format.");
         }
-    }
 }
 
 
@@ -314,8 +329,41 @@ if (isset($_POST["submit"])) { // Form has been submitted.
         </div>
         <!------------linkdin --------->
 
+            <div class="row">
+                <h3>Choose The Paper Topics</h3>
+                <h5>Choose from the conferences topics</h5>
+            </div>
+            <div class="row well">
 
-        <!------------aboutme --------->
+                <?php
+                $query = "SELECT topicName FROM topic ";
+
+                $topics = topic::find_by_sql($query);
+
+                $counter = 0;
+                $array = array();
+                foreach($topics as $topic){
+                    foreach($topic as $key) {
+                        if (isset($key)) {
+                            $array[$counter] = $key;
+                            $counter++;
+                        }
+                    }
+                }
+                for($i = 0;$i<=$counter-1;$i++) {
+                    ?>
+                    <label><?php echo htmlentities($array[$i])?><input type="checkbox" value="<?php echo htmlentities($array[$i])?>" name="topic<?php echo $i?>" ></label>
+                    <br>
+                <?php
+                }
+                ?>
+            </div>
+
+            <input type="hidden" value="<?php echo $i?>" name="counter">
+                <!------------topic --------->
+
+
+                <!------------aboutme --------->
         <div class="row form-group">
             <div class="">
                 <label for="aboutme">About Me  <span id="req">*</span></label>

@@ -289,12 +289,11 @@ foreach($users as $user){
 <div class="row">
 
     <?php
-    $x = 0;
     for($i = 0; $i <= $counter1-1 ;$i+=2){
     ?>
     <div ng-repeat="u in users" class="col-xs-4 col-sm-2 ng-scope">
         <?php
-        $query3 = "SELECT imageURL FROM userimgs WHERE userID = {$array1[$i]};";
+        $query3 = "SELECT imageURL FROM userimgs WHERE userID = {$array1[$i]}";
         $photos = userimgs::find_by_sql($query3);
         $counter2 = 0;
         $array2 = array();
@@ -306,9 +305,9 @@ foreach($users as $user){
                 }
             }
         }
-        $x++;
+
         ?>
-        <img src="<?php echo htmlentities($array2[$x])?>" class="img-thumbnail img-responsive img-circle">
+        <img src="<?php echo htmlentities($array2[0])?>" class="img-thumbnail img-responsive img-circle">
         <h3 class="text-center "><?php echo htmlentities($array1[$i+1]) ?></h3>
         <hr>
     </div>

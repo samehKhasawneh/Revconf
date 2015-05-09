@@ -5,6 +5,8 @@ require_once("../includes/committe.php");
 require_once("../includes/session.php");
 require_once("../includes/topic.php");
 require_once("../includes/paper.php");
+require_once("../includes/reviewresults.php");
+
 
 if(!isset($_SESSION["orgEmail"])){
     redirect_to("login.php");
@@ -277,7 +279,16 @@ foreach($papers as $paper){
                             <td><?php echo htmlentities($paperobj->paperName)?></td>
                             <td><?php echo htmlentities($paperobj->paperTopic)?></td>
                             <td><?php echo htmlentities($paperobj->author)?></td>
-                            <td style="color: red; font-weight: bold;">4</td>
+                            <?php
+                            $query2 = "SELECT * FROM reviewresults WHERE paperID = {$paperobj->ID}";
+                            $revnum = reviewresults::find_by_sql($query2);
+                            $counter1 = 0;
+                            $array1 = 0;
+                            foreach($revnum as $rev){
+                                $counter1++;
+                            }
+                            ?>
+                            <td style="color: red; font-weight: bold;"><?php echo $counter1 ?></td>
                             <td> <a class="btn btn-success btn-block" href="assign2.php?ID=<?php echo htmlentities($paperobj->ID)?>&confID=<?php echo htmlentities($_GET["ID"]) ?>">Assign</a> </td>
                         </tr>
                     <?php

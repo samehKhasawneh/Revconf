@@ -2,6 +2,9 @@
 require_once("../includes/conference.php");
 require_once("../includes/session.php");
 require_once("../includes/functions.php");
+require_once("../includes/topic.php");
+require_once("../includes/conftopic.php");
+
 
 if(!isset($_SESSION["orgEmail"])){
     redirect_to("login.php");
@@ -10,28 +13,85 @@ if(!isset($_SESSION["orgEmail"])){
 if(isset($_POST["submit"])){
 
     $name = trim($_POST["confName"]);
-    $intro = trim($_POST["confintro"]);
+    $intro = trim($_POST["Confintro"]);
     $loc = trim($_POST["location"]);
 
     $newConf = new conference();
 
     $mysql_datetime = strftime("%Y-%m-%d", time());
 
-    $newConf->confDate = $mysql_datetime;
+
     $newConf->confName = $name;
     $newConf->introduction = $intro;
     $newConf->orgID = $_SESSION["ID"];
     $newConf->Location = $loc;
 
+    $check = 1;
 
-
-
-    if($newConf->save()){
-        redirect_to("index.php");
+    if($_POST["fromdate"] > $mysql_datetime){
+    $date1 = $_POST["fromdate"];
+    if($_POST["todate"] > $date1){
+    $date2 = $_POST["todate"];
+        $newConf->confDate = "$date1 -"."$date2";
+    if($_POST["subDate"] > $date2){
+    $date3 = $_POST["subDate"];
+        $newConf->confSubmitEnd = $date3;
+    if($_POST["revDate"]) {
+        $date4 = $_POST["revDate"];
+        $newConf->confReviewEnd = $date4;
+    }else{
+    $session->setAttrb("message","Review date is incorrect");
+        $check = -1;
+    }
+    }else{
+        $session->setAttrb("message","Submit date is incorrect");
+        $check = -1;
     }
 
+    }else{
+        $session->setAttrb("message","to date is incorrect");
+        $check = -1;
+    }
+    }else{
+        $session->setAttrb("message","From date is incorrect");
+        $check = -1;
+    }
+    if($newConf->save()&&$check) {
 
+        $countert = $_POST["counter"];
+        $x = 0;
+        $sum = 0;
+        for ($J = 0; $J <= $countert; $J++) {
+            if ($x == 4) {
+                break;
+            }
+            if (isset($_POST["topic{$J}"])) {
+                $query2 = "SELECT ID FROM topic WHERE topicName = '{$_POST["topic{$J}"]}'";
+                $topicName = topic::find_by_sql($query2);
+                $counter2 = 0;
+                $array2 = array();
+                foreach ($topicName as $topic) {
+                    foreach ($topic as $key) {
+                        if (isset($key)) {
+                            $array2[$counter2] = $key;
+                            $counter2++;
+                        }
+                    }
+                }
+                $id = $array2[0];
+                $query3 = "INSERT INTO conftopics (topicID,confID) VALUES ({$id},{$newConf->ID})";
+                $conft = conftopic::execut_by_sql($query3);
+                if ($conft) {
+                    $sum++;
+                }
+                $x++;
+            }
+        }
 
+        if ($sum==$x) {
+            redirect_to("index.php");
+        }
+    }
 
 }
 
@@ -260,6 +320,8 @@ if(isset($_POST["submit"])){
 
         <div class="alert alert-danger">
             <p>Your conference will have to get accepted by the Admin</p>
+
+            <label><?php echo $session->getAttrb("message"); ?></label>
         </div>
 
         <hr>
@@ -292,9 +354,16 @@ if(isset($_POST["submit"])){
 
 
                     <div class="row form-group">
-                        <div class="3" id="date">
-                            <label for="date">Conference Date <span id="req">*</span></label>
-                            <input type="date" class="form-control"  id="date" required name="date">
+                        <div class="3" id="fromdate">
+                            <label for="fromdate">Conference Date from<span id="req">*</span></label>
+                            <input type="date" class="form-control"  id="fromdate" required name="fromdate">
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <div class="3" id="todate">
+                            <label for="todate">Conference Date to<span id="req">*</span></label>
+                            <input type="date" class="form-control"  id="todate" required name="todate">
                         </div>
                     </div>
 
@@ -313,30 +382,37 @@ if(isset($_POST["submit"])){
                         </div>
                     </div>
 
-
-                    <div class="row form-group">
-                        <div class="3" id="city">
-                            <label for="city">Conference Location <span id="req">*</span></label>
-                            <input type="text" class="form-control"  id="city" required name="location">
-                        </div>
-                    </div>
-
-
                     <div class="row">
                         <h3>Choose The Conference Topics</h3>
 
                     </div>
                     <div class="row well">
 
-                        <label>Computer Science: <input type="checkbox"  name="topic1" ></label>
-                        <br>
-                        <label>Software Engineering: <input type="checkbox"  name="topic1" ></label>
-                        <br>
-                        <label>Animation: <input type="checkbox"  name="topic1" ></label>
-                        <br>
+                        <?php
+                        $query = "SELECT topicName FROM topic ";
 
+                        $topics = topic::find_by_sql($query);
 
+                        $counter = 0;
+                        $array = array();
+                        foreach($topics as $topic){
+                            foreach($topic as $key) {
+                                if (isset($key)) {
+                                    $array[$counter] = $key;
+                                    $counter++;
+                                }
+                            }
+                        }
+                        for($i = 0;$i<=$counter-1;$i++) {
+                            ?>
+                            <label><?php echo htmlentities($array[$i])?><input type="checkbox" value="<?php echo htmlentities($array[$i])?>" name="topic<?php echo $i?>" ></label>
+                            <br>
+                        <?php
+                        }
+                        ?>
                     </div>
+
+                    <input type="hidden" value="<?php echo $i?>" name="counter">
 
                     <div class="row">
                         <h3> Upload Conference Picture</h3>

@@ -8,7 +8,7 @@ if(!isset($_SESSION["orgEmail"])){
     redirect_to("login.php");
 }
 
-$query = "SELECT ID,confName,confDate,isApproved FROM conference WHERE orgID = {$_SESSION["ID"]}";
+$query = "SELECT ID,confName,confDate,isApproved FROM conference WHERE orgID = {$_SESSION["ID"]} AND isApproved = 0";
 $conf = conference::find_by_sql($query);
 $counter = 0;
 $array = array();

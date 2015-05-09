@@ -42,91 +42,36 @@ $conference = conference::find_by_id($_GET["ID"]);
 if(isset($_POST["submit"])) {// Form has been submitted.
 
 
-    $target_dir = "uploads/";
-    $file = basename($_FILES["fileToUpload"]["name"]);
-    echo $file;
-    $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
-    $uploadOk = 1;
-    echo $target_file;;
-    $FileType = pathinfo($target_file, PATHINFO_EXTENSION);
-    echo $FileType;
+    $paperName = $_POST["pName"];
+    $author = $_POST["author"];
+    $authorEmail = $_POST["authorEmail"];
+    $abstract = $_POST["abstract"];
+    $paperTopic = $_POST["ptopic"];
 
 
-    echo $target_file;
-    echo $uploadOk;
-// Check if file already exists
-    if (file_exists($target_file)) {
-        echo "Sorry, file already exists.";
-        $uploadOk = 0;
-    }
-// Check file size
-    if ($_FILES["fileToUpload"]["size"] > 1000000) {
-        echo "Sorry, your file is too large.";
-        $uploadOk = 0;
+    $mysql_datetime = strftime("%Y-%m-%d", time());
 
-    }
-// Allow certain file formats
-    if ($FileType != "pdf") {
-        echo "Sorry, only PDF files are allowed.";
-        $uploadOk = 0;
-    }
-// Check if $uploadOk is set to 0 by an error
-    if ($uploadOk == 0) {
-        echo "Sorry, your file was not uploaded.";
-// if everything is ok, try to upload file
-    } else {
-        if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-            echo "The file " . basename($_FILES["fileToUpload"]["name"]) . " has been uploaded.";
+    $new_paper = new paper();
 
-            $uploadOk = "ok";
-            echo "<p id = 'pages' hidden='hidden' >"; echo $target_file ; echo "</p>";
-//            checkPages();
+    $new_paper->userID = $_SESSION["ID"];
+    $new_paper->confID = $_GET["ID"];
+    $new_paper->abstract = $abstract;
+    $new_paper->paperName = $paperName;
+    $new_paper->paperTopic = $paperTopic;
+    $new_paper->dateSubmitted = $mysql_datetime;
+    $new_paper->author = $author;
+    $new_paper->authorEmail = $authorEmail;
+    $new_paper->paperURL = $target_file;
 
-
-
-
-        } else {
-            echo "Sorry, there was an error uploading your file.";
-        }
-
-
-    }
-
-
-    if ($uploadOk == "ok") {
-
-        $paperName = $_POST["pName"];
-        $author = $_POST["author"];
-        $authorEmail = $_POST["authorEmail"];
-        $abstract = $_POST["abstract"];
-        $paperTopic = $_POST["ptopic"];
-
-
-        $mysql_datetime = strftime("%Y-%m-%d", time());
-
-        $new_paper = new paper();
-
-        $new_paper->userID = $_SESSION["ID"];
-        $new_paper->confID = $_GET["ID"];
-        $new_paper->abstract = $abstract;
-        $new_paper->paperName = $paperName;
-        $new_paper->paperTopic = $paperTopic;
-        $new_paper->dateSubmitted = $mysql_datetime;
-        $new_paper->author = $author;
-        $new_paper->authorEmail = $authorEmail;
-        $new_paper->paperURL = $target_file;
-
-        if ($new_paper->save()) {
+if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    if ($new_paper->save()) {
         redirect_to("conference.php?ID={$_GET["ID"]}");
-        }
-
+    } else {
+        echo "error";
     }
-
-}
-
-else
-{
-    echo "error";
+}else{
+    $session->setAttrb("message", "Author Email is not in a correct format.");
+    }
 }
 
 

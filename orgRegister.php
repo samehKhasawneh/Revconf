@@ -20,43 +20,44 @@ if (isset($_POST["submit"])) { // Form has been submitted.
     $orgName = trim($_POST["orgName"]);
     $website = trim($_POST["website"]);
 
+    if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $query = "SELECT * FROM organization WHERE orgEmail = '{$email}'";
+        $found_org = organization::find_by_sql($query);
 
-    $query = "SELECT * FROM organization WHERE orgEmail = '{$email}'";
-    $found_org = organization::find_by_sql($query);
+        if (empty($found_org)) {
 
-    if (empty($found_org)) {
+            $newOrg = new organization();
 
-        $newOrg = new organization();
+            $mysql_datetime = strftime("%Y-%m-%d", time());
 
-        $mysql_datetime = strftime("%Y-%m-%d", time());
-
-        $newOrg->orgDate = $mysql_datetime;
-        $newOrg->orgName = $orgName;
-        $newOrg->website = $website;
-        $newOrg->orgEmail = $email;
-        $newOrg->orgPassword = $password;
+            $newOrg->orgDate = $mysql_datetime;
+            $newOrg->orgName = $orgName;
+            $newOrg->website = $website;
+            $newOrg->orgEmail = $email;
+            $newOrg->orgPassword = $password;
 
 
-        if ($newOrg->save()) {
+            if ($newOrg->save()) {
 
-            $found_org = organization::authenticate($email, $password);
+                $found_org = organization::authenticate($email, $password);
 
-            if ($found_org) {
+                if ($found_org) {
 
-                foreach ($found_org as $key => $value) {
-                    $session->setAttrb($key, $value);
+                    foreach ($found_org as $key => $value) {
+                        $session->setAttrb($key, $value);
+                    }
+                    redirect_to("org/index.php");
                 }
-                redirect_to("org/index.php");
+
             }
 
+        } else {
+            $session->setAttrb("message", "Email is already in use.");
         }
-
     }else{
-        $session->setAttrb("message","Email is already in use combination incorrect.");
+        $session->setAttrb("message", "Email is in a wrong format.");
     }
 }
-
-
 
 
 

@@ -71,7 +71,7 @@ class userimgs extends DatabaseObject {
 
     public function create(){
         global $database;
-        $query = "INSERT INTO userimgs(userID,imageURL) VALUES ($this->userID,$this->temp_path)";
+        $query = "INSERT INTO userimgs(userID,imageURL) VALUES ({$this->userID},'{$this->temp_path}')";
         if($database->query($query)){
             return true;
         }else {

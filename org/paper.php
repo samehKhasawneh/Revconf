@@ -5,7 +5,8 @@ require_once("../includes/database.php");
 require_once("../includes/functions.php");
 require_once("../includes/paper.php");
 require_once("../includes/user.php");
-require_once("../includes/evaluationresult.php");
+require_once("../includes/reviewresults.php");
+
 
 
 if(!isset($_SESSION["orgEmail"])){
@@ -23,8 +24,10 @@ $array = array();
 foreach($papers as $paper){
     foreach($paper as $key) {
         if (isset($key)) {
-            $array[$counter] = $key;
-            $counter++;
+            if(!in_array($key,$array)) {
+                $array[$counter] = $key;
+                $counter++;
+            }
         }
     }
 }
@@ -285,8 +288,26 @@ foreach($papers as $paper){
                             <td><?php echo htmlentities($paper_info->paperName)?></td>
                             <td><?php echo htmlentities($paper_info->author)?></td>
                             <td><?php echo htmlentities($paper_info->paperTopic)?></td>
-                            <td>6</td>
-                            <td style="color: red; font-weight: bold;">40/100</td>
+                            <?php
+                           $query1 = "SELECT rank FROM reviewresults WHERE paperID = {$paper_info->ID}";
+                            $paperreviewrs = reviewresults::find_by_sql($query1);
+                            $countern2 = 0;
+                            $counter3 = 0;
+                            $sum = 0;
+                            $array1 = array();
+                            foreach($paperreviewrs as $paperreviewr){
+                                foreach($paperreviewr as $key){
+                                    if(isset($key)){
+                                     $sum += $key;
+                                     $countern2++;
+                                    }
+                                }
+                                $counter3++;
+                            }
+
+                            ?>
+                            <td><?php echo $counter3 ?></td>
+                            <td style="color: red; font-weight: bold;"><?php echo $sum/$counter3 ?>/100</td>
                             <td> <a class="btn btn-success btn-block" href="accept.php?ID=<?php echo htmlentities($paper_info->ID)?>&confID=<?php echo htmlentities($_GET["ID"]) ?>">Accept</a> </td>
                         </tr>
                         <?php

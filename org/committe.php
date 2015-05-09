@@ -278,7 +278,7 @@ foreach($users as $user){
                         $id = $array[$i];
                         $found_user = user::find_by_id($id);
 
-                        $query2 = "SELECT userID FROM committe WHERE userID = {$found_user->ID}";
+                        $query2 = "SELECT userID FROM committe WHERE userID = {$found_user->ID} AND confID = {$_GET["ID"]}";
                         $com = committe::find_by_sql($query2);
 
                         if (!$com) {
@@ -324,7 +324,7 @@ foreach($users as $user){
                                 ?>
                                 <td><?php echo htmlentities($found_user->ID)?></td>
                                 <td><?php echo htmlentities($found_user->FirstName); echo " ";echo htmlentities($found_user->LastName);?></td>
-                                <td><?php for($J=0;$J<=$counter1-1;$J++) { echo htmlentities($array2[$J]); echo "<br>"; } ?></td>
+                                <td><?php for($D=0;$D<=$counter1-1;$D++) { echo htmlentities($array2[$D]); echo "<br>"; } ?></td>
                                 <td><?php echo htmlentities($found_user->city)?></td>
                                 <td><a class="btn btn-danger btn-block" href="addremovecom.php?ID=<?php echo htmlentities($found_user->ID)?>&confID=<?php echo htmlentities($_GET["ID"])?>&OP=0">Remove</a></td>
                             </tr>

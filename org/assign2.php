@@ -7,6 +7,8 @@ require_once("../includes/topic.php");
 require_once("../includes/paper.php");
 require_once("../includes/attendance.php");
 require_once("../includes/paperassign.php");
+require_once("../includes/reviewresults.php");
+
 
 if(!isset($_SESSION["orgEmail"])){
     redirect_to("login.php");
@@ -265,7 +267,16 @@ if(!isset($_GET["ID"]) || !isset($_GET["confID"])){
                         <td><?php echo htmlentities($paperobj->paperName)?></td>
                         <td><?php echo htmlentities($paperobj->paperTopic)?></td>
                         <td><?php echo htmlentities($paperobj->author)?></td>
-                        <td style="color: red; font-weight: bold;">4</td>
+                        <?php
+                        $query3 = "SELECT * FROM reviewresults WHERE paperID = {$paperobj->ID}";
+                        $paperreview = reviewresults::find_by_sql($query3);
+                        $counter3 = 0;
+                        $array4 = array();
+                        foreach ($paperreview as $key) {
+                        $counter3++;
+                        }
+                        ?>
+                        <td style="color: red; font-weight: bold;"><?php echo $counter3?></td>
 
                     </tr>
 
@@ -307,7 +318,7 @@ if(!isset($_GET["ID"]) || !isset($_GET["confID"])){
 
                     <tbody>
                     <?php
-                    $query = "SELECT userID FROM attendance WHERE confID = {$_GET["confID"]}";
+                    $query = "SELECT userID FROM attendance WHERE confID = {$_GET["confID"]} AND userID != {$paperobj->userID}";
                     $users = attendance::find_by_sql($query);
                     $counter = 0;
                     $array = array();
@@ -367,7 +378,17 @@ if(!isset($_GET["ID"]) || !isset($_GET["confID"])){
                                     echo htmlentities($array2[$J]);
                                     echo "<br>";
                                 } ?></td>
-                            <td>5</td>
+                            <?php
+                            $query2 = "SELECT * FROM paperassign WHERE userID = {$user_info->ID}";
+                            $assignuser = paperassign::find_by_sql($query2);
+                            $counter2 = 0;
+                            $array3 = array();
+                            foreach ($assignuser as $key) {
+                                        $counter2++;
+                            }
+
+                            ?>
+                            <td><?php echo $counter2 ?></td>
                             <td><a class="btn btn-success btn-block"
                                    href="assignpaper.php?ID=<?php echo htmlentities($paperobj->ID) ?>&confID=<?php echo htmlentities($_GET["confID"]) ?>&userID=<?php echo htmlentities($user_info->ID) ?>">Assign</a>
                             </td>
