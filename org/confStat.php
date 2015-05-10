@@ -15,6 +15,23 @@ if(!isset($_GET["ID"])){
     redirect_to("index.php");
 }
 
+$query2 = "SELECT ID FROM conference WHERE orgID = {$_SESSION["ID"]}";
+$conferences = conference::find_by_sql($query2);
+$counter1 = 0;
+$array1 = array();
+foreach($conferences as $conference){
+    foreach($conference as $key){
+        if(isset($key)){
+            $array1[$counter1] = $key;
+            $counter1++;
+        }
+    }
+}
+if(!in_array($_GET["ID"],$array1)){
+    redirect_to("index.php");
+}
+
+
 $query = "SELECT * FROM paper WHERE confID = {$_GET["ID"]}";
 $pnum = paper::find_by_sql($query);
 $counter = 0;

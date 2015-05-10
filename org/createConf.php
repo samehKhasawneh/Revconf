@@ -56,7 +56,7 @@ if(isset($_POST["submit"])){
         $session->setAttrb("message","From date is incorrect");
         $check = -1;
     }
-    if($newConf->save()&&$check) {
+    if($newConf->save()&&$check == 1) {
 
         $countert = $_POST["counter"];
         $x = 0;

@@ -4,6 +4,7 @@ require_once("../includes/session.php");
 require_once("../includes/functions.php");
 require_once("../includes/paper.php");
 require_once("../includes/topic.php");
+require_once("../includes/conference.php");
 
 
 if(!isset($_SESSION["orgEmail"])){
@@ -12,6 +13,24 @@ if(!isset($_SESSION["orgEmail"])){
 if(!isset($_GET["ID"])){
     redirect_to("index.php");
 }
+
+$query2 = "SELECT ID FROM conference WHERE orgID = {$_SESSION["ID"]}";
+$conferences = conference::find_by_sql($query2);
+$counter1 = 0;
+$array1 = array();
+foreach($conferences as $conference){
+    foreach($conference as $key){
+        if(isset($key)){
+            $array1[$counter1] = $key;
+            $counter1++;
+        }
+    }
+}
+if(!in_array($_GET["ID"],$array1)){
+    redirect_to("index.php");
+}
+
+
 
 $query = "SELECT user.ID FROM user INNER JOIN attendance ON user.ID = attendance.userID WHERE attendance.confID = {$_GET["ID"]}";
 $users = user::find_by_sql($query);
