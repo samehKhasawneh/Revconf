@@ -20,16 +20,18 @@ if (!isset($_SESSION["Email"]) && !isset($_GET["ID"])) {
 
 if(isset($_SESSION["Email"])){
     $id = $_SESSION["ID"];
-}else{
+    }else{
     $id = $_GET["ID"] ;
 }
+
 if(isset($_GET["ID"])){
-if($_SESSION["ID"] !== $_GET["ID"]){
-$id = $_GET["ID"];
+    if($_SESSION["ID"] !== $_GET["ID"]){
+        $id = $_GET["ID"];
+    }
 }
-}
+
 $user_info = user::find_by_id($id);
-if(!$user_info){
+if(empty($user_info)){
     $session->setAttrb("message","user is not found !!!");
     redirect_to("login.php");
 }
@@ -189,7 +191,7 @@ foreach($query as $result2){
             <tbody >
             <tr>
                 <td><strong>City</strong></td>
-                <td><?php echo htmlentities($_SESSION["city"]);?></td>
+                <td><?php echo htmlentities($user_info->city);?></td>
             </tr>
             <tr>
                 <td><strong>Organization</strong></td>
