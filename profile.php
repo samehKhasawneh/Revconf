@@ -18,13 +18,16 @@ if (!isset($_SESSION["Email"]) && !isset($_GET["ID"])) {
 
 }
 
-isset($_SESSION["Email"])? $id = $_SESSION["ID"] : $id = $_GET["ID"] ;
+if(isset($_SESSION["Email"])){
+    $id = $_SESSION["ID"];
+}else{
+    $id = $_GET["ID"] ;
+}
 if(isset($_GET["ID"])){
-if(!($_SESSION["ID"] == $_GET["ID"])){
+if($_SESSION["ID"] !== $_GET["ID"]){
 $id = $_GET["ID"];
 }
 }
-
 $user_info = user::find_by_id($id);
 if(!$user_info){
     $session->setAttrb("message","user is not found !!!");
