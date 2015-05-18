@@ -29,13 +29,19 @@ if (isset($_POST["submit"])) { // Form has been submitted.
         $sdegree = trim($_POST["scientific_degree"]);
         $city = trim($_POST{"city"});
         $title = trim($_POST["title"]);
+        $imgURL;
+    if (isset($_POST["imgURL"])) {
+        $imgURL = $_POST["imgURL"];
+    }
+    else
+    {
+        $imgURL="http://www.filecluster.com/howto/wp-content/uploads/2014/07/User-Default.jpg";
+    }
 
         $fb = trim($_POST["facebook"]);
         $li = trim($_POST["linkdin"]);
         $Am = trim($_POST["aboutme"]);
         $org = trim($_POST["org"]);
-
-        $t1 = $_POST["utopic1"];
 
         if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
@@ -60,6 +66,7 @@ if (isset($_POST["submit"])) { // Form has been submitted.
                 $newUser->scientific_degree = $sdegree;
 
 
+
                 if ($newUser->save()) {
 
                     $found_user = User::authenticate($email, $password);
@@ -67,18 +74,15 @@ if (isset($_POST["submit"])) { // Form has been submitted.
                     $query4 = "INSERT INTO userinfo (userID,facebook,linkedin,org,aboutme) VALUES ({$found_user->ID},'{$fb}','{$li}','{$org}','{$Am}')";
                     $info = userinfo::execut_by_sql($query4);
 
-                    $query2 = "SELECT ID FROM topic WHERE topicName = '{$_POST["utopic1"]}'";
-                    $topicName = topic::find_by_sql($query2);
-                    $counter1 = 0;
-                    $array1 = array();
-                    foreach($topicName as $topic){
-                        foreach($topic as $key) {
-                            if (isset($key)) {
-                                $array1[$counter1] = $key;
-                                $counter1++;
-                            }
-                        }
-                    }
+
+//                    if(isset ($imgURL))
+//                    {
+//
+//                        $query5 = "INSERT INTO userimgs (userID,imageURL) VALUES ({$_SESSION["ID"]},{$imgURL})";
+//                        $img = userimgs::execut_by_sql($query5);
+//
+//                    }
+
 
 
 
@@ -88,7 +92,13 @@ if (isset($_POST["submit"])) { // Form has been submitted.
                         foreach ($found_user as $key => $value) {
                             $session->setAttrb($key, $value);
                         }
-                        sendMail($email, "Welcome To RevConf", "Thank You FOr Registering");
+
+
+
+                        sendMail($email, "Welcome To RevConf",'<h1>Welcome To RevCon</h1>
+                                                            <img src="img/logo.png" width="5%" >
+                                            <p><strong>Dear User,</strong> Thank you for registering to RevCon.</p> ');
+
 
                         $countert = $_POST["counter"];
                         $x = 0;
@@ -121,11 +131,15 @@ if (isset($_POST["submit"])) { // Form has been submitted.
                         }
 
                         if ($sum==$x) {
-                            redirect_to("index.php");
+                            redirect_to("home.php");
+                            echo $imgURL;
                         }
                     }else{
                         $session->setAttrb("message","error");
                     }
+
+
+
 
                 }
 
@@ -169,6 +183,9 @@ if (isset($_POST["submit"])) { // Form has been submitted.
     <script src="js/noty/topRight.js"></script>
     <script src="js/noty/jquery.noty.packaged.min.js"></script>
     <script src="js/noty/notification_html.js"></script>
+
+    <script src="js/bootstrap-formhelpers.js"></script>
+    <link href="css/bootstrap-formhelpers.min.css" rel="stylesheet">
 
 
     <style>
@@ -279,6 +296,8 @@ if (isset($_POST["submit"])) { // Form has been submitted.
             <div class="3" id="city">
                 <label for="city">Enter your City <span id="req">*</span></label>
                 <input type="text" class="form-control"  id="city" required name="city">
+                <select class="form-control bfh-countries" data-country="US"></select>
+
             </div>
         </div>
         <!------------location --------->
@@ -381,11 +400,98 @@ if (isset($_POST["submit"])) { // Form has been submitted.
 
         <!------------picture --------->
         <div class="row form-group">
-            <div class="" >
-                <label for="pic">Upload a Picture<span id="req">* </span></label>
-                <input type="file" name="fileToUpload"  >
-
+            <div class="row">
+                <h3> Upload Conference Picture</h3>
             </div>
+
+            <input type="hidden" id="imgURL" name="imgURL"/>
+
+            <!--////////////////////////////////////////////////////////////////-->
+
+            <div class="row" style="padding-top:10px;">
+                <div class="col-xs-2">
+                    <button id="uploadBtn" class="btn btn-large btn-primary" accept=".jpg">Choose File</button>
+                </div>
+                <div class="col-xs-10">
+                    <div id="progressOuter" class="progress progress-striped active" style="display:none;">
+                        <div id="progressBar" class="progress-bar progress-bar-success"  role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="padding-top:10px;">
+                <div class="col-xs-10">
+                    <div id="msgBox">
+                    </div>
+                </div>
+            </div>
+            <script src="js/imgUpload/SimpleAjaxUploader.min.js"></script>
+            <script>
+
+                function escapeTags( str ) {
+                    return String( str )
+                        .replace( /&/g, '&amp;' )
+                        .replace( /"/g, '&quot;' )
+                        .replace( /'/g, '&#39;' )
+                        .replace( /</g, '&lt;' )
+                        .replace( />/g, '&gt;' );
+                }
+
+                window.onload = function() {
+
+                    var btn = document.getElementById('uploadBtn'),
+                        progressBar = document.getElementById('progressBar'),
+                        progressOuter = document.getElementById('progressOuter'),
+                        msgBox = document.getElementById('msgBox');
+
+                    var uploader = new ss.SimpleUpload({
+                        button: btn,
+                        url: 'file_upload.php',
+                        name: 'uploadfile',
+                        hoverClass: 'hover',
+                        allowedExtensions: ['jpg', 'jpeg', 'png', 'gif'],
+                        focusClass: 'focus',
+                        responseType: 'json',
+                        startXHR: function() {
+                            progressOuter.style.display = 'block'; // make progress bar visible
+                            this.setProgressBar( progressBar );
+                        },
+                        onSubmit: function() {
+                            msgBox.innerHTML = ''; // empty the message box
+                            btn.innerHTML = 'Uploading...'; // change button text to "Uploading..."
+                        },
+                        onComplete: function( filename, response ) {
+//                                    btn.innerHTML = 'Choose Another File';
+                            progressOuter.style.display = 'none'; // hide progress bar when upload is completed
+
+                            if ( !response ) {
+                                msgBox.innerHTML = 'Unable to upload file';
+                                return;
+                            }
+
+                            if ( response.success === true ) {
+                                msgBox.innerHTML = '<strong>' + escapeTags( filename ) + '</strong>' + ' successfully uploaded.';
+                                $("#imgURL").val( filename );
+
+                            } else {
+                                if ( response.msg )  {
+                                    msgBox.innerHTML = escapeTags( response.msg );
+
+                                } else {
+                                    msgBox.innerHTML = 'An error occurred and the upload failed.';
+                                }
+                            }
+                        },
+                        onError: function() {
+                            progressOuter.style.display = 'none';
+                            msgBox.innerHTML = 'Unable to upload file';
+                        }
+                    });
+                };
+
+            </script>
+        </div>
+            <!--  ///////////////////////////////////////////////////////////////////////////////////////-->
         </div>
 
         <!------------picture--------->

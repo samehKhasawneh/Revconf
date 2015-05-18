@@ -1,5 +1,4 @@
 <?php
-
 require_once("includes/functions.php");
 require_once("includes/database.php");
 require_once("includes/DatabaseObject.php");
@@ -13,16 +12,22 @@ require_once("includes/userimgs.php");
 require_once("includes/attendance.php");
 require_once("includes/paper.php");
 require_once("includes/paperassign.php");
-include_once("includes/navbar-user.php");
-
+if(isset($_SESSION["ID"])){
+    include_once("includes/navbar-user.php");
+}
+else
+{
+    include_once("includes/navbar.php");
+}
 if(empty($_GET["ID"])) {
     $session->message("No conference has been choosen");
     redirect_to("findconf.php");
 }
 $conference = conference::find_by_id($_GET["ID"]);
 
-if(!$conference) {
-    $session->message("The conference is not exists.");
+if(!$conference)
+{
+    $session->message("The conference does not exists.");
     redirect_to("findconf.php");
 }
 
@@ -32,9 +37,12 @@ $topics = topic::find_by_sql($query);
 
 $counter = 0;
 $array = array();
-foreach($topics as $topic){
-    foreach($topic as $key) {
-        if (isset($key)) {
+foreach($topics as $topic)
+{
+    foreach($topic as $key)
+    {
+        if (isset($key))
+        {
             $array[$counter] = $key;
             $counter++;
         }
@@ -79,7 +87,7 @@ foreach($users as $user){
 
     <script src="js/submitPaper.js"></script>
     <script src="js/ui-bootstrap-0.12.1.min.js"></script>
-
+    <script src="includes/timer/jquery.downCount.js"></script>
 
     <link href="css/body.css" rel="stylesheet"> <!-- includes background color -->
 
@@ -126,7 +134,8 @@ foreach($users as $user){
             color:#ffffff;
         }
 
-        span.minutes {
+        span.minutes
+        {
             border: 10px solid;
             padding: 48px;
             border-radius: 104px;
@@ -134,13 +143,17 @@ foreach($users as $user){
             color:#ffffff;
         }
 
-        span.seconds {
+        span.seconds
+        {
             border: 10px solid;
             padding: 48px;
             border-radius: 104px;
             background-color: darkcyan;
             color:#ffffff;
+
         }
+
+
     </style>
 
 </head>
@@ -217,9 +230,12 @@ foreach($users as $user){
 
 
         var check;
-        var conf = <?php echo json_encode($conference->confDate); ?>;
+        var confDate = document.getElementById("datee").firstChild.nodeValue;
+        var confSplit = confDate.split(" -");
+        var conf = confSplit[0];
         $('.countdown').downCount({
 //        MM//DD//YYYY
+
             date: conf + ' 12:00:00',
             offset: +10
 
@@ -297,7 +313,7 @@ foreach($users as $user){
                         </tr>
                         <tr>
                             <td><strong>Conference Date</strong></td>
-                            <td><?php echo htmlentities($conference->confDate)?></td>
+                            <td  id="datee"><?php echo htmlentities($conference->confDate)?></td>
                         </tr>
 
                         <tr>
@@ -386,17 +402,6 @@ foreach($users as $user){
                 <?php
                 }
                 ?>
-                <script>
-                    //             <!-- This will check if the user has joined the conference if he did , the join div will get removed -->
-                    x = true;
-                    if (x)
-                    {
-                        var x = document.getElementById("join");
-                        //x.remove();
-
-                    }
-
-                </script>
 
 
 
@@ -425,7 +430,7 @@ foreach($users as $user){
                     <?php
                     for($i = 0;$i<=$counter-1;$i++) {
                         ?>
-                        <p class="label label-primary"><?php echo htmlentities($array[$i])?></p>
+                        <p class="label label-primary "><?php echo htmlentities($array[$i])?></p>
 
                     <?php
                     }
@@ -448,7 +453,7 @@ foreach($users as $user){
     <?php
     for($i = 0; $i <= $counter1-1 ;$i+=2){
     ?>
-    <div ng-repeat="u in users" class="col-xs-4 col-sm-2 ng-scope">
+    <div ng-repeat="u in users" class="col-xs-5 col-sm-3 ng-scope">
         <?php
         $query3 = "SELECT imageURL FROM userimgs WHERE userID = {$array1[$i]}";
         $photos = userimgs::find_by_sql($query3);
@@ -464,8 +469,10 @@ foreach($users as $user){
         }
 
         ?>
+        <a href="profile.php?ID=<?php echo htmlentities($array1[$i])?>">
         <img src="<?php echo htmlentities($array2[0])?>" class="img-thumbnail img-responsive img-circle">
-        <h3 class="text-center "><?php echo htmlentities($array1[$i+1]) ?></h3>
+        </a>
+            <h3 class="text-center "><?php echo htmlentities($array1[$i+1]) ?></h3>
         <hr>
     </div>
     <?php
@@ -505,11 +512,12 @@ foreach($users as $user){
 
                     for($i = 0 ; $i<=$c1-1 ; $i+=2) {
                         ?>
-                        <p class="label label-primary">
+                        <p class="btn    btn-lg btn-success">
                             <?php
-                            echo $array4[$i];
-                            echo "<br>";
+
+
                             echo $array4[$i+1];
+
                             ?>
                         </p>
                     <?php
@@ -531,34 +539,7 @@ foreach($users as $user){
 
 
 
-        <div  id="ajaxDiv" class="col-md-8" style="display: none;" >
 
-            <script>
-
-
-                $(document).ready(function(){
-
-
-                    $.ajax({url: "paperSubmit.php" ,
-                        cache: false ,
-//                            data: "workerID=<?//=$row['workerID'];?>//",
-                        success: function(result){
-                            $("#ajaxDiv").html(result);
-                        },
-                        error: function(result){
-                            $("#ajaxDiv").html("error");
-                        }
-
-
-
-                    });
-                });
-
-
-
-            </script>
-
-        </div>
 
             </div>
 

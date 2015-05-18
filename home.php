@@ -51,10 +51,11 @@ foreach($sql as $s){
     <title>Jumbotron Template for Bootstrap</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
 
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
     <!-- Custom styles for this template -->
     <link href="css/carousel.css" rel="stylesheet">
     <link href="css/animate.css" rel="stylesheet">
@@ -82,17 +83,20 @@ foreach($sql as $s){
     ================================================== -->
 <div class="jumbotron">
     <div class="container">
-
-        <div class="text-center" id="jump">
-            </br>
-            </br>
+        <div class="col-md-12">
+        <div class="col-md-8 text-center" id="jump">
+            <br>
+            <br>
             <h1 class="animated fadeInLeftBig  ">Hello, <?php echo ucfirst($_SESSION['FirstName'])?></h1>
-            <img  id="profilephoto" src="<?php echo htmlentities($array[1]); ?>" class="img-thumbnail img-circle animated zoomInUp   " width="25%">
+            <img  id="profilephoto" src="<?php echo htmlentities($array[1]); ?>" class="img-thumbnail img-circle animated zoomInUp   " width="50%">
             <p></p>
 
         </div>
         <br>
         <br>
+            <br>
+            <br>
+            <br>
         <div class="animated bounceInUp well col-md-4 text-center">
 
             <?php
@@ -134,9 +138,10 @@ foreach($sql as $s){
             <h3><span style="color: red; font-weight: bold"><?php echo $counter1?></span>  Submitted Papers</h3>
         </div>
         </div>
+        </div>
 
     </div>
-</div>
+
 <hr>
 
 <!-- /.carousel -->

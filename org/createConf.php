@@ -16,6 +16,8 @@ if(isset($_POST["submit"])){
     $intro = trim($_POST["Confintro"]);
     $loc = trim($_POST["location"]);
 
+    $imgURL = $_POST['imgURL'];
+
     $newConf = new conference();
 
     $mysql_datetime = strftime("%Y-%m-%d", time());
@@ -25,18 +27,20 @@ if(isset($_POST["submit"])){
     $newConf->introduction = $intro;
     $newConf->orgID = $_SESSION["ID"];
     $newConf->Location = $loc;
+    $newConf->photoURL="org/upload_files/".$imgURL;
 
     $check = 1;
 
     if($_POST["fromdate"] > $mysql_datetime){
     $date1 = $_POST["fromdate"];
-    if($_POST["todate"] > $date1){
+    if($_POST["todate"] > $date1)
+    {
     $date2 = $_POST["todate"];
         $newConf->confDate = "$date1 -"."$date2";
-    if($_POST["subDate"] > $date2){
+    if($_POST["subDate"] < $date2 && $_POST["subDate"] < $date1 ){
     $date3 = $_POST["subDate"];
         $newConf->confSubmitEnd = $date3;
-    if($_POST["revDate"]) {
+    if($_POST["revDate"] < $date2 && $_POST["revDate"] < $date1) {
         $date4 = $_POST["revDate"];
         $newConf->confReviewEnd = $date4;
     }else{
@@ -56,7 +60,7 @@ if(isset($_POST["submit"])){
         $session->setAttrb("message","From date is incorrect");
         $check = -1;
     }
-    if($newConf->save()&&$check) {
+    if($newConf->save()&&$check == 1) {
 
         $countert = $_POST["counter"];
         $x = 0;
@@ -418,7 +422,94 @@ if(isset($_POST["submit"])){
                         <h3> Upload Conference Picture</h3>
                     </div>
 
-                        <input name="fileToUpload" type="file" class="input-lg btn btn-success" accept=".pdf" >
+                    <input type="hidden" id="imgURL" name="imgURL"/>
+
+                    <!--////////////////////////////////////////////////////////////////-->
+
+                    <div class="row" style="padding-top:10px;">
+                        <div class="col-xs-2">
+                            <button id="uploadBtn" class="btn btn-large btn-primary" accept=".jpg">Choose File</button>
+                        </div>
+                        <div class="col-xs-10">
+                            <div id="progressOuter" class="progress progress-striped active" style="display:none;">
+                                <div id="progressBar" class="progress-bar progress-bar-success"  role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="padding-top:10px;">
+                        <div class="col-xs-10">
+                            <div id="msgBox">
+                            </div>
+                        </div>
+                    </div>
+                    <script src="../js/imgUpload/SimpleAjaxUploader.min.js"></script>
+                    <script>
+
+                        function escapeTags( str ) {
+                            return String( str )
+                                .replace( /&/g, '&amp;' )
+                                .replace( /"/g, '&quot;' )
+                                .replace( /'/g, '&#39;' )
+                                .replace( /</g, '&lt;' )
+                                .replace( />/g, '&gt;' );
+                        }
+
+                        window.onload = function() {
+
+                            var btn = document.getElementById('uploadBtn'),
+                                progressBar = document.getElementById('progressBar'),
+                                progressOuter = document.getElementById('progressOuter'),
+                                msgBox = document.getElementById('msgBox');
+
+                            var uploader = new ss.SimpleUpload({
+                                button: btn,
+                                url: 'file_upload.php',
+                                name: 'uploadfile',
+                                hoverClass: 'hover',
+                                allowedExtensions: ['jpg', 'jpeg', 'png', 'gif'],
+                                focusClass: 'focus',
+                                responseType: 'json',
+                                startXHR: function() {
+                                    progressOuter.style.display = 'block'; // make progress bar visible
+                                    this.setProgressBar( progressBar );
+                                },
+                                onSubmit: function() {
+                                    msgBox.innerHTML = ''; // empty the message box
+                                    btn.innerHTML = 'Uploading...'; // change button text to "Uploading..."
+                                },
+                                onComplete: function( filename, response ) {
+//                                    btn.innerHTML = 'Choose Another File';
+                                    progressOuter.style.display = 'none'; // hide progress bar when upload is completed
+
+                                    if ( !response ) {
+                                        msgBox.innerHTML = 'Unable to upload file';
+                                        return;
+                                    }
+
+                                    if ( response.success === true ) {
+                                        msgBox.innerHTML = '<strong>' + escapeTags( filename ) + '</strong>' + ' successfully uploaded.';
+                                        $("#imgURL").val( filename );
+
+                                    } else {
+                                        if ( response.msg )  {
+                                            msgBox.innerHTML = escapeTags( response.msg );
+
+                                        } else {
+                                            msgBox.innerHTML = 'An error occurred and the upload failed.';
+                                        }
+                                    }
+                                },
+                                onError: function() {
+                                    progressOuter.style.display = 'none';
+                                    msgBox.innerHTML = 'Unable to upload file';
+                                }
+                            });
+                        };
+
+                    </script>
+                </div>
+                <!--  ///////////////////////////////////////////////////////////////////////////////////////-->
                     </div>
 
 
