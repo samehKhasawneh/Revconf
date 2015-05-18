@@ -22,10 +22,13 @@
 
             <div class="nav navbar-nav col-lg-6">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search for...">
+                    <form method="post" action="foundconf.php">
+                    <input type="text" class="form-control" placeholder="Search for a conference..." name="search1">
+                    </form>
       <span class="input-group-btn">
         <button class="btn btn-default" type="button">Go!</button>
       </span>
+
                 </div><!-- /input-group -->
             </div><!-- /.col-lg-6 -->
 

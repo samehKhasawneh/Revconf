@@ -20,6 +20,7 @@ class user extends DatabaseObject{
     public $date_registered;
     public $city;
     public $isAdmin;
+    public $photoURL;
 
 
     public static function authenticate($email="", $password="") {

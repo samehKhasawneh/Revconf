@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Revconf.iml" filepath="$PROJECT_DIR$/.idea/Revconf.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/RevCon.iml" filepath="$PROJECT_DIR$/.idea/RevCon.iml" />
     </modules>
   </component>
 </project>
