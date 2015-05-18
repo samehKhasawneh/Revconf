@@ -8,6 +8,7 @@ require_once("../includes/paper.php");
 require_once("../includes/attendance.php");
 require_once("../includes/paperassign.php");
 require_once("../includes/reviewresults.php");
+require_once("../includes/conference.php");
 
 
 if(!isset($_SESSION["orgEmail"])){
@@ -18,8 +19,38 @@ if(!isset($_GET["ID"]) || !isset($_GET["confID"])){
 }
 
 
+$query2 = "SELECT ID FROM conference WHERE orgID = {$_SESSION["ID"]}";
+$conferences = conference::find_by_sql($query2);
+$counter1 = 0;
+$array1 = array();
+foreach($conferences as $conference){
+    foreach($conference as $key){
+        if(isset($key)){
+            $array1[$counter1] = $key;
+            $counter1++;
+        }
+    }
+}
+if(!in_array($_GET["confID"],$array1)){
+    redirect_to("index.php");
+}
 
 
+$query2 = "SELECT ID FROM paper WHERE confID = {$_GET["confID"]}";
+$papers = conference::find_by_sql($query2);
+$counter2 = 0;
+$array2 = array();
+foreach($papers as $paper){
+    foreach($paper as $key){
+        if(isset($key)){
+            $array2[$counter2] = $key;
+            $counter2++;
+        }
+    }
+}
+if(!in_array($_GET["ID"],$array2)){
+    redirect_to("index.php");
+}
 
 
 
