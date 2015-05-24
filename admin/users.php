@@ -11,10 +11,10 @@ $counter = 0;
 $array = array();
 foreach($users as $user){
     foreach($user as $key){
-//        if(isset($key)){
+        if(isset($key)){
             $array[$counter] = $key;
             $counter++;
-//        }
+        }
     }
 }
 

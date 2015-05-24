@@ -30,12 +30,10 @@ if (isset($_POST["submit"])) { // Form has been submitted.
         $city = trim($_POST{"city"});
         $title = trim($_POST["title"]);
         $imgURL;
+
+
     if (isset($_POST["imgURL"])) {
-        $imgURL = $_POST["imgURL"];
-    }
-    else
-    {
-        $imgURL="http://www.filecluster.com/howto/wp-content/uploads/2014/07/User-Default.jpg";
+        $imgURL = "uploads/userImg/".$_POST["imgURL"];
     }
 
         $fb = trim($_POST["facebook"]);
@@ -75,13 +73,11 @@ if (isset($_POST["submit"])) { // Form has been submitted.
                     $info = userinfo::execut_by_sql($query4);
 
 
-//                    if(isset ($imgURL))
-//                    {
-//
-//                        $query5 = "INSERT INTO userimgs (userID,imageURL) VALUES ({$_SESSION["ID"]},{$imgURL})";
-//                        $img = userimgs::execut_by_sql($query5);
-//
-//                    }
+                    if(isset($imgURL))
+                    {
+                        $query5 = "INSERT INTO userimgs(userID,imageURL) VALUES ({$found_user->ID},'{$imgURL}')";
+                        $img = userimgs::execut_by_sql($query5);
+                    }
 
 
 
@@ -132,7 +128,6 @@ if (isset($_POST["submit"])) { // Form has been submitted.
 
                         if ($sum==$x) {
                             redirect_to("home.php");
-                            echo $imgURL;
                         }
                     }else{
                         $session->setAttrb("message","error");
